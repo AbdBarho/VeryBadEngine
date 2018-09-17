@@ -1,0 +1,27 @@
+{
+  "name": "verybadshooter",
+  "version": "0.0.1",
+  "description": "A very bad in browser shooter game",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdBarho/VeryBadShooter.git"
+  },
+  "keywords": [
+    "game",
+    "browser"
+  ],
+  "author": "Abdullah Barhoum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdBarho/VeryBadShooter/issues"
+  },
+  "homepage": "https://github.com/AbdBarho/VeryBadShooter#readme",
+  "devDependencies": {
+    "webpack": "^4.19.0",
+    "webpack-cli": "^3.1.0"
+  }
+}

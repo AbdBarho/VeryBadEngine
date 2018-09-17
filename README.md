@@ -1,2 +1,2 @@
 # VeryBadShooter
-My first attempt at creating a game
+My first attempt at creating a game.
