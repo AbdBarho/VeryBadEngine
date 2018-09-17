@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/AbdBarho/VeryBadShooter#readme",
   "devDependencies": {
+    "eslint": "^5.6.0",
     "webpack": "^4.19.0",
     "webpack-cli": "^3.1.0"
   }
