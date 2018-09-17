@@ -14,7 +14,7 @@ export default class Logger {
 
     //completely disable logging for performance reasons
     if (GLOBAL_VERBOSITY === -1)
-      this.log = () => { };
+      this.log = () => {};
   }
 
   /**

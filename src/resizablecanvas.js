@@ -1,6 +1,6 @@
 const ASPECT_RATIO = 16 / 9;
 
-export default class ResizableCanvas{
+export default class ResizableCanvas {
   constructor() {
     this.canvas = document.createElement("canvas");
     document.body.appendChild(this.canvas);

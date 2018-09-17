@@ -22,8 +22,7 @@ export default class Engine extends EventManager {
   }
 
 
-  update() {
-  }
+  update() {}
 
   stop() {
     this.trigger("beforeStop");
