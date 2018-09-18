@@ -1,7 +1,7 @@
 import Engine from "./engine/engine";
-import Logger from "./services/logger";
-import InputManager from "./services/inputmanager";
+import InputManager from "./engine/inputmanager";
 import ResizableCanvas from "./engine/resizablecanvas";
+import Logger from "./services/logger";
 
 export default class Game {
   constructor() {

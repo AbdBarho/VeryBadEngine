@@ -1,5 +1,5 @@
-import EventManager from "./eventmanager";
-import Logger from "./logger";
+import EventManager from "../services/eventmanager";
+import Logger from "../services/logger";
 
 export default class InputManager extends EventManager {
   constructor() {
@@ -42,7 +42,7 @@ export default class InputManager extends EventManager {
     else
       delete this.buttonStates[name];
     this.logger.log(3, "state update", type, name, isPressed);
-    this.displayState();
+    Logger.debugInfo(name, isPressed);
     this.trigger(type, name, isPressed, this);
   }
 
@@ -53,27 +53,18 @@ export default class InputManager extends EventManager {
     ///no keys should be updated here
     this.mouseState.x = e.clientX;
     this.mouseState.y = e.clientY;
-    this.displayState();
+    Logger.debugInfo("x", e.clientX);
+    Logger.debugInfo("y", e.clientY);
     this.trigger(e.type, e.clientX, e.clientY, this);
   }
 
   clearAll() {
     for (let key of Object.keys(this.buttonStates)) {
       let eventName = key.indexOf("Mouse") === 0 ? "mouseup" : "keyup";
+      Logger.debugInfo(key);
       this.trigger(eventName, key, false, this);
     }
     this.buttonStates = {};
-    this.displayState();
-  }
-
-  displayState() {
-    let div = document.getElementById("state");
-    let str = "";
-    for (let [key, value] of Object.entries(this.mouseState))
-      str += key + ": " + value + " \n";
-    for (let [key, value] of Object.entries(this.buttonStates))
-      str += key + ": " + value + " \n";
-    div.innerText = str;
   }
 
   /**
