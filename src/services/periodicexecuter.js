@@ -9,7 +9,6 @@ export default class PeriodicExecuter {
     this.logger = new Logger(this, name);
     this.updateInterval = updateInterval;
     this.callback = callback;
-    this.alreadyLogged = false;
     this.timer = null;
   }
 
@@ -27,9 +26,8 @@ export default class PeriodicExecuter {
     }
     let timeTaken = new Date().getMilliseconds() - now;
     let nextUpdateDelay = this.updateInterval - timeTaken;
-    if (!this.alreadyLogged && nextUpdateDelay < 0) {
-      this.alreadyLogged = true;
-      this.logger.log(1, "Cannot update fast enough, last update took extra", -nextUpdateDelay, "ms");
+    if (nextUpdateDelay < 0) {
+      this.logger.log(1, "update took extra", -nextUpdateDelay, "ms, updateInterval is", this.updateInterval, "ms");
       nextUpdateDelay = 0;
     }
     this.timer = setTimeout(() => this.run(), nextUpdateDelay);

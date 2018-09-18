@@ -1,7 +1,7 @@
 let path = require('path');
 
 module.exports = {
-  entry: './game.js',
+  entry: './index.js',
   devtool: 'source-map',
   mode: 'development',
   output: {

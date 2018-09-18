@@ -4,7 +4,7 @@ export default class ResizableCanvas {
   constructor() {
     this.canvas = document.createElement("canvas");
     document.body.appendChild(this.canvas);
-    window.addEventListener("resize", this.resize.bind(this));
+    window.addEventListener("resize", () => this.resize());
     this.resize();
   }
 

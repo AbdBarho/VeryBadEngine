@@ -11,8 +11,6 @@ export default class InputManager extends EventManager {
   }
 
   initListeners() {
-    //reset buttons when menu loses visibility
-    window.addEventListener("visibilitychange", () => this.buttonStates = {});
 
     window.addEventListener("keydown", (e) =>
       this.updateState(e.type, e.code, true));
@@ -29,6 +27,8 @@ export default class InputManager extends EventManager {
     window.addEventListener("mousemove", (e) => this.mouseStateUpdate(e));
     window.addEventListener("dblclick", (e) => this.mouseStateUpdate(e));
     window.addEventListener("click", (e) => this.mouseStateUpdate(e));
+
+    window.addEventListener("blur", () => this.clearAll());
   }
 
   /**
@@ -55,6 +55,15 @@ export default class InputManager extends EventManager {
     this.mouseState.y = e.clientY;
     this.displayState();
     this.trigger(e.type, e.clientX, e.clientY, this);
+  }
+
+  clearAll() {
+    for (let key of Object.keys(this.buttonStates)) {
+      let eventName = key.indexOf("Mouse") === 0 ? "mouseup" : "keyup";
+      this.trigger(eventName, key, false, this);
+    }
+    this.buttonStates = {};
+    this.displayState();
   }
 
   displayState() {

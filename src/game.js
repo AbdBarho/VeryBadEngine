@@ -1,9 +1,9 @@
-import Engine from "./src/engine";
-import Logger from "./src/logger";
-import InputManager from "./src/inputmanager";
-import ResizableCanvas from "./src/resizablecanvas";
+import Engine from "./engine/engine";
+import Logger from "./services/logger";
+import InputManager from "./services/inputmanager";
+import ResizableCanvas from "./engine/resizablecanvas";
 
-class Game {
+export default class Game {
   constructor() {
     this.logger = new Logger(this, "Game");
     this.engine = new Engine();
@@ -13,20 +13,15 @@ class Game {
     //...
   }
 
-  startGame() {
+  start() {
     this.logger.log(2, "starting...");
     this.engine.start();
     this.logger.log(2, "started");
   }
 
-  stopGame() {
+  stop() {
     this.logger.log(2, "stopping...");
     this.engine.stop();
     this.logger.log(2, "stopped");
   }
-
 }
-window.addEventListener("load", () => {
-  let game = new Game();
-  game.startGame();
-});

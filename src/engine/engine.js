@@ -1,6 +1,6 @@
-import EventManager from "./eventmanager";
-import Logger from "./logger";
-import PeriodecExecuter from "./periodicexecuter";
+import EventManager from "../services/eventmanager";
+import Logger from "../services/logger";
+import PeriodecExecuter from "../services/periodicexecuter";
 
 //Engine's "FPS"
 const TICKS_PER_SECOND = 60;
@@ -11,7 +11,7 @@ export default class Engine extends EventManager {
   constructor() {
     super();
     this.logger = new Logger(this, "Engine");
-    this.updater = new PeriodecExecuter("Engine Updater", UPDATE_INTERVAL, this.update.bind(this));
+    this.updater = new PeriodecExecuter("Engine Updater", UPDATE_INTERVAL, () => this.update());
   }
 
   start() {
