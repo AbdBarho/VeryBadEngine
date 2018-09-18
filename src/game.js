@@ -1,14 +1,14 @@
 import Engine from "./engine/engine";
 import InputManager from "./engine/inputmanager";
-import ResizableCanvas from "./engine/resizablecanvas";
+import Viewport from "./engine/viewport";
 import Logger from "./services/logger";
 
 export default class Game {
   constructor() {
     this.logger = new Logger(this, "Game");
     this.engine = new Engine();
-    this.inputManager = new InputManager();
-    this.canvas = new ResizableCanvas();
+    this.viewPort = new Viewport();
+    this.inputManager = new InputManager(this.viewPort);
 
     //...
   }

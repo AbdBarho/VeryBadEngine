@@ -7,7 +7,7 @@ const BASE_HEIGHT = 1080;
 
 /**
  * Events:
- * 
+ *
  * parametersChanged: {
     xScale,
     yScale,
@@ -58,9 +58,14 @@ export default class ResizableCanvas extends EventManager {
   calculateParameters() {
     let xScale = this.canvas.width / BASE_WIDTH;
     let yScale = this.canvas.height / BASE_HEIGHT;
-    let style = this.canvas.getBoundingClientRect();
-    let xShift = style.x;
-    let yShift = style.y;
+    let rect = this.canvas.getBoundingClientRect();
+    let computed = getComputedStyle(this.canvas);
+    // console.log(computed.marginTop);
+
+    // let xShift = rect.x + parseFloat(computed.marginLeft);
+    let xShift = rect.x;
+    // let yShift = rect.y + parseFloat(computed.marginTop);
+    let yShift = rect.y;
     this.parameters = {
       xScale,
       yScale,
@@ -68,10 +73,7 @@ export default class ResizableCanvas extends EventManager {
       yShift
     };
 
-    Logger.debugInfo("xScale", xScale);
-    Logger.debugInfo("yScale", yScale);
-    Logger.debugInfo("xShift", xShift);
-    Logger.debugInfo("yShift", yShift);
+    Logger.debugInfo(this.parameters);
 
     this.trigger("parametersChanged", this.getParamaters());
   }

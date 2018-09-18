@@ -39,12 +39,16 @@ export default class Logger {
   }
 
   static debugInfo(name, value) {
-    if (value === null || value === false || value === undefined)
-      delete debugState[name];
-    else if (typeof value === "number" && !Number.isInteger(value))
-      debugState[name] = value.toFixed(3);
+    if (typeof name === "object")
+      Object.assign(debugState, name);
     else
       debugState[name] = value;
+
+    for (let [key, value] of Object.entries(debugState))
+      if (value === false || value === undefined)
+        delete debugState[key];
+      else if (typeof value === "number" && !Number.isInteger(value))
+        debugState[key] = value.toFixed(3);
 
     let div = document.getElementById("state");
     let str = "";

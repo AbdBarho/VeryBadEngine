@@ -47,8 +47,8 @@ export default class EventManager {
   /**
    * trigger an event
    * @param {string} event event name
-   * @param {...} arguments further arguments
-   * @return {object} this object
+   * @param {...any} eventParams further arguments
+   * @return {this} this object
    */
   trigger(event, ...eventParams) {
     let callbacks = this.__callbacks__[event];
