@@ -12,7 +12,9 @@ const BASE_HEIGHT = 1080;
     xScale,
     yScale,
     xShift,
-    yShift
+    yShift,
+    width,
+    height
  * }
  */
 export default class ResizableCanvas extends EventManager {
@@ -20,11 +22,14 @@ export default class ResizableCanvas extends EventManager {
     super();
     this.logger = new Logger(this, "Canvas");
     this.canvas = document.createElement("canvas");
+    this.ctx = this.canvas.getContext("2d");
     this.parameters = {
       xScale: 1,
       yScale: 1,
       xShift: 0,
-      yShift: 0
+      yShift: 0,
+      width: 0,
+      height: 0
     };
 
     document.body.appendChild(this.canvas);
@@ -35,9 +40,7 @@ export default class ResizableCanvas extends EventManager {
   update() {
     this.resize();
     this.calculateParameters();
-    let ctx = this.getContext();
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    Logger.debugInfo(this.parameters);
   }
 
   resize() {
@@ -53,29 +56,17 @@ export default class ResizableCanvas extends EventManager {
     }
     this.canvas.width = width;
     this.canvas.height = height;
+    this.parameters.width = width;
+    this.parameters.height = height;
   }
 
   calculateParameters() {
     let xScale = this.canvas.width / BASE_WIDTH;
     let yScale = this.canvas.height / BASE_HEIGHT;
     let rect = this.canvas.getBoundingClientRect();
-    let computed = getComputedStyle(this.canvas);
-    // console.log(computed.marginTop);
-
-    // let xShift = rect.x + parseFloat(computed.marginLeft);
     let xShift = rect.x;
-    // let yShift = rect.y + parseFloat(computed.marginTop);
     let yShift = rect.y;
-    this.parameters = {
-      xScale,
-      yScale,
-      xShift,
-      yShift
-    };
-
-    Logger.debugInfo(this.parameters);
-
-    this.trigger("parametersChanged", this.getParamaters());
+    Object.assign(this.parameters, { xScale, yScale, xShift, yShift });
   }
 
   getParamaters() {
@@ -87,6 +78,6 @@ export default class ResizableCanvas extends EventManager {
   }
 
   getContext() {
-    return this.canvas.getContext("2d");
+    return this.ctx;
   }
 }

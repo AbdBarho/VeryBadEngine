@@ -1,21 +1,16 @@
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
-import Viewport from "./viewport";
+import Container from "../services/container";
 
 export default class InputManager extends EventManager {
-  /**
-   * @param {Viewport} viewport
-   */
-  constructor(viewport) {
+  constructor() {
     super();
-    this.viewport = viewport;
+    this.viewport = Container.get("Viewport");
     this.logger = new Logger(this, "InputManager");
     this.buttonStates = {};
-    this.mousePos = {
-      x: 0,
-      y: 0
-    };
+    this.mousePos = { x: 0, y: 0 };
     this.initListeners();
+    Container.register("InputManager", this);
   }
 
   initListeners() {
@@ -34,14 +29,14 @@ export default class InputManager extends EventManager {
   }
 
   keyboardPress(e, isPressed) {
-    e.preventDefault();
+    // e.preventDefault();
     let name = e.code;
     this.updateButtonsState(name, isPressed);
     this.trigger("keyboard", e.type, name, isPressed);
   }
 
   mousePress(e, isPressed) {
-    e.preventDefault();
+    // e.preventDefault();
     let name = "Mouse" + (e.button + 1);
     this.updateButtonsState(name, isPressed);
     this.trigger("mouse", e.type, name, isPressed);
@@ -58,14 +53,14 @@ export default class InputManager extends EventManager {
   }
 
   mouseStateUpdate(e) {
-    e.preventDefault();
+    // e.preventDefault();
     ///no keys should be updated here
     let x = e.pageX;
     let y = e.pageY;
     Logger.debugInfo("pageX", x);
     Logger.debugInfo("pageY", y);
     //shift coordinates according to viewport
-    this.mousePos = this.viewport.shiftAndScaleMousePos(x, y);
+    this.mousePos = this.viewport.shiftAndScale(x, y);
     Logger.debugInfo(this.mousePos);
     this.trigger("mouse", e.type, x, y);
   }

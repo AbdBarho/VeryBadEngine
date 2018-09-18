@@ -1,6 +1,7 @@
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
 import PeriodecExecuter from "../services/periodicexecuter";
+import Container from "../services/container";
 
 //Engine's "FPS"
 const TICKS_PER_SECOND = 60;
@@ -10,6 +11,8 @@ const UPDATE_INTERVAL = Math.ceil(1000 / TICKS_PER_SECOND);
 export default class Engine extends EventManager {
   constructor() {
     super();
+    this.world = Container.get("World");
+    this.renderer = Container.get("Renderer");
     this.logger = new Logger(this, "Engine");
     this.updater = new PeriodecExecuter("Engine Updater", UPDATE_INTERVAL, () => this.update());
   }
@@ -22,7 +25,14 @@ export default class Engine extends EventManager {
   }
 
 
-  update() {}
+  update() {
+    this.trigger("beforeUpdate");
+
+    this.world.update();
+    this.renderer.render();
+
+    this.trigger("afterUpdate");
+  }
 
   stop() {
     this.trigger("beforeStop");

@@ -10,20 +10,19 @@ export default class PeriodicExecuter {
     this.updateInterval = updateInterval;
     this.callback = callback;
     this.timer = null;
+    this.lastTime = 0;
   }
 
   start() {
-    this.logger.log(2, "starting periodic execution, period:", this.updateInterval, "ms");
-    this.run();
+    let now = new Date().getMilliseconds();
+    let delay = now - this.lastTime;
+    delay = delay < this.updateInterval ? delay : 0;
+    this.timer = setTimeout(() => this.run(), delay);
   }
 
   run() {
-    let now = new Date().getMilliseconds();
-    try {
-      this.callback();
-    } catch (error) {
-      this.logger.log(0, "Unexpected error while executing the callback:", error);
-    }
+    let now = this.lastTime = new Date().getMilliseconds();
+    this.callback();
     let timeTaken = new Date().getMilliseconds() - now;
     let nextUpdateDelay = this.updateInterval - timeTaken;
     if (nextUpdateDelay < 0) {
@@ -37,10 +36,6 @@ export default class PeriodicExecuter {
     if (this.timer !== null) {
       clearTimeout(this.timer);
       this.timer = null;
-      this.logger.log(2, "stopped periodic execution");
-    } else {
-      this.logger.log(2, "nothing is executing, already stopped");
     }
   }
-
 }

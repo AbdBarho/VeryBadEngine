@@ -1,34 +1,45 @@
 import ResizableCanvas from "./resizablecanvas";
-import EventManager from "../services/eventmanager";
+import Container from "../services/container";
 
-export default class Viewport extends EventManager {
+export default class Viewport extends ResizableCanvas {
   constructor() {
     super();
-    this.canvas = new ResizableCanvas();
-    this.canvasParameters = this.canvas.getParamaters();
-    this.canvas.on("parametersChanged", (params) => this.canvasParameters = params);
-  }
-
-  /**
-   * @param {"Scale"|"Shift"} name
-   * @param {"x"|"y"} axis
-   */
-  get(name, axis) {
-    return this.canvasParameters[axis + name];
+    this.world = Container.get("World");
+    Container.register("Viewport", this);
   }
 
   /**
    * @param {Number} x
    * @param {Number} y
-   * @returns {{x:Number, y: Number}} from pixels in page to game units, (0,0) being top left of canvas
+   * @returns {{x:Number, y: Number}} from pixels in page to game units
    */
-  shiftAndScaleMousePos(x, y) {
-    x -= this.canvasParameters.xShift;
-    x /= this.canvasParameters.xScale;
+  shiftAndScale(x, y) {
+    x -= this.parameters.xShift;
+    x /= this.parameters.xScale;
 
-    y -= this.canvasParameters.yShift;
-    y /= this.canvasParameters.yScale;
+    y -= this.parameters.yShift;
+    y /= this.parameters.yScale;
 
     return { x, y };
+  }
+
+  unshiftAndUnscale(x, y) {
+    x *= this.parameters.xScale;
+    // x += this.parameters.xShift;
+
+    // y += this.parameters.yShift;
+    y *= this.parameters.yScale;
+
+    return {
+      x,
+      y
+    };
+
+  }
+
+
+  backgroundColor(color) {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(0, 0, this.parameters.width, this.parameters.height);
   }
 }
