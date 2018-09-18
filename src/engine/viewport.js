@@ -1,16 +1,10 @@
-import InputManager from "./inputmanager";
 import ResizableCanvas from "./resizablecanvas";
 import EventManager from "../services/eventmanager";
 
 export default class Viewport extends EventManager {
-  /**
-   * @param {InputManager} inputManager
-   */
-  constructor(inputManager) {
+  constructor() {
     super();
     this.canvas = new ResizableCanvas();
-    this.inputManager = inputManager;
-
     this.canvasParameters = this.canvas.getParamaters();
     this.canvas.on("parametersChanged", (params) => this.canvasParameters = params);
   }
