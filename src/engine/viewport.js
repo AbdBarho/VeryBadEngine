@@ -13,33 +13,28 @@ export default class Viewport extends ResizableCanvas {
    * @param {Number} y
    * @returns {{x:Number, y: Number}} from pixels in page to game units
    */
-  shiftAndScale(x, y) {
+  pixelToUnit(x, y) {
     x -= this.parameters.xShift;
-    x /= this.parameters.xScale;
+    x /= this.parameters.scale;
 
     y -= this.parameters.yShift;
-    y /= this.parameters.yScale;
+    y /= this.parameters.scale;
 
     return { x, y };
   }
 
-  unshiftAndUnscale(x, y) {
-    x *= this.parameters.xScale;
-    // x += this.parameters.xShift;
-
-    // y += this.parameters.yShift;
-    y *= this.parameters.yScale;
-
-    return {
-      x,
-      y
-    };
-
+  unitToPixel(...coords) {
+    return coords.map(x => x * this.parameters.scale);
   }
 
 
   backgroundColor(color) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(0, 0, this.parameters.width, this.parameters.height);
+  }
+
+  fillRect(x, y, width, height, color) {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(...this.unitToPixel(x, y, width, height));
   }
 }

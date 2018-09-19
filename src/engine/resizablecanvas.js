@@ -8,14 +8,9 @@ const BASE_HEIGHT = 1080;
 /**
  * Events:
  *
- * parametersChanged: {
-    xScale,
-    yScale,
-    xShift,
-    yShift,
-    width,
-    height
- * }
+ * parametersChanged: { scale, xShift, yShift, width, height }
+ *
+ *
  */
 export default class ResizableCanvas extends EventManager {
   constructor() {
@@ -24,8 +19,7 @@ export default class ResizableCanvas extends EventManager {
     this.canvas = document.createElement("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.parameters = {
-      xScale: 1,
-      yScale: 1,
+      scale: 1,
       xShift: 0,
       yShift: 0,
       width: 0,
@@ -61,12 +55,11 @@ export default class ResizableCanvas extends EventManager {
   }
 
   calculateParameters() {
-    let xScale = this.canvas.width / BASE_WIDTH;
-    let yScale = this.canvas.height / BASE_HEIGHT;
+    let scale = this.canvas.width / BASE_WIDTH;
     let rect = this.canvas.getBoundingClientRect();
     let xShift = rect.x;
     let yShift = rect.y;
-    Object.assign(this.parameters, { xScale, yScale, xShift, yShift });
+    Object.assign(this.parameters, { scale, xShift, yShift });
   }
 
   getParamaters() {

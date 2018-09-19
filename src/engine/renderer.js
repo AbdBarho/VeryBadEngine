@@ -12,7 +12,7 @@ export default class Renderer {
   render() {
     this.viewport.backgroundColor("black");
     for (let obj of this.world.getObjects())
-      obj.render(this.viewport.getContext());
+      obj.render();
   }
 
 }
