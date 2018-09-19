@@ -32,14 +32,14 @@ export default class InputManager extends EventManager {
     // e.preventDefault();
     let name = e.code;
     this.updateButtonsState(name, isPressed);
-    this.trigger("keyboard", e.type, name, isPressed);
+    this.trigger(e.type, name, isPressed);
   }
 
   mousePress(e, isPressed) {
     // e.preventDefault();
     let name = "Mouse" + (e.button + 1);
     this.updateButtonsState(name, isPressed);
-    this.trigger("mouse", e.type, this.mousePos.x, this.mousePos.y, name, isPressed);
+    this.trigger(e.type, this.mousePos.x, this.mousePos.y, name, isPressed);
   }
 
 
@@ -62,7 +62,7 @@ export default class InputManager extends EventManager {
     //shift coordinates according to viewport
     this.mousePos = this.viewport.pixelToUnit(x, y);
     Logger.debugInfo(this.mousePos);
-    this.trigger("mouse", e.type, this.mousePos.x, this.mousePos.y);
+    this.trigger(e.type, this.mousePos.x, this.mousePos.y);
   }
 
   clearAll() {
