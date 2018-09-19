@@ -20,4 +20,15 @@ export default class MathHelper {
     let b = this.getRandomInt(256);
     return "rgb(" + r + "," + g + "," + b + ")";
   }
+
+  static getRandomWithSign() {
+    let r = Math.random();
+    if (Math.random() < 0.5)
+      return r;
+    return -r;
+  }
+
+  static limitBetween(num, min, max) {
+    return Math.max(Math.min(num, max), min);
+  }
 }

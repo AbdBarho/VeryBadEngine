@@ -1,10 +1,24 @@
 import Container from "../../services/container";
 import Moving2DObject from "./moving2dobject";
 import MathHelper from "../../services/math";
-import Logger from "../../services/logger";
+
 
 const WIDTH = 20;
 const HEIGHT = 20;
+//cicle
+// const LOOK_AHED_STEPS = 0;
+// const RANDOM_FACTOR_SCALE = 0;
+// const STOP_ON_REACH = false;
+
+//particle effects
+const LOOK_AHED_STEPS = 0;
+const RANDOM_FACTOR_SCALE = 1;
+const STOP_ON_REACH = false;
+
+//perfect follower
+// const LOOK_AHED_STEPS = 10;
+// const RANDOM_FACTOR_SCALE = 0;
+// const STOP_ON_REACH = true;
 
 export default class MouseFollower extends Moving2DObject {
   constructor() {
@@ -27,8 +41,8 @@ export default class MouseFollower extends Moving2DObject {
 
   update() {
     this.updateDistanceToTarget();
-    // if (this.targetReached())
-    //   return;
+    if (STOP_ON_REACH && this.targetReached())
+      return;
     this.updateDirection();
     this.move();
     this.keepInScreen();
@@ -44,24 +58,17 @@ export default class MouseFollower extends Moving2DObject {
   }
 
   updateDirection() {
-    let { x, y } = MathHelper.direction(this.x, this.y, this.xTarget, this.yTarget);
-    let factor = (this.xDistance + this.yDistance) / 1000;
+    let xStep = this.x + LOOK_AHED_STEPS * this.xVel;
+    let yStep = this.y + LOOK_AHED_STEPS * this.yVel;
+    let { x, y } = MathHelper.direction(xStep, yStep, this.xTarget, this.yTarget);
     //add some random number for entertainment
-    let r = Math.random() /5;
-    this.setAcceleration(x * factor + r, y * factor + r);
-    // this.setSpeed(x, y);
+    let r = MathHelper.getRandomWithSign() * RANDOM_FACTOR_SCALE;
+    this.setAcceleration(x + r, y + r);
   }
 
   keepInScreen() {
-    if (this.x >= this.worldDims.width)
-      this.x = 0;
-    else if (this.x < 0)
-      this.x = this.worldDims.width;
-
-    if (this.y >= this.worldDims.height)
-      this.y = 0;
-    else if (this.y < 0)
-      this.y = this.worldDims.height;
+    this.x = MathHelper.limitBetween(this.x, 0, this.worldDims.width - WIDTH);
+    this.y = MathHelper.limitBetween(this.y, 0, this.worldDims.height - HEIGHT);
   }
 
 

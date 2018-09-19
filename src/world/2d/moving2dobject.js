@@ -1,9 +1,9 @@
 import TwoDimensionalWorldObject from "./2dworldobject";
 
 const START_VELOCITY = 1;
-const MAX_VELOCITY = 5;
+const MAX_VELOCITY = 10;
 const START_ACCELRATION = 0.01;
-const MAX_ACCELERATION = 2;
+const MAX_ACCELERATION = 10;
 export default class Moving2DObject extends TwoDimensionalWorldObject {
   constructor() {
     super();
