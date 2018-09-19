@@ -1,12 +1,12 @@
 import Container from "../services/container";
-import MouseFollower from "./mousefollower";
 
-export default class TwoDimensionalWorld {
+export default class World {
   constructor() {
     this.objects = [];
-    this.visibleDimensions = {};
     Container.register("World", this);
   }
+
+
 
   addObject(obj) {
     this.objects.push(obj);
@@ -21,4 +21,7 @@ export default class TwoDimensionalWorld {
       obj.update();
   }
 
+  getDimensions() {
+    throw "not implemented";
+  }
 }
