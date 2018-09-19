@@ -30,10 +30,9 @@ export default class MouseFollower extends Moving2DObject {
     this.yDistance = 0;
 
     this.color = MathHelper.getRandomColor();
-
     this.worldDims = Container.getWorld().getDimensions();
 
-    Container.getInputManager().on("mouse", (_, x, y) => {
+    Container.getInputManager().on("mousemove", (x, y) => {
       this.xTarget = x;
       this.yTarget = y;
     });
@@ -73,7 +72,7 @@ export default class MouseFollower extends Moving2DObject {
 
 
   render() {
-    this.viewport.fillRect(this.x, this.y, WIDTH, HEIGHT, this.color);
+    this.viewport.fillRect(this.x - WIDTH / 2, this.y - HEIGHT / 2, WIDTH, HEIGHT, this.color);
   }
 
 }
