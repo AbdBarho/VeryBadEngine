@@ -4,7 +4,7 @@ export default class WorldObject {
   constructor() {
     this.viewport = Container.getViewport();
   }
-  
+
   update() {
     throw "not implemented";
   }
@@ -14,6 +14,10 @@ export default class WorldObject {
   }
 
   getBoundingRect() {
+    throw "not implemented";
+  }
+
+  getRenderingCommand() {
     throw "not implemented";
   }
 }

@@ -1,6 +1,8 @@
-import Game from "./src/game";
+import Engine from "./src/engine";
+// import EngineWorker from "./src/webworker/engine.worker";
+// let worker = new EngineWorker();
 
 window.addEventListener("load", () => {
-  let game = new Game();
+  let game = new Engine();
   game.start();
 });

@@ -5,8 +5,8 @@ import Vector from "../services/math/vector";
 export default class Viewport extends ResizableCanvas {
   constructor() {
     super();
-    // this.world = Container.getWorld();
     Container.register("Viewport", this);
+
   }
 
   /**
