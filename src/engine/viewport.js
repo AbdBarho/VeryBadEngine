@@ -4,7 +4,7 @@ import Container from "../services/container";
 export default class Viewport extends ResizableCanvas {
   constructor() {
     super();
-    this.world = Container.get("World");
+    // this.world = Container.getWorld();
     Container.register("Viewport", this);
   }
 

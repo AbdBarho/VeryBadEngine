@@ -3,10 +3,9 @@ import Container from "../services/container";
 
 export default class Renderer {
   constructor() {
-    this.viewport = Container.get("Viewport");
-    this.world = Container.get("World");
+    this.viewport = Container.getViewport();
+    this.world = Container.getWorld();
     this.logger = new Logger(this, "Renderer");
-    this.isRendering = false;
     Container.register("Renderer", this);
   }
 

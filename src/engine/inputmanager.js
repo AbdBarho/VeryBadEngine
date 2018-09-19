@@ -5,12 +5,12 @@ import Container from "../services/container";
 export default class InputManager extends EventManager {
   constructor() {
     super();
-    this.viewport = Container.get("Viewport");
+    this.viewport = Container.getViewport();
     this.logger = new Logger(this, "InputManager");
     this.buttonStates = {};
     this.mousePos = { x: 0, y: 0 };
-    this.initListeners();
     Container.register("InputManager", this);
+    this.initListeners();
   }
 
   initListeners() {
