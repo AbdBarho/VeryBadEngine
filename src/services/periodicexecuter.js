@@ -24,6 +24,9 @@ export default class PeriodicExecuter {
     let now = this.lastTime = new Date().getMilliseconds();
     this.callback();
     let timeTaken = new Date().getMilliseconds() - now;
+    //FIXME: WTF
+    if (timeTaken < 0)
+      timeTaken = 0;
     let nextUpdateDelay = this.updateInterval - timeTaken;
     if (nextUpdateDelay < 0) {
       this.logger.log(1, "update took extra", -nextUpdateDelay, "ms, updateInterval is", this.updateInterval, "ms");

@@ -15,8 +15,11 @@ export default class Logger {
     this.alreadyLogged = {};
 
     //completely disable logging for performance reasons
-    if (GLOBAL_VERBOSITY === -1)
-      this.log = () => {};
+    if (GLOBAL_VERBOSITY === -1) {
+      this.log = () => { };
+      Logger.debugInfo = () => { };
+    }
+
   }
 
   /**
