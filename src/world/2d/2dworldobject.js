@@ -1,14 +1,13 @@
 import WorldObject from "../worldobject";
+import Vector from "../../services/math/vector";
 
 export default class TwoDimensionalWorldObject extends WorldObject {
   constructor() {
     super();
-    this.x = 0;
-    this.y = 0;
+    this.pos = new Vector([0, 0]);
   }
 
-  setPosition(x, y) {
-    this.x = x;
-    this.y = y;
+  setPosition(vector) {
+    this.pos = vector;
   }
 }

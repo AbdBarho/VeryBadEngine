@@ -1,6 +1,8 @@
 import Container from "../../services/container";
 import Moving2DObject from "./moving2dobject";
-import MathHelper from "../../services/math";
+import MathHelper from "../../services/math/math";
+import Vector from "../../services/math/vector";
+import Logger from "../../services/logger";
 
 
 const WIDTH = 20;
@@ -11,68 +13,60 @@ const HEIGHT = 20;
 // const STOP_ON_REACH = false;
 
 //particle effects
-const LOOK_AHED_STEPS = 0;
-const RANDOM_FACTOR_SCALE = 1;
-const STOP_ON_REACH = false;
+// const LOOK_AHED_STEPS = 0;
+// const RANDOM_FACTOR_SCALE = 1;
+// const STOP_ON_REACH = false;
 
 //perfect follower
-// const LOOK_AHED_STEPS = 10;
-// const RANDOM_FACTOR_SCALE = 0;
-// const STOP_ON_REACH = true;
+const LOOK_AHED_STEPS = 10;
+const RANDOM_FACTOR_SCALE = 0;
+const STOP_ON_REACH = true;
 
+const SIZE = new Vector([WIDTH, HEIGHT]);
+const BOUNDING_BOX_DISTANCE = new Vector([WIDTH / 2, HEIGHT / 2]);
+let UPPER_LIMIT;
 export default class MouseFollower extends Moving2DObject {
   constructor() {
     super();
 
-    this.xTarget = 0;
-    this.yTarget = 0;
-    this.xDistance = 0;
-    this.yDistance = 0;
+    this.target = new Vector([0, 0]);
+    this.distance = new Vector([0, 0]);
 
     this.color = MathHelper.getRandomColor();
-    this.worldDims = Container.getWorld().getDimensions();
+    if (!UPPER_LIMIT) {
+      let worldDims = Container.getWorld().getSize();
+      UPPER_LIMIT = worldDims.subVec(BOUNDING_BOX_DISTANCE);
+    }
 
-    Container.getInputManager().on("mousemove", (x, y) => {
-      this.xTarget = x;
-      this.yTarget = y;
-    });
+    Container.getInputManager().on("mousemove", (x, y) => this.target = new Vector([x, y]));
   }
 
   update() {
-    this.updateDistanceToTarget();
+    this.distance = this.target.copy().subVec(this.pos).abs();
     if (STOP_ON_REACH && this.targetReached())
       return;
     this.updateDirection();
     this.move();
-    this.keepInScreen();
+    this.pos.limitByMinMax(BOUNDING_BOX_DISTANCE, UPPER_LIMIT);
     this.updateSpeed();
   }
-  updateDistanceToTarget() {
-    this.xDistance = Math.abs(this.xTarget - this.x);
-    this.yDistance = Math.abs(this.yTarget - this.y);
+
+
+  updateDirection() {
+    let step = this.pos.copy().addVec(this.velocity.copy().mulNum(LOOK_AHED_STEPS));
+    let dir = MathHelper.direction2d(step, this.target);
+    let r = MathHelper.getRandomWithSign() * RANDOM_FACTOR_SCALE;
+    this.setAcceleration(dir.addNum(r));
   }
 
   targetReached() {
-    return this.xDistance < WIDTH / 2 && this.yDistance < HEIGHT / 2;
-  }
-
-  updateDirection() {
-    let xStep = this.x + LOOK_AHED_STEPS * this.xVel;
-    let yStep = this.y + LOOK_AHED_STEPS * this.yVel;
-    let { x, y } = MathHelper.direction(xStep, yStep, this.xTarget, this.yTarget);
-    //add some random number for entertainment
-    let r = MathHelper.getRandomWithSign() * RANDOM_FACTOR_SCALE;
-    this.setAcceleration(x + r, y + r);
-  }
-
-  keepInScreen() {
-    this.x = MathHelper.limitBetween(this.x, 0, this.worldDims.width - WIDTH);
-    this.y = MathHelper.limitBetween(this.y, 0, this.worldDims.height - HEIGHT);
+    return this.distance.smallerThan(BOUNDING_BOX_DISTANCE);
   }
 
 
   render() {
-    this.viewport.fillRect(this.x - WIDTH / 2, this.y - HEIGHT / 2, WIDTH, HEIGHT, this.color);
+    let pos = this.pos.copy().subVec(BOUNDING_BOX_DISTANCE);
+    this.viewport.fillRect(pos, SIZE, this.color);
   }
 
 }

@@ -1,5 +1,6 @@
 import ResizableCanvas from "./resizablecanvas";
 import Container from "../services/container";
+import Vector from "../services/math/vector";
 
 export default class Viewport extends ResizableCanvas {
   constructor() {
@@ -33,8 +34,22 @@ export default class Viewport extends ResizableCanvas {
     this.ctx.fillRect(0, 0, this.parameters.width, this.parameters.height);
   }
 
-  fillRect(x, y, width, height, color) {
+  /**
+   *
+   * @param {Vector} vector
+   */
+  scale(vector) {
+    return vector.copy().mulNum(this.parameters.scale).getValues();
+  }
+
+  /**
+   * @param {Vector} pos
+   * @param {Vector} size
+   * @param {String} color
+   */
+  fillRect(pos, size, color) {
     this.ctx.fillStyle = color;
-    this.ctx.fillRect(...this.unitToPixel(x, y, width, height));
+    let params = this.scale(pos).concat(this.scale(size));
+    this.ctx.fillRect(...params);
   }
 }

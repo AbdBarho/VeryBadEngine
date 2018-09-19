@@ -1,13 +1,19 @@
+import Vector from "./vector";
+
 export default class MathHelper {
   static atan2(x, y) {
     // we use -y because the y is positive when we go down the canvas, not up just like in normal math
     return Math.atan2(-y, x);
   }
 
-  static direction(xStart, yStart, xEnd, yEnd) {
-    let angle = this.atan2(xEnd - xStart, yEnd - yStart);
+  /**
+   * @param {Vector} vecStart
+   * @param {Vector} vecEnd
+   */
+  static direction2d(vecStart, vecEnd) {
+    let angle = this.atan2(vecEnd.get(0) - vecStart.get(0), vecEnd.get(1) - vecStart.get(1));
     // console.log(angle * 180 / Math.PI);
-    return { x: Math.cos(angle), y: -Math.sin(angle) };
+    return new Vector([Math.cos(angle), -Math.sin(angle)]);
   }
 
   static getRandomInt(max, min = 0) {

@@ -23,7 +23,7 @@ export default class Game {
 
   start() {
     this.logger.log(2, "starting...");
-    // for (let i = 0; i < 4000; i++)
+    // for (let i = 0; i < 3000; i++)
       this.addRandomFollower();
     this.engine.start();
     this.logger.log(2, "started");
@@ -38,7 +38,7 @@ export default class Game {
   addRandomFollower() {
     let follower = new MouseFollower();
     let pos = this.world.getRandomPosition();
-    follower.setPosition(pos.x, pos.y);
+    follower.setPosition(pos);
     this.world.addObject(follower);
   }
 }

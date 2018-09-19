@@ -1,4 +1,5 @@
 import Container from "../services/container";
+import Vector from "../services/math/vector";
 
 export default class World {
   constructor() {
@@ -22,6 +23,13 @@ export default class World {
   }
 
   getDimensions() {
+    throw "not implemented";
+  }
+
+  /**
+   * @returns {Vector}
+   */
+  getSize() {
     throw "not implemented";
   }
 }

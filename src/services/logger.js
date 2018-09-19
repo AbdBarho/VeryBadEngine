@@ -52,6 +52,8 @@ export default class Logger {
         delete debugState[key];
       else if (typeof value === "number" && !Number.isInteger(value))
         debugState[key] = value.toFixed(3);
+      else if (value.getValues)
+        debugState[key] = value.getValues().map(val => val.toFixed(3));
 
     let div = document.getElementById("state");
     let str = "";

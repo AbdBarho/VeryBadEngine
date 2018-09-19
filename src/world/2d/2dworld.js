@@ -1,30 +1,24 @@
 import World from "../world";
-import MathHelper from "../../services/math";
+import MathHelper from "../../services/math/math";
+import Vector from "../../services/math/vector";
 
 const WIDTH = 1920;
 const HEIGHT = 1080;
 export default class TwoDimensionalWorld extends World {
   constructor() {
     super();
-    this.width = WIDTH;
-    this.height = HEIGHT;
-    this.x = 0;
-    this.y = 0;
+    this.size = new Vector([WIDTH, HEIGHT]);
+    this.pos = new Vector([0, 0]);
   }
 
-  getDimensions() {
-    return {
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height
-    };
+  getSize() {
+    return this.size.copy();
   }
 
   getRandomPosition() {
-    return {
-      x: MathHelper.getRandomInt(this.width),
-      y: MathHelper.getRandomInt(this.height)
-    };
+    let dims = [MathHelper.getRandomInt(WIDTH), MathHelper.getRandomInt(HEIGHT)];
+    return new Vector(dims);
   }
+
+
 }
