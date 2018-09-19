@@ -19,6 +19,4 @@ export default class TwoDimensionalWorld extends World {
     let dims = [MathHelper.getRandomInt(WIDTH), MathHelper.getRandomInt(HEIGHT)];
     return new Vector(dims);
   }
-
-
 }

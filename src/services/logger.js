@@ -1,7 +1,7 @@
+import EventManager from "../services/eventmanager";
+
 const GLOBAL_VERBOSITY = 2;
-
 const LOGGERS = [console.error, console.warn, console.log];
-
 
 let debugState = {};
 export default class Logger {
@@ -55,10 +55,6 @@ export default class Logger {
       else if (value.getValues)
         debugState[key] = value.getValues().map(val => val.toFixed(3));
 
-    let div = document.getElementById("state");
-    let str = "";
-    for (let [key, value] of Object.entries(debugState))
-      str += key + ": " + value + " \n";
-    div.innerText = str;
+    EventManager.trigger("render_debug", debugState);
   }
 }

@@ -5,16 +5,8 @@ const ASPECT_RATIO = 16 / 9;
 const BASE_WIDTH = 1920;
 const BASE_HEIGHT = 1080;
 
-/**
- * Events:
- *
- * parametersChanged: { scale, xShift, yShift, width, height }
- *
- *
- */
-export default class ResizableCanvas extends EventManager {
+export default class ResizableCanvas {
   constructor() {
-    super();
     this.logger = new Logger(this, "Canvas");
     this.canvas = document.createElement("canvas");
     this.ctx = this.canvas.getContext("2d");
@@ -23,7 +15,9 @@ export default class ResizableCanvas extends EventManager {
       xShift: 0,
       yShift: 0,
       width: 0,
-      height: 0
+      height: 0,
+      baseWidth: BASE_WIDTH,
+      baseHeight: BASE_HEIGHT
     };
 
     document.body.appendChild(this.canvas);
@@ -34,6 +28,7 @@ export default class ResizableCanvas extends EventManager {
   update() {
     this.resize();
     this.calculateParameters();
+    EventManager.trigger("canvas", this.getParamaters());
     Logger.debugInfo(this.parameters);
   }
 

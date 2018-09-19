@@ -1,48 +1,44 @@
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
-import Container from "../services/container";
 
-export default class InputManager extends EventManager {
-  constructor() {
-    super();
-    this.viewport = Container.getViewport();
+export default class InputManager {
+  constructor(renderer) {
     this.logger = new Logger(this, "InputManager");
-    this.buttonStates = {};
     this.mousePos = { x: 0, y: 0 };
-    Container.register("InputManager", this);
+    this.buttonStates = {};
+    this.canvasParams = renderer.getParamaters();
     this.initListeners();
   }
 
   initListeners() {
+    window.addEventListener("keydown", e => this.keyboardPress(e, true));
+    window.addEventListener("keyup", e => this.keyboardPress(e, false));
 
-    window.addEventListener("keydown", (e) => this.keyboardPress(e, true));
-    window.addEventListener("keyup", (e) => this.keyboardPress(e, false));
+    window.addEventListener("mousedown", e => this.mousePress(e, true));
+    window.addEventListener("mouseup", e => this.mousePress(e, false));
 
-    window.addEventListener("mousedown", (e) => this.mousePress(e, true));
-    window.addEventListener("mouseup", (e) => this.mousePress(e, false));
-
-    window.addEventListener("mousemove", (e) => this.mouseStateUpdate(e));
-    window.addEventListener("dblclick", (e) => this.mouseStateUpdate(e));
-    window.addEventListener("click", (e) => this.mouseStateUpdate(e));
+    window.addEventListener("mousemove", e => this.mouseStateUpdate(e));
+    window.addEventListener("dblclick", e => this.mouseStateUpdate(e));
+    window.addEventListener("click", e => this.mouseStateUpdate(e));
 
     window.addEventListener("blur", () => this.clearAll());
+
+    EventManager.on("canvas", params => this.canvasParams = params);
   }
 
   keyboardPress(e, isPressed) {
     // e.preventDefault();
     let name = e.code;
     this.updateButtonsState(name, isPressed);
-    this.trigger(e.type, name, isPressed);
+    EventManager.trigger("input_" + e.type, name, isPressed);
   }
 
   mousePress(e, isPressed) {
     // e.preventDefault();
     let name = "Mouse" + (e.button + 1);
     this.updateButtonsState(name, isPressed);
-    this.trigger(e.type, this.mousePos.x, this.mousePos.y, name, isPressed);
+    EventManager.trigger("input_" + e.type, this.mousePos.x, this.mousePos.y, name, isPressed);
   }
-
-
 
   updateButtonsState(name, isPressed) {
     if (isPressed)
@@ -54,26 +50,36 @@ export default class InputManager extends EventManager {
 
   mouseStateUpdate(e) {
     // e.preventDefault();
-    ///no keys should be updated here
     let x = e.pageX;
     let y = e.pageY;
-    Logger.debugInfo("pageX", x);
-    Logger.debugInfo("pageY", y);
     //shift coordinates according to viewport
-    this.mousePos = this.viewport.pixelToUnit(x, y);
+    this.mousePos = this.pixelToUnit(x, y);
     Logger.debugInfo(this.mousePos);
-    this.trigger(e.type, this.mousePos.x, this.mousePos.y);
+    EventManager.trigger("input_" + e.type, this.mousePos.x, this.mousePos.y);
   }
 
   clearAll() {
     for (let key of Object.keys(this.buttonStates)) {
       delete this.buttonStates[key];
-      let isMouse = key.indexOf("Mouse") === 0;
-      let eventType = isMouse ? "mouse" : "keyboard";
-      let eventName = isMouse ? "mouseup" : "keyup";
+      if (key.indexOf("Mouse") === 0)
+        EventManager.trigger("input_mouseup", this.mousePos.x, this.mousePos.y, key, false);
+      else
+        EventManager.trigger("input_keyup", key, false);
       Logger.debugInfo(key);
-      this.trigger(eventType, eventName, key, false);
     }
+  }
+
+  /**
+   * @param {Number} x
+   * @param {Number} y
+   * @returns {{x:Number, y: Number}} from pixels in page to game units
+   */
+  pixelToUnit(x, y) {
+    x -= this.canvasParams.xShift;
+    x /= this.canvasParams.scale;
+    y -= this.canvasParams.yShift;
+    y /= this.canvasParams.scale;
+    return { x, y };
   }
 
   /**

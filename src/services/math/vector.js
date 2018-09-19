@@ -33,14 +33,16 @@ export default class Vector {
    * @param {Number} num
    */
   addNum(num) {
-    this.values.forEach((val, i) => this.values[i] = val + num);
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] += num;
     return this;
   }
   /**
    * @param {Number} num
    */
   mulNum(num) {
-    this.values.forEach((val, i) => this.values[i] = val * num);
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] *= num;
     return this;
   }
 
@@ -69,7 +71,8 @@ export default class Vector {
    * @param {Number} max
    */
   limitValues(min, max) {
-    this.values.forEach((val, i) => this.values[i] = MathHelper.limitBetween(val, min, max));
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = MathHelper.limitBetween(this.values[i], min, max);
     return this;
   }
 
@@ -77,10 +80,10 @@ export default class Vector {
    * @param {Vector} vec
    */
   limitByMax(vec) {
-    this.values.forEach((val, i) => {
+    for (let i = 0; i < this.values.length; i++) {
       let max = Math.abs(vec.get(i));
-      this.values[i] = MathHelper.limitBetween(val, -max, max);
-    });
+      this.values[i] = MathHelper.limitBetween(this.values[i], -max, max);
+    }
     return this;
   }
 
@@ -89,17 +92,26 @@ export default class Vector {
    * @param {Vector} maxVec
    */
   limitByMinMax(minVec, maxVec) {
-    this.values.forEach((val, i) => this.values[i] = MathHelper.limitBetween(val, minVec.get(i), maxVec.get(i)));
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = MathHelper.limitBetween(this.values[i], minVec.get(i), maxVec.get(i));
     return this;
   }
 
   abs() {
-    this.values.forEach((val, i) => this.values[i] = Math.abs(val));
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = Math.abs(this.values[i]);
     return this;
   }
 
   neg() {
-    this.values.forEach((val, i) => this.values[i] = -val);
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = -this.values[i];
+    return this;
+  }
+
+  floor() {
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = Math.floor(this.values[i]);
     return this;
   }
 

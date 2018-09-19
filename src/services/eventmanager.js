@@ -1,4 +1,4 @@
-export default class EventManager {
+class EventManager {
   constructor() {
     this.__callbacks__ = {};
   }
@@ -58,3 +58,6 @@ export default class EventManager {
     return this;
   }
 }
+
+let instance = new EventManager();
+export default instance;

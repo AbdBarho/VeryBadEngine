@@ -1,5 +1,5 @@
 import InputManager from "../engine/inputmanager";
-import Viewport from "../engine/viewport";
+import Viewport from "../ui/viewport";
 import World from "../world/world";
 
 let instances = {};
