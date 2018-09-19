@@ -39,7 +39,7 @@ export default class InputManager extends EventManager {
     // e.preventDefault();
     let name = "Mouse" + (e.button + 1);
     this.updateButtonsState(name, isPressed);
-    this.trigger("mouse", e.type, name, isPressed);
+    this.trigger("mouse", e.type, this.mousePos.x, this.mousePos.y, name, isPressed);
   }
 
 
@@ -60,9 +60,9 @@ export default class InputManager extends EventManager {
     Logger.debugInfo("pageX", x);
     Logger.debugInfo("pageY", y);
     //shift coordinates according to viewport
-    this.mousePos = this.viewport.shiftAndScale(x, y);
+    this.mousePos = this.viewport.pixelToUnit(x, y);
     Logger.debugInfo(this.mousePos);
-    this.trigger("mouse", e.type, x, y);
+    this.trigger("mouse", e.type, this.mousePos.x, this.mousePos.y);
   }
 
   clearAll() {
