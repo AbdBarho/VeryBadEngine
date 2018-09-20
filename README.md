@@ -1,2 +1,2 @@
-# VeryBadShooter
-My first attempt at creating a game.
+# VeryBadEngine
+My first attempt at creating a game engine.
