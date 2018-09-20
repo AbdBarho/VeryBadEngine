@@ -13,7 +13,7 @@ export default class Moving2DObject extends TwoDimensionalWorldObject {
   }
 
   move() {
-    this.setPosition(this.pos.addVec(this.velocity));
+    this.pos.addVec(this.velocity);
   }
 
   /**

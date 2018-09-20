@@ -4,6 +4,7 @@ import App from "./src/app";
 
 window.addEventListener("load", () => {
   let game = new App();
+  game.engine.addRandomFollower();
   setTimeout(() => {
     game.start();
   }, 0);
