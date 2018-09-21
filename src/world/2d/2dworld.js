@@ -1,10 +1,10 @@
 import World from "../world";
 import MathHelper from "../../services/math/math";
 import Vector from "../../services/math/vector";
-import GameState from "../../config/gamestate";
+import Config from "../../config/config";
 
 
-const [WIDTH, HEIGHT] = GameState.getWorldSize().getValues();
+const [WIDTH, HEIGHT] = Config.getWorldSize().getValues();
 export default class TwoDimensionalWorld extends World {
   constructor() {
     super();

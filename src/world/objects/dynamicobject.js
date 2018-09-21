@@ -2,21 +2,17 @@ import StaticObject from "./staticobject";
 import Behavior from "../behaviour/behaviour"; //eslint-disable-line no-unused-vars
 
 export default class DynamicObject extends StaticObject {
-  constructor(numDims) {
-    super(numDims);
+  constructor(params) {
+    super(params);
     this.__behaviors__ = {};
     this.__activeBehaviors__ = {};
-  }
 
-  /**
-   *
-   * @param {{BEHAVIORS: Behavior[], DEFAULT_BEHAVIOR_INDEX: Number}} config
-   */
-  initBehaviors(config) {
-    let behaviors = config.BEHAVIORS.map(Clazz => new Clazz(this));
-    this.addBehaviors(behaviors);
-    this.activateBehavior(behaviors[config.DEFAULT_BEHAVIOR_INDEX].getName());
-    return behaviors;
+    //init behaviors
+    let behaviors = params.BEHAVIORS.map(Clazz => new Clazz(this));
+    for (let i = 0; i < behaviors.length; i++)
+      this.addBehavior(behaviors[i]);
+    if (params.DEFAULT_BEHAVIOR_INDEX > -1)
+      this.activateBehavior(behaviors[params.DEFAULT_BEHAVIOR_INDEX].getName());
   }
 
   /**
@@ -31,15 +27,6 @@ export default class DynamicObject extends StaticObject {
     return behavior;
   }
 
-  /**
-   * @param {Behavior[]} behavior
-   * @returns {Behavior[]}
-   */
-  addBehaviors(behaviors) {
-    for (let i = 0; i < behaviors.length; i++)
-      this.addBehavior(behaviors[i]);
-    return behaviors;
-  }
   /**
    * @param {Behavior} behavior
    */
@@ -96,17 +83,5 @@ export default class DynamicObject extends StaticObject {
    */
   getBehaviorNames() {
     return Object.keys(this.__behaviors__);
-  }
-
-  beforeUpdate() {
-    //nothing
-  }
-
-  update() {
-    throw "not implemented";
-  }
-
-  afterUpdate() {
-    //nothing
   }
 }

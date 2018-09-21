@@ -1,9 +1,8 @@
 import InitialState from "./initialgamestate";
 import Vector from "../services/math/vector";
 import EventManager from "../services/eventmanager";
-import Behavior from "../world/behaviour/behaviour";
 
-class GameState {
+class Config {
   constructor() {
     this.state = InitialState;
     EventManager.on("input_mousemove", (x, y) => this.state.MOUSE = new Vector([x, y]));
@@ -21,10 +20,6 @@ class GameState {
     return this.state.MOVEMENT.MAX_ACCELERATION;
   }
 
-  /**
-   * @param {String} name
-   * @returns {{SIZE: Vector, BEHAVIORS: Behavior[], DEFAULT_BEHAVIOR_INDEX: Number}}
-   */
   getConfig(name) {
     return this.state.OBJECTS[name];
   }
@@ -32,6 +27,10 @@ class GameState {
   getWorldSize() {
     return this.state.WORLD.SIZE.copy();
   }
+
+  getUpdateInterval() {
+    return this.state.ENGINE.UPDATE_INTERVAL;
+  }
 }
 
-export default new GameState();
+export default new Config();

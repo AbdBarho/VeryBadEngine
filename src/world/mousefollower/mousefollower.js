@@ -3,28 +3,27 @@ import MathHelper from "../../services/math/math";
 import Vector from "../../services/math/vector";
 import EventManager from "../../services/eventmanager";
 import NumberKeysMapper from "../../engine/numbekeysmapper";
-import GameState from "../../config/gamestate";
-
-//config
-const CONFIG = GameState.getConfig("MOUSE_FOLLOWER");
-const SIZE = CONFIG.SIZE.copy();
-const BOUNDING_BOX_DISTANCE = SIZE.copy().divNum(2);
-const WORLD_EDGES = GameState.getWorldSize().subVec(BOUNDING_BOX_DISTANCE);
+import Config from "../../config/config";
 
 export default class MouseFollower extends MovingObject {
-  constructor() {
-    super(2);
+  constructor(params = Config.getConfig("MOUSE_FOLLOWER")) {
+    super(params);
+
     this.distance = new Vector(2);
-    this.target = GameState.getMousePos();
+    this.target = Config.getMousePos();
     this.color = MathHelper.getRandomColor();
 
-    this.LOOK_AHED_STEPS = 0;
-    this.RANDOM_FACTOR_SCALE = 0;
-    this.STOP_ON_REACH = false;
+    if (params.DEFAULT_BEHAVIOR_INDEX === -1) {
+      this.LOOK_AHED_STEPS = Math.random();
+      this.RANDOM_FACTOR_SCALE = Math.random();
+      this.STOP_ON_REACH = Math.random() > 0;
+    }
 
-    let behaviors = this.initBehaviors(CONFIG);
-    this.mapper = new NumberKeysMapper((_, i) => this.activateBehaviorOnly(behaviors[i].name), [1, 2, 3, 4]);
     EventManager.on("input_mousemove", this.setTarget, this);
+    let behaviors = this.getBehaviorNames();
+    this.mapper = new NumberKeysMapper((num) => {
+      this.activateBehaviorOnly(behaviors[--num]);
+    }, [1, 2, 3, 4]);
   }
 
   setTarget(x, y) {
@@ -32,14 +31,24 @@ export default class MouseFollower extends MovingObject {
   }
 
   update() {
-    this.distance = this.target.copy().subVec(this.pos).abs();
+    this.updateDistance();
     if (this.STOP_ON_REACH && this.targetReached())
       return this.getRenderingCommand();
+    //set a
     this.updateDirection();
-    this.move();
-    this.pos.limitByMinMax(BOUNDING_BOX_DISTANCE, WORLD_EDGES);
-    this.updateSpeed();
-    return this.getRenderingCommand();
+    // x += v
+    this.pos.addVec(this.velocity);
+    // v += a
+    this.setSpeed(this.velocity.addVec(this.acceleration));
+    this.keepInWorld();
+  }
+
+  updateDistance() {
+    this.distance = this.target.copy().subVec(this.pos).abs();
+  }
+
+  targetReached() {
+    return this.distance.smallerThan(this.centerShift);
   }
 
   updateDirection() {
@@ -49,13 +58,15 @@ export default class MouseFollower extends MovingObject {
     this.setAcceleration(dir.addNum(r));
   }
 
-  targetReached() {
-    return this.distance.smallerThan(BOUNDING_BOX_DISTANCE);
+  setMovementParameters(lookAhed = 0, randomScale = 0, stopOnReach = false) {
+    this.LOOK_AHED_STEPS = lookAhed;
+    this.RANDOM_FACTOR_SCALE = randomScale;
+    this.STOP_ON_REACH = stopOnReach;
   }
 
   getRenderingCommand() {
-    let pos = this.pos.copy().subVec(BOUNDING_BOX_DISTANCE);
-    let renderDims = pos.floor().getValues().concat(SIZE.getValues());
+    let pos = this.pos.copy().subVec(this.centerShift);
+    let renderDims = pos.floor().getValues().concat(this.size.getValues());
     return {
       command: "fillRect",
       color: this.color,

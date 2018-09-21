@@ -54,6 +54,8 @@ export default class Logger {
         debugState[key] = value.toFixed(3);
       else if (value.getValues)
         debugState[key] = value.getValues().map(val => val.toFixed(3));
+      else if (typeof value === "object" && !Array.isArray(value)|| typeof value === "function")
+        delete debugState[key];
 
     EventManager.trigger("render_debug", debugState);
   }

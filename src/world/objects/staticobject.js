@@ -1,8 +1,10 @@
 import Vector from "../../services/math/vector";
 
 export default class StaticObject {
-  constructor(numDimensions) {
-    this.pos = new Vector(numDimensions);
+  constructor(params) {
+    this.pos = params.POSITION.copy();
+    this.size = params.SIZE.copy();
+    this.centerShift = params.SIZE.copy().divNum(2);
   }
 
   /**
@@ -10,6 +12,35 @@ export default class StaticObject {
    */
   setPosition(pos) {
     this.pos = pos;
+  }
+
+  /**
+   * @param {Vector} size
+   */
+  setSize(size) {
+    this.size = size;
+  }
+
+  triggerUpdate(dt) {
+    this.beforeUpdate(dt);
+    this.update(dt);
+    this.afterUpdate(dt);
+  }
+
+
+  beforeUpdate(dt) {
+    //nothing
+  }
+
+  /**
+   * @param {Number} dt time since last update
+   */
+  update(dt) {
+    throw "not implemented";
+  }
+
+  afterUpdate(dt) {
+    //nothing
   }
 
   getBoundingBox() {

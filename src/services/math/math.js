@@ -27,7 +27,7 @@ export default class MathHelper {
     return "rgb(" + r + "," + g + "," + b + ")";
   }
 
-  static getRandomWithSign() {
+  static getSignedRandom() {
     let r = Math.random();
     if (Math.random() < 0.5)
       return r;
