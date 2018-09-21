@@ -2,9 +2,11 @@ import MathHelper from "./math";
 
 export default class Vector {
   /**
-   * @param {Number[]} values
+   * @param {Number[]|Number} values
    */
   constructor(values) {
+    if (typeof values === "number")
+      values = Array(values).fill(0);
     this.values = values;
   }
 
@@ -44,6 +46,14 @@ export default class Vector {
     for (let i = 0; i < this.values.length; i++)
       this.values[i] *= num;
     return this;
+  }
+  /**
+   * @param {Number} num
+   */
+  divNum(num) {
+    if (num === 0)
+      throw "Zero division error";
+    return this.mulNum(1 / num);
   }
 
   /**

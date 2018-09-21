@@ -1,27 +1,21 @@
 export default class Behavior {
   /**
-   * @param {Strinh} name
-   * @param {Function} activator
-   * @param {Function} deactivator
-   * @param {any} obj
+   * @param {String} name
    */
-  constructor(name, activator, deactivator = () => {}, obj = {}) {
+  constructor(name) {
     this.name = name;
-    this.activator = activator;
-    this.deactivator = deactivator;
-    this.storage = obj;
+    this.storage = {};
   }
 
   getName() {
     return this.name;
   }
 
-  activate(...params) {
-    this.activator(this.storage, ...params);
+  activate() {
+    throw "not implemented";
   }
 
-  deactivate(...params) {
-    this.deactivator(this.storage, ...params);
+  deactivate() {
+    throw "not implemented";
   }
-
 }

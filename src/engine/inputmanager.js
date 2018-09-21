@@ -30,14 +30,14 @@ export default class InputManager {
     // e.preventDefault();
     let name = e.code;
     this.updateButtonsState(name, isPressed);
-    EventManager.trigger("input_" + e.type, name, isPressed);
+    EventManager.trigger("input_" + e.type + "_" + name);
   }
 
   mousePress(e, isPressed) {
     // e.preventDefault();
     let name = "Mouse" + (e.button + 1);
     this.updateButtonsState(name, isPressed);
-    EventManager.trigger("input_" + e.type, this.mousePos.x, this.mousePos.y, name, isPressed);
+    EventManager.trigger("input_" + e.type + "_" + name, this.mousePos.x, this.mousePos.y);
   }
 
   updateButtonsState(name, isPressed) {

@@ -1,15 +1,15 @@
-import TwoDimensionalWorldObject from "./2dworldobject";
 import Vector from "../../services/math/vector";
+import DynamicObject from "./dynamicobject";
+import GameState from "../../config/gamestate";
 
-const START_VELOCITY = 1;
-const MAX_VELOCITY = 10;
-const START_ACCELRATION = 0.01;
-const MAX_ACCELERATION = 10;
-export default class Moving2DObject extends TwoDimensionalWorldObject {
-  constructor() {
-    super();
-    this.velocity = new Vector([START_VELOCITY, START_VELOCITY]);
-    this.acceleration = new Vector([START_ACCELRATION, START_ACCELRATION]);
+
+const MAX_VELOCITY = GameState.getMaxVelocity();
+const MAX_ACCELERATION = GameState.getMaxAcceleration();
+export default class MovingObject extends DynamicObject {
+  constructor(numDims) {
+    super(numDims);
+    this.velocity = new Vector(numDims);
+    this.acceleration = new Vector(numDims);
   }
 
   move() {
@@ -27,6 +27,9 @@ export default class Moving2DObject extends TwoDimensionalWorldObject {
     this.setSpeed(this.velocity.addVec(this.acceleration));
   }
 
+  /**
+   * @param {Vector} vector
+   */
   setAcceleration(vector) {
     this.acceleration = vector.limitValues(-MAX_ACCELERATION, MAX_ACCELERATION);
   }

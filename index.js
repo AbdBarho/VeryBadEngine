@@ -1,11 +1,12 @@
 import App from "./src/app";
+import EventManager from "./src/services/eventmanager";
 // import EngineWorker from "./src/webworker/engine.worker";
 // let worker = new EngineWorker();
 
 window.addEventListener("load", () => {
   let game = new App();
+  window.game = game;
+  window.eventManager = EventManager;
   game.engine.addRandomFollower();
-  setTimeout(() => {
-    game.start();
-  }, 0);
+  setTimeout(() => game.start(), 0);
 });

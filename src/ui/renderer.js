@@ -12,15 +12,19 @@ export default class Renderer extends Viewport {
     this.logger = new Logger(this, "Renderer");
     this.updater = new PeriodicExecuter("Render Loop", UPDATE_INTERVAL, () => this.renderAll());
     this.renderCommands = {};
+    this.isRendering = false;
+    this.raf = this.raf.bind(this);
     this.initListeners();
   }
 
   initListeners() {
     EventManager.on("render_start", () => {
       this.updater.start();
+      this.isRendering = true;
     });
     EventManager.on("render_stop", () => {
       this.updater.stop();
+      this.isRendering = false;
     });
 
     EventManager.on("render_command", (index, params) => {
@@ -38,7 +42,6 @@ export default class Renderer extends Viewport {
   }
 
   renderAll() {
-    this.ctx.save();
     this.backgroundColor("black");
     let i = 0;
     let command = this.renderCommands[i];
@@ -46,13 +49,12 @@ export default class Renderer extends Viewport {
       this.renderCommand(command);
       command = this.renderCommands[++i];
     }
-    this.ctx.restore();
   }
 
   raf() {
     this.renderAll();
     if (this.isRendering)
-      requestAnimationFrame(this.raf.bind(this));
+      requestAnimationFrame(this.raf);
   }
 
   renderCommand(command) {

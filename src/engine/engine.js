@@ -1,5 +1,5 @@
 import Logger from "../services/logger";
-import MouseFollower from "../world/2d/mousefollower";
+import MouseFollower from "../world/mousefollower/mousefollower";
 import TwoDimensionalWorld from "../world/2d/2dworld";
 import PeriodecExecuter from "../services/periodicexecuter";
 import EventManager from "../services/eventmanager";
@@ -29,7 +29,7 @@ export default class Engine {
       let renderCommand = obj.update();
       EventManager.trigger("render_command", i, renderCommand);
     });
-    // EventManager.trigger("render_all")
+    EventManager.trigger("render_all");
   }
 
   addRandomFollower() {

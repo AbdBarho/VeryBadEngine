@@ -1,5 +1,3 @@
-import Vector from "../services/math/vector";
-
 export default class World {
   constructor() {
     this.objects = [];
@@ -9,18 +7,13 @@ export default class World {
     this.objects.push(obj);
   }
 
+  removeObject(id) {
+    let obj = this.objects[id];
+    this.objects.splice(id, 1);
+    obj.destroy();
+  }
+
   getObjects() {
     return this.objects;
-  }
-
-  getDimensions() {
-    throw "not implemented";
-  }
-
-  /**
-   * @returns {Vector}
-   */
-  getSize() {
-    throw "not implemented";
   }
 }

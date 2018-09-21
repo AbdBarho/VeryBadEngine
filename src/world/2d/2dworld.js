@@ -1,22 +1,20 @@
 import World from "../world";
 import MathHelper from "../../services/math/math";
 import Vector from "../../services/math/vector";
+import GameState from "../../config/gamestate";
 
-const WIDTH = 1920;
-const HEIGHT = 1080;
+
+const [WIDTH, HEIGHT] = GameState.getWorldSize().getValues();
 export default class TwoDimensionalWorld extends World {
   constructor() {
     super();
     this.size = new Vector([WIDTH, HEIGHT]);
-    this.pos = new Vector([0, 0]);
-  }
-
-  getSize() {
-    return this.size.copy();
+    this.pos = new Vector(2);
   }
 
   getRandomPosition() {
-    let dims = [MathHelper.getRandomInt(WIDTH), MathHelper.getRandomInt(HEIGHT)];
-    return new Vector(dims);
+    let x = MathHelper.getRandomInt(WIDTH);
+    let y = MathHelper.getRandomInt(HEIGHT);
+    return new Vector([x, y]);
   }
 }
