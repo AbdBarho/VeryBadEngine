@@ -1,5 +1,5 @@
 import MouseFollower from "./mousefollower";
-import MathHelper from "../../services/math/math";
+import MathHelper from "../../math/math";
 import Config from "../../config/config";
 import Logger from "../../services/logger";
 
@@ -16,6 +16,7 @@ export default class AccurateMouseFollower extends MouseFollower {
     this.updateDirection();
     this.timeStep(dt);
     this.keepInWorld();
+    // Logger.debugInfo(this);
   }
 
   updateDirection() {

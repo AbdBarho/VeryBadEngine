@@ -1,6 +1,4 @@
 import Behavior from "../behaviour/behaviour";
-import MouseFollower from "./mousefollower"; //eslint-disable-line
-
 
 class FreezeBehavior extends Behavior {
   /**

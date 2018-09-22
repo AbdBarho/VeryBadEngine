@@ -4,6 +4,7 @@ const GLOBAL_VERBOSITY = 2;
 const LOGGERS = [console.error, console.warn, console.log];
 
 let debugState = {};
+let avgFps = 0;
 export default class Logger {
   /**
    * @param {*} obj
@@ -16,8 +17,8 @@ export default class Logger {
 
     //completely disable logging for performance reasons
     if (GLOBAL_VERBOSITY === -1) {
-      this.log = () => { };
-      Logger.debugInfo = () => { };
+      this.log = () => {};
+      Logger.debugInfo = () => {};
     }
 
   }
@@ -41,21 +42,31 @@ export default class Logger {
     loggingFunc(this.prefix, ":", ...params);
   }
 
-  static debugInfo(name, value) {
-    if (typeof name === "object")
-      Object.assign(debugState, name);
-    else
-      debugState[name] = value;
+  static fps(dt) {
+    avgFps += dt;
+    avgFps /= 2;
+    this.debugInfo("FPS", Math.round(1 / avgFps));
+  }
 
-    for (let [key, value] of Object.entries(debugState))
-      if (value === false || value === undefined)
-        delete debugState[key];
-      else if (typeof value === "number" && !Number.isInteger(value))
-        debugState[key] = value.toFixed(3);
-      else if (value.getValues)
-        debugState[key] = value.getValues().map(val => val.toFixed(3));
-      else if (typeof value === "object" && !Array.isArray(value)|| typeof value === "function")
-        delete debugState[key];
+  static debugInfo(name, val) {
+    if (typeof name === "object") {
+      for (let [key, value] of Object.entries(name)) {
+        if (value === false || value === undefined)
+          delete debugState[key];
+        else if (typeof value === "number" && !Number.isInteger(value))
+          debugState[key] = value.toFixed(3);
+        else if (value.getValues)
+          debugState[key] = value.getValues().map(val => val.toFixed(3));
+        else if (typeof value === "object" && !Array.isArray(value) || typeof value === "function")
+          delete debugState[key];
+        else
+          debugState[key] = value;
+      }
+    } else if (val === false || val === undefined) {
+      delete debugState[name];
+    } else {
+      debugState[name] = val;
+    }
 
     EventManager.trigger("render_debug", debugState);
   }

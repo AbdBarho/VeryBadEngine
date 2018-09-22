@@ -14,11 +14,13 @@ export default class App {
     EventManager.on("input_keydown_Enter", () => {
       for (let i = 0; i < 10; i++)
         this.engine.addRandomFollower();
+      console.log(this.engine.world.getObjects().length);
     });
     EventManager.on("input_keydown_Delete", () => {
       let len = Math.min(10, this.engine.world.getObjects());
       for (let i = 0; i < len; i++)
         this.engine.world.removeObject(0);
+      console.log(this.engine.world.getObjects());
     });
   }
 

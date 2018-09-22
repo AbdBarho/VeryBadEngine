@@ -1,20 +1,18 @@
 import Logger from "../services/logger";
-import MouseFollower from "../world/mousefollower/mousefollower";
-import TwoDimensionalWorld from "../world/2d/2dworld";
 import PeriodecExecuter from "../services/periodicexecuter";
 import EventManager from "../services/eventmanager";
 import Config from "../config/config";
+import World from "../world/world";
+import MouseFollower from "../world/mousefollower/mousefollower";
 import AccurateMouseFollower from "../world/mousefollower/accuratemousefollower";
 
+const CONFIG = Config.getConfig("ENGINE");
 export default class Engine {
   constructor() {
     this.logger = new Logger(this, "Engine");
-    this.world = new TwoDimensionalWorld();
-    this.updater = new PeriodecExecuter("Update Loop", Config.getUpdateInterval(), this.update.bind(this));
-    this.initListeners();
-  }
+    this.world = new World();
+    this.updater = new PeriodecExecuter("Update Loop", CONFIG.UPDATE_INTERVAL, this.update, this);
 
-  initListeners() {
     EventManager.on("engine_start", () => this.updater.start());
     EventManager.on("engine_stop", () => this.updater.stop());
   }
@@ -28,6 +26,7 @@ export default class Engine {
       EventManager.trigger("render_command", i, obj.getRenderingCommand());
     });
     EventManager.trigger("render_all");
+    Logger.fps(ms);
   }
 
   addRandomFollower() {

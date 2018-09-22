@@ -1,6 +1,6 @@
 import MovingObject from "../objects/movingobject";
-import MathHelper from "../../services/math/math";
-import Vector from "../../services/math/vector";
+import MathHelper from "../../math/math";
+import Vector from "../../math/vector";
 import EventManager from "../../services/eventmanager";
 import NumberKeysMapper from "../../engine/numbekeysmapper";
 import Config from "../../config/config";
@@ -12,18 +12,15 @@ export default class MouseFollower extends MovingObject {
     this.distance = new Vector(2);
     this.target = Config.getMousePos();
     this.color = MathHelper.getRandomColor();
+    this.LOOK_AHED_STEPS = 0;
+    this.RANDOM_FACTOR_SCALE = 0;
+    this.STOP_ON_REACH = false;
 
-    if (params.DEFAULT_BEHAVIOR_INDEX === -1) {
-      this.LOOK_AHED_STEPS = Math.random();
-      this.RANDOM_FACTOR_SCALE = Math.random();
-      this.STOP_ON_REACH = Math.random() > 0;
-    }
-
-    EventManager.on("input_mousemove", this.setTarget, this);
     let behaviors = this.getBehaviorNames();
     this.mapper = new NumberKeysMapper((num) => {
       this.activateBehaviorOnly(behaviors[--num]);
     }, [1, 2, 3, 4]);
+    EventManager.on("input_mousemove", this.setTarget, this);
   }
 
   setTarget(x, y) {

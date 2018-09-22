@@ -1,10 +1,10 @@
-import Vector from "../../services/math/vector";
+import Vector from "../../math/vector";
 
 export default class StaticObject {
   constructor(params) {
-    this.pos = params.POSITION.copy();
-    this.size = params.SIZE.copy();
-    this.centerShift = params.SIZE.copy().divNum(2);
+    this.pos = params.POSITION;
+    this.size = params.SIZE;
+    this.centerShift = params.CENTER_SHIFT;
   }
 
   /**
@@ -20,6 +20,7 @@ export default class StaticObject {
   setSize(size) {
     this.size = size;
   }
+  
 
   triggerUpdate(dt) {
     this.beforeUpdate(dt);

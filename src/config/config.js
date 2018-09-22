@@ -1,5 +1,5 @@
 import InitialState from "./initialgamestate";
-import Vector from "../services/math/vector";
+import Vector from "../math/vector";
 import EventManager from "../services/eventmanager";
 
 class Config {
@@ -12,25 +12,19 @@ class Config {
     return this.state.MOUSE.copy();
   }
 
-  getMaxVelocity() {
-    return this.state.MOVEMENT.MAX_VELOCITY;
-  }
-
-  getMaxAcceleration() {
-    return this.state.MOVEMENT.MAX_ACCELERATION;
-  }
-
   getConfig(name) {
-    return this.state.OBJECTS[name];
+    return this.copy(this.state[name]);
   }
-
-  getWorldSize() {
-    return this.state.WORLD.SIZE.copy();
-  }
-
-  getUpdateInterval() {
-    return this.state.ENGINE.UPDATE_INTERVAL;
+  copy(obj) {
+    let copy = {};
+    for (let [key, value] of Object.entries(obj))
+      if (value instanceof Vector)
+        copy[key] = value.copy();
+      else
+        copy[key] = value;
+    return copy;
   }
 }
 
-export default new Config();
+let instance = new Config();
+export default instance;

@@ -1,5 +1,5 @@
 import ResizableCanvas from "./resizablecanvas";
-import Vector from "../services/math/vector";
+import Vector from "../math/vector";
 
 export default class Viewport extends ResizableCanvas {
   backgroundColor(color) {

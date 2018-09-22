@@ -133,6 +133,15 @@ export default class Vector {
     return true;
   }
 
+  /**
+   *
+   * @param {(val: Number, index: Number, arr: Number[]) => Number} func
+   * @param {any} context
+   */
+  map(func, context) {
+    return new Vector(this.values.map((el, i, arr) => func.call(context, el, i, arr)));
+  }
+
   copy() {
     return new Vector(this.getValues());
   }

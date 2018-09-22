@@ -1,15 +1,15 @@
-import Vector from "../../services/math/vector";
+import Vector from "../../math/vector";
 import DynamicObject from "./dynamicobject";
 import Config from "../../config/config";
 
-//FIXME: move collision detection to engine
 
-let WORLD_EDGES = Config.getWorldSize().subVec(new Vector([10,10]));
+//FIXME: move collision detection to engine
+const WORLD_EDGES = Config.getConfig("WORLD").SIZE;
 export default class MovingObject extends DynamicObject {
   constructor(params) {
     super(params);
-    this.velocity = params.VELOCITY.copy();
-    this.acceleration = params.ACCELERATION.copy();
+    this.velocity = params.VELOCITY;
+    this.acceleration = params.ACCELERATION;
 
     this.MAX_VELOCITY = params.MAX_VELOCITY;
     this.MAX_ACCELERATION = params.MAX_ACCELERATION;

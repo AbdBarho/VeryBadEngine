@@ -11,8 +11,6 @@ export default class DynamicObject extends StaticObject {
     let behaviors = params.BEHAVIORS.map(Clazz => new Clazz(this));
     for (let i = 0; i < behaviors.length; i++)
       this.addBehavior(behaviors[i]);
-    if (params.DEFAULT_BEHAVIOR_INDEX > -1)
-      this.activateBehavior(behaviors[params.DEFAULT_BEHAVIOR_INDEX].getName());
   }
 
   /**
