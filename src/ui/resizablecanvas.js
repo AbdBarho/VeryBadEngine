@@ -1,9 +1,13 @@
 import Logger from "../services/logger";
 import EventManager from "../services/eventmanager";
+import Confing from "../config/config";
+import Vector from "../math/vector";
 
-const ASPECT_RATIO = 16 / 9;
-const BASE_WIDTH = 1920;
-const BASE_HEIGHT = 1080;
+const CONFIG = Confing.getConfig("VIEWPORT");
+const SIZE = CONFIG.SIZE;
+const BASE_WIDTH = SIZE.get(0);
+const BASE_HEIGHT = SIZE.get(1);
+const ASPECT_RATIO = CONFIG.ASPECT_RATIO;
 
 export default class ResizableCanvas {
   constructor() {
@@ -11,9 +15,8 @@ export default class ResizableCanvas {
     this.canvas = document.createElement("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.parameters = {
-      scale: 1,
-      xShift: 0,
-      yShift: 0,
+      scale: null,
+      shift: null,
       width: 0,
       height: 0,
       baseWidth: BASE_WIDTH,
@@ -50,11 +53,10 @@ export default class ResizableCanvas {
   }
 
   calculateParameters() {
-    let scale = this.canvas.width / BASE_WIDTH;
+    let scale = new Vector([this.canvas.width / BASE_WIDTH, this.canvas.height / BASE_HEIGHT]);
     let rect = this.canvas.getBoundingClientRect();
-    let xShift = rect.x;
-    let yShift = rect.y;
-    Object.assign(this.parameters, { scale, xShift, yShift });
+    let shift = new Vector([rect.x, rect.y]);
+    Object.assign(this.parameters, { scale, shift });
   }
 
   getParamaters() {

@@ -5,7 +5,7 @@ import EventManager from "../services/eventmanager";
 class Config {
   constructor() {
     this.state = InitialState;
-    EventManager.on("input_mousemove", (x, y) => this.state.MOUSE = new Vector([x, y]));
+    EventManager.on("input_mousemove", (vec) => this.state.MOUSE = vec);
   }
 
   getMousePos() {
@@ -13,18 +13,18 @@ class Config {
   }
 
   getConfig(name) {
-    return this.copy(this.state[name]);
-  }
-  copy(obj) {
-    let copy = {};
-    for (let [key, value] of Object.entries(obj))
-      if (value instanceof Vector)
-        copy[key] = value.copy();
-      else
-        copy[key] = value;
-    return copy;
+    return copy(this.state[name]);
   }
 }
 
-let instance = new Config();
-export default instance;
+export default new Config();
+
+function copy(obj) {
+  let copy = {};
+  for (let [key, value] of Object.entries(obj))
+    if (value instanceof Vector)
+      copy[key] = value.copy();
+    else
+      copy[key] = value;
+  return copy;
+}

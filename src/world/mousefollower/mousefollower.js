@@ -23,8 +23,8 @@ export default class MouseFollower extends MovingObject {
     EventManager.on("input_mousemove", this.setTarget, this);
   }
 
-  setTarget(x, y) {
-    this.target = new Vector([x, y]);
+  setTarget(pos) {
+    this.target = pos.copy();
   }
 
   update() {
@@ -63,11 +63,11 @@ export default class MouseFollower extends MovingObject {
 
   getRenderingCommand() {
     let pos = this.pos.copy().subVec(this.centerShift);
-    let renderDims = pos.floor().getValues().concat(this.size.getValues());
     return {
       command: "fillRect",
       color: this.color,
-      dimensions: renderDims
+      pos: pos.floor(),
+      size: this.size.copy()
     };
   }
 

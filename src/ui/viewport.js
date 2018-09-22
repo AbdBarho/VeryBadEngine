@@ -11,12 +11,11 @@ export default class Viewport extends ResizableCanvas {
    * @param {Vector} vector
    */
   scale(vector) {
-    return vector.mulNum(this.parameters.scale).getValues();
+    return vector.mulVec(this.parameters.scale).getValues();
   }
 
-  fillRect(color, dims) {
-    this.ctx.fillStyle = color;
-    dims = this.scale(new Vector(dims));
-    this.ctx.fillRect(...dims);
+  fillRect(command) {
+    this.ctx.fillStyle = command.color;
+    this.ctx.fillRect(...this.scale(command.pos), ...this.scale(command.size));
   }
 }

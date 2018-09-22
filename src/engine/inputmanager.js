@@ -1,5 +1,6 @@
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
+import Vector from "../math/vector";
 
 export default class InputManager {
   constructor(renderer) {
@@ -54,15 +55,15 @@ export default class InputManager {
     let y = e.pageY;
     //shift coordinates according to viewport
     this.mousePos = this.pixelToUnit(x, y);
-    Logger.debugInfo(this.mousePos);
-    EventManager.trigger("input_" + e.type, this.mousePos.x, this.mousePos.y);
+    Logger.debugInfo("MousePos", this.mousePos.copy().floor().getValues());
+    EventManager.trigger("input_" + e.type, this.mousePos);
   }
 
   clearAll() {
     for (let key of Object.keys(this.buttonStates)) {
       delete this.buttonStates[key];
       if (key.indexOf("Mouse") === 0)
-        EventManager.trigger("input_mouseup", this.mousePos.x, this.mousePos.y, key, false);
+        EventManager.trigger("input_mouseup", this.mousePos, key, false);
       else
         EventManager.trigger("input_keyup", key, false);
       Logger.debugInfo(key);
@@ -72,14 +73,13 @@ export default class InputManager {
   /**
    * @param {Number} x
    * @param {Number} y
-   * @returns {{x:Number, y: Number}} from pixels in page to game units
+   * @returns {Vector} from pixels in page to game units
    */
   pixelToUnit(x, y) {
-    x -= this.canvasParams.xShift;
-    x /= this.canvasParams.scale;
-    y -= this.canvasParams.yShift;
-    y /= this.canvasParams.scale;
-    return { x, y };
+    let pos = new Vector([x, y]);
+    pos.subVec(this.canvasParams.shift);
+    pos.divVec(this.canvasParams.scale);
+    return pos;
   }
 
   /**

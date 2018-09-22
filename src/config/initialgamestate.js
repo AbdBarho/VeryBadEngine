@@ -7,9 +7,10 @@ export default {
     UPDATE_INTERVAL: 1000 / MAX_TICKS_PER_SECOND
   },
   VIEWPORT: {
-    SIZE: new Vector([1920, 1080]),
+    SIZE: new Vector([1920, 1080 ]),
+    ASPECT_RATIO: 16 / 9,
     ACTUAL_SIZE: new Vector(2),
-    SCALE: 1
+    SCALE: new Vector(2)
   },
   MOUSE: new Vector(2),
   WORLD: {

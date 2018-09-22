@@ -76,6 +76,30 @@ export default class Vector {
     return this;
   }
 
+
+  /**
+   * @param {Vector} vector
+   */
+  divVec(vector) {
+    let len = getMaxLength([this, vector]);
+    for (let i = 0; i < len; i++)
+      if (vector.get(i) === 0)
+        throw "Division by Zero";
+      else
+        this.values[i] = this.get(i) / vector.get(i);
+    return this;
+  }
+  /**
+   * @param {Vector} vector
+   */
+  mulVec(vector) {
+    let len = getMaxLength([this, vector]);
+    for (let i = 0; i < len; i++)
+      this.values[i] = this.get(i) * vector.get(i);
+    return this;
+  }
+
+
   /**
    * @param {Number} min
    * @param {Number} max

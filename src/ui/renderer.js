@@ -1,16 +1,12 @@
 import Logger from "../services/logger";
 import Viewport from "./viewport";
 import EventManager from "../services/eventmanager";
-import PeriodicExecuter from "../services/periodicexecuter";
 
-const TICKS_PER_SECOND = 60;
-//delay between each update
-const UPDATE_INTERVAL = Math.ceil(1000 / TICKS_PER_SECOND);
+
 export default class Renderer extends Viewport {
   constructor() {
     super();
     this.logger = new Logger(this, "Renderer");
-    this.updater = new PeriodicExecuter("Render Loop", UPDATE_INTERVAL, () => this.renderAll());
     this.renderCommands = {};
     this.isRendering = false;
     this.raf = this.raf.bind(this);
@@ -58,7 +54,7 @@ export default class Renderer extends Viewport {
   }
 
   renderCommand(command) {
-    this.fillRect(command.color, command.dimensions);
+    this.fillRect(command);
   }
 
   renderDebug(debugState) {
