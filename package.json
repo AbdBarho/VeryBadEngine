@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
+    "build": "webpack --mode=production --progress && inline-source --compress true --root ./ ./index.html ./bundle.html",
     "server": "http-server ./ -p 8001"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AbdBarho/VeryBadGame.git"
+    "url": "git+https://github.com/AbdBarho/VeryBadEngine.git"
   },
   "keywords": [
     "game",
@@ -18,17 +19,19 @@
   "author": "Abdullah Barhoum",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AbdBarho/VeryBadGame/issues"
+    "url": "https://github.com/AbdBarho/VeryBadEngine/issues"
   },
-  "homepage": "https://github.com/AbdBarho/VeryBadGame#readme",
+  "homepage": "https://github.com/AbdBarho/VeryBadEngine#readme",
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/runtime": "^7.0.0",
     "babel-loader": "^8.0.2",
+    "circular-dependency-plugin": "^5.0.2",
     "eslint": "^5.6.0",
     "http-server": "^0.11.1",
+    "inline-source-cli": "^1.2.0",
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.0",
     "worker-loader": "^2.0.0"

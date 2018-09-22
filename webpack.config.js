@@ -1,4 +1,5 @@
 let path = require('path');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 module.exports = {
   entry: './index.js',
@@ -8,6 +9,13 @@ module.exports = {
     path: path.join(__dirname, './dist'),
     filename: 'bundle.js'
   },
+  plugins: [
+    new CircularDependencyPlugin({
+      exclude: /node_modules/,
+      failOnError: false,
+      cwd: process.cwd(),
+    })
+  ],
   module: {
     rules: [{
       test: /\.worker\.js$/,
@@ -24,8 +32,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env'],
-          plugins: ['@babel/plugin-transform-runtime'],
-          cacheDirectory: false
+          plugins: ['@babel/plugin-transform-runtime']
         }
       }
     }]
