@@ -1,6 +1,5 @@
 import App from "./src/app";
 import EventManager from "./src/services/eventmanager";
-import AccurateMouseFollower from "./src/world/mousefollower/accuratemousefollower";
 // import EngineWorker from "./src/webworker/engine.worker";
 // let worker = new EngineWorker();
 

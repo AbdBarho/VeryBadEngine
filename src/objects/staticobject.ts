@@ -1,4 +1,4 @@
-import Vector from "../../math/vector";
+import Vector from "../math/vector";
 import BoundingBox, { BoundingBoxParameter} from "./boundingbox";
 
 export interface StaticObjectParameter extends BoundingBoxParameter {

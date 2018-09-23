@@ -1,5 +1,5 @@
 import DynamicObject, { DynamicObjectParameter } from "./dynamicobject";
-import Behavior from "../behaviour/behaviour";
+import Behavior from "./behaviour/behaviour";
 
 
 export interface BehavingObjectParameter extends DynamicObjectParameter {

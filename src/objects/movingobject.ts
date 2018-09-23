@@ -1,5 +1,5 @@
-import Vector from "../../math/vector";
-import Config from "../../config/config";
+import Vector from "../math/vector";
+import Config from "../config/config";
 import BehavingObject, { BehavingObjectParameter } from "./behavingobject";
 
 export interface MovingObjectParameter extends BehavingObjectParameter {

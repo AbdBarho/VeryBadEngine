@@ -3,8 +3,8 @@ import PeriodecExecuter from "../services/periodicexecuter";
 import EventManager from "../services/eventmanager";
 import Config from "../config/config";
 import World from "../world/world";
-import MouseFollower from "../world/mousefollower/mousefollower";
-import AccurateMouseFollower from "../world/mousefollower/accuratemousefollower";
+import MouseFollower from "../objects/mousefollower/mousefollower";
+import AccurateMouseFollower from "../objects/mousefollower/accuratemousefollower";
 
 const CONFIG = Config.getConfig("ENGINE");
 export default class Engine {

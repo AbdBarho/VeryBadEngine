@@ -1,7 +1,7 @@
 import MathHelper from "../math/math";
 import Config from "../config/config";
 import Vector from "../math/vector";
-import DynamicObject from "./objects/dynamicobject";
+import DynamicObject from "../objects/dynamicobject";
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
 

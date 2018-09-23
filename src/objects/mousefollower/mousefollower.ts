@@ -3,7 +3,7 @@ import Vector from "../../math/vector";
 import EventManager from "../../services/eventmanager";
 import NumberKeysMapper from "../../engine/numbekeysmapper";
 import Config from "../../config/config";
-import MovingObject, { MovingObjectParameter } from "../objects/movingobject";
+import MovingObject, { MovingObjectParameter } from "../movingobject";
 import FillRect from "../../ui/rendercommands/fillrect";
 
 export interface MouseFollowerParameter extends MovingObjectParameter { };

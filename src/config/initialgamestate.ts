@@ -1,5 +1,5 @@
 import Vector from "../math/vector";
-import MouseFollowerBehaviors from "../world/mousefollower/mousefollowerbehaviors";
+import MouseFollowerBehaviors from "../objects/mousefollower/mousefollowerbehaviors";
 
 const MAX_TICKS_PER_SECOND = 60;
 let state: any = {
