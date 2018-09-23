@@ -1,15 +1,13 @@
 export default class Behavior {
-  /**
-   * @param {String} name
-   */
-  constructor(name) {
+  private name: string;
+  getName = () => this.name;
+
+  protected storage: any = {};
+
+  constructor(name: string) {
     this.name = name;
-    this.storage = {};
   }
 
-  getName() {
-    return this.name;
-  }
 
   activate() {
     throw "not implemented";

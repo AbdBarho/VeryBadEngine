@@ -1,12 +1,16 @@
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
 import Vector from "../math/vector";
+import Renderer from "../ui/renderer";
+import { CanvasParameters } from "../ui/resizablecanvas";
 
 export default class InputManager {
-  constructor(renderer) {
-    this.logger = new Logger(this, "InputManager");
-    this.mousePos = { x: 0, y: 0 };
-    this.buttonStates = {};
+  logger = new Logger(this, "InputManager");
+  mousePos = new Vector(2);
+  buttonStates: any = {};
+  canvasParams: CanvasParameters;
+
+  constructor(renderer: Renderer) {
     this.canvasParams = renderer.getParamaters();
     this.initListeners();
   }
@@ -24,24 +28,24 @@ export default class InputManager {
 
     window.addEventListener("blur", () => this.clearAll());
 
-    EventManager.on("canvas", params => this.canvasParams = params);
+    EventManager.on("canvas", (params: any) => this.canvasParams = params, this);
   }
 
-  keyboardPress(e, isPressed) {
+  keyboardPress(e: KeyboardEvent, isPressed: boolean) {
     // e.preventDefault();
     let name = e.code;
     this.updateButtonsState(name, isPressed);
     EventManager.trigger("input_" + e.type + "_" + name);
   }
 
-  mousePress(e, isPressed) {
+  mousePress(e: MouseEvent, isPressed: boolean) {
     // e.preventDefault();
     let name = "Mouse" + (e.button + 1);
     this.updateButtonsState(name, isPressed);
-    EventManager.trigger("input_" + e.type + "_" + name, this.mousePos.x, this.mousePos.y);
+    EventManager.trigger("input_" + e.type + "_" + name, this.mousePos);
   }
 
-  updateButtonsState(name, isPressed) {
+  updateButtonsState(name: string, isPressed: boolean) {
     if (isPressed)
       this.buttonStates[name] = isPressed;
     else
@@ -49,7 +53,7 @@ export default class InputManager {
     Logger.debugInfo(name, isPressed);
   }
 
-  mouseStateUpdate(e) {
+  mouseStateUpdate(e: MouseEvent) {
     // e.preventDefault();
     let x = e.pageX;
     let y = e.pageY;
@@ -63,38 +67,17 @@ export default class InputManager {
     for (let key of Object.keys(this.buttonStates)) {
       delete this.buttonStates[key];
       if (key.indexOf("Mouse") === 0)
-        EventManager.trigger("input_mouseup", this.mousePos, key, false);
+        EventManager.trigger("input_mouseup", this.mousePos, key);
       else
-        EventManager.trigger("input_keyup", key, false);
+        EventManager.trigger("input_keyup", key);
       Logger.debugInfo(key);
     }
   }
 
-  /**
-   * @param {Number} x
-   * @param {Number} y
-   * @returns {Vector} from pixels in page to game units
-   */
-  pixelToUnit(x, y) {
+  pixelToUnit(x: number, y: number) {
     let pos = new Vector([x, y]);
-    pos.subVec(this.canvasParams.shift);
-    pos.divVec(this.canvasParams.scale);
+    pos.subVec(this.canvasParams.SHIFT);
+    pos.divVec(this.canvasParams.SCALE);
     return pos;
   }
-
-  /**
-   * @param {String} name key or button name
-   * @returns {Boolean} is the key pressed or not
-   */
-  isPressed(name) {
-    return this.buttonStates[name] || false;
-  }
-
-  /**
-   * @returns {{x:Number, y:Number}}
-   */
-  getMousePos() {
-    return Object.assign({}, this.mousePos);
-  }
-
 }

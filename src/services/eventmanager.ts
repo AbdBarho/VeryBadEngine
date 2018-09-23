@@ -1,24 +1,22 @@
 class EventManager {
-  constructor() {
-    this.__listeners__ = {};
-  }
+  __listeners__ : any = {};
   /**
    * register event listerner
-   * @param {string} event event name
-   * @param {Function} callback the callback function
-   * @param {any} context this context for the method
+   * @param event event name
+   * @param callback the callback function
+   * @param context this context for the method
    */
-  on(event, callback, context) {
+  on(event: string, callback: Function, context?: any) {
     this.__listeners__[event] = this.__listeners__[event] || [];
     this.__listeners__[event].push({ callback, context });
   }
   /**
    * register event listerner. will be called only once, then unregistered.
-   * @param {string} event event name
-   * @param {Function} callback the callback function
-   * @param {any} context
+   * @param event event name
+   * @param callback the callback function
+   * @param context
    */
-  once(event, callback, context) {
+  once(event: string, callback: Function, context?: any) {
     let helper = () => {
       callback.apply(context, arguments);
       this.off(event, helper);
@@ -27,10 +25,10 @@ class EventManager {
   }
   /**
    * unregister event handler.
-   * @param {string} event the event name
-   * @param {Function} callback the callback
+   * @param event the event name
+   * @param callback the callback
    */
-  off(event, callback) {
+  off(event: string, callback: Function) {
     let callbacks = this.__listeners__[event];
     for (let i = 0; i < callbacks.length; i++)
       if (callbacks[i].callback === callback)
@@ -38,10 +36,10 @@ class EventManager {
   }
   /**
    * trigger an event
-   * @param {string} event event name
-   * @param {...any} args further arguments
+   * @param event event name
+   * @param args callback arguments
    */
-  trigger(event, ...args) {
+  trigger(event: string, ...args: any[]) {
     let callbacks = this.__listeners__[event] || [];
     for (let i = 0; i < callbacks.length; i++)
       if (callbacks[i].callback)

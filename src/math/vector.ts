@@ -1,86 +1,55 @@
 import MathHelper from "./math";
 
+
+interface mapFunction { (val: number, index: number, arr: number[]): number }
+
 export default class Vector {
-  /**
-   * @param {Number[]|Number} values
-   */
-  constructor(values) {
+  private values: number[];
+
+  constructor(values: number | number[]) {
     if (typeof values === "number")
       values = Array(values).fill(0);
     this.values = values;
   }
 
-  /**
-   * @param {Number} index
-   */
-  get(index) {
-    return this.values[index] || 0;
-  }
+  get = (index: number) => this.values[index] || 0;
+  set = (index: number, newVal: number) => { this.values[index] = newVal; }
+  getValues = () => this.values.slice(0);
+  getLength = () => this.values.length;
 
-  /**
-   * @returns {Number[]}
-   */
-  getValues() {
-    return this.values.slice(0);
-  }
-  /**
-   * @param {Number} index
-   * @param {Number} newVal
-   */
-  set(index, newVal) {
-    this.values[index] = newVal;
-  }
-
-  /**
-   * @param {Number} num
-   */
-  addNum(num) {
+  addNum(num: number) {
     for (let i = 0; i < this.values.length; i++)
       this.values[i] += num;
     return this;
   }
-  /**
-   * @param {Number} num
-   */
-  mulNum(num) {
+
+  mulNum(num: number) {
     for (let i = 0; i < this.values.length; i++)
       this.values[i] *= num;
     return this;
   }
-  /**
-   * @param {Number} num
-   */
-  divNum(num) {
+
+  divNum(num: number) {
     if (num === 0)
       throw "Zero division error";
     return this.mulNum(1 / num);
   }
 
-  /**
-   * @param {Vector} vector
-   */
-  addVec(vector) {
+  addVec(vector: Vector) {
     let len = getMaxLength([this, vector]);
     for (let i = 0; i < len; i++)
       this.values[i] = this.get(i) + vector.get(i);
     return this;
   }
 
-  /**
-   * @param {Vector} vector
-   */
-  subVec(vector) {
+  subVec(vector: Vector) {
     let len = getMaxLength([this, vector]);
     for (let i = 0; i < len; i++)
       this.values[i] = this.get(i) - vector.get(i);
     return this;
   }
 
-
-  /**
-   * @param {Vector} vector
-   */
-  divVec(vector) {
+  divVec(vector: Vector) {
     let len = getMaxLength([this, vector]);
     for (let i = 0; i < len; i++)
       if (vector.get(i) === 0)
@@ -89,31 +58,21 @@ export default class Vector {
         this.values[i] = this.get(i) / vector.get(i);
     return this;
   }
-  /**
-   * @param {Vector} vector
-   */
-  mulVec(vector) {
+
+  mulVec(vector: Vector) {
     let len = getMaxLength([this, vector]);
     for (let i = 0; i < len; i++)
       this.values[i] = this.get(i) * vector.get(i);
     return this;
   }
 
-
-  /**
-   * @param {Number} min
-   * @param {Number} max
-   */
-  limitValues(min, max) {
+  limitValues(min: number, max: number) {
     for (let i = 0; i < this.values.length; i++)
       this.values[i] = MathHelper.limitBetween(this.values[i], min, max);
     return this;
   }
 
-  /**
-   * @param {Vector} vec
-   */
-  limitByMax(vec) {
+  limitByMax(vec: Vector) {
     for (let i = 0; i < this.values.length; i++) {
       let max = Math.abs(vec.get(i));
       this.values[i] = MathHelper.limitBetween(this.values[i], -max, max);
@@ -121,11 +80,7 @@ export default class Vector {
     return this;
   }
 
-  /**
-   * @param {Vector} minVec
-   * @param {Vector} maxVec
-   */
-  limitByMinMax(minVec, maxVec) {
+  limitByMinMax(minVec: Vector, maxVec: Vector) {
     for (let i = 0; i < this.values.length; i++)
       this.values[i] = MathHelper.limitBetween(this.values[i], minVec.get(i), maxVec.get(i));
     return this;
@@ -149,7 +104,7 @@ export default class Vector {
     return this;
   }
 
-  smallerThan(vec) {
+  smallerThan(vec: Vector) {
     let len = getMaxLength([this, vec]);
     for (let i = 0; i < len; ++i)
       if (this.get(i) >= vec.get(i))
@@ -157,12 +112,8 @@ export default class Vector {
     return true;
   }
 
-  /**
-   *
-   * @param {(val: Number, index: Number, arr: Number[]) => Number} func
-   * @param {any} context
-   */
-  map(func, context) {
+
+  map(func: mapFunction, context?: any) {
     return new Vector(this.values.map((el, i, arr) => func.call(context, el, i, arr)));
   }
 
@@ -171,9 +122,7 @@ export default class Vector {
   }
 }
 
-/**
- * @param  {Vector[]} vectors
- */
-function getMaxLength(vectors) {
-  return vectors.reduce((acc, vec) => Math.max(acc, vec.values.length), 0);
+
+function getMaxLength(vectors: Vector[]) {
+  return vectors.reduce((acc, vec) => Math.max(acc, vec.getLength()), 0);
 }

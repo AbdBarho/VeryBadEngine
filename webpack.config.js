@@ -2,7 +2,7 @@ let path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 module.exports = {
-  entry: './index.js',
+  entry: './index.ts',
   devtool: 'source-map',
   mode: 'development',
   output: {
@@ -16,25 +16,31 @@ module.exports = {
       cwd: process.cwd(),
     })
   ],
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
   module: {
     rules: [{
-      test: /\.worker\.js$/,
-      use: {
-        loader: 'worker-loader',
-        options: {
-          inline: true
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: ['babel-loader', 'ts-loader']
+      },
+      {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            inline: true
+          }
+        }
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader'
         }
       }
-    }, {
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env'],
-          plugins: ['@babel/plugin-transform-runtime']
-        }
-      }
-    }]
+    ]
   }
 };

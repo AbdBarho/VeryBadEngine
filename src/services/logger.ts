@@ -1,40 +1,35 @@
-import EventManager from "../services/eventmanager";
+import EventManager from "./eventmanager";
+import Vector from "../math/vector";
+import Config from "../config/config";
 
-const GLOBAL_VERBOSITY = 2;
+const GLOBAL_VERBOSITY = Config.getConfig("LOGGER").VERBOSITY;
 const LOGGERS = [console.error, console.warn, console.log];
 
-let debugState = {};
-let avgFps = 0;
+let debugState: any = {};
+const FPS_UPDATE_INTERVAL = 0.5;
+let numUpdates = 0;
+let time = 0;
 export default class Logger {
-  /**
-   * @param {*} obj
-   * @param {String} prefix
-   */
-  constructor(obj, prefix) {
+  private prefix: string;
+  private verbosity = GLOBAL_VERBOSITY;
+
+  constructor(obj: any, prefix: string) {
     this.prefix = prefix;
     this.verbosity = GLOBAL_VERBOSITY;
-    this.alreadyLogged = {};
 
     //completely disable logging for performance reasons
     if (GLOBAL_VERBOSITY === -1) {
-      this.log = () => {};
-      Logger.debugInfo = () => {};
+      this.log = () => { };
+      Logger.debugInfo = () => { };
     }
 
   }
 
-  /**
-   * @param {Number} verbosity
-   */
-  setVerbosity(verbosity) {
+  setVerbosity(verbosity: number) {
     this.verbosity = Math.min(verbosity, GLOBAL_VERBOSITY);
   }
 
-  /**
-   * @param {0|1|2} level
-   * @param  {...any} params
-   */
-  log(level, ...params) {
+  log(level: 0 | 1 | 2, ...params: any[]) {
     if (level > this.verbosity)
       return;
 
@@ -42,20 +37,24 @@ export default class Logger {
     loggingFunc(this.prefix, ":", ...params);
   }
 
-  static fps(dt) {
-    avgFps += dt;
-    avgFps /= 2;
-    this.debugInfo("FPS", Math.round(1 / avgFps));
+  static fps(dt: number) {
+    numUpdates++;
+    time += dt;
+    if (time < FPS_UPDATE_INTERVAL)
+      return;
+    this.debugInfo("FPS", Math.floor(numUpdates / FPS_UPDATE_INTERVAL));
+    time -= FPS_UPDATE_INTERVAL;
+    numUpdates = 0;
   }
 
-  static debugInfo(name, val) {
+  static debugInfo(name: any, val?: any) {
     if (typeof name === "object") {
       for (let [key, value] of Object.entries(name)) {
         if (value === false || value === undefined)
           delete debugState[key];
         else if (typeof value === "number" && !Number.isInteger(value))
           debugState[key] = value.toFixed(3);
-        else if (value.getValues)
+        else if (value instanceof Vector)
           debugState[key] = value.getValues().map(val => val.toFixed(3));
         else if (typeof value === "object" && !Array.isArray(value) || typeof value === "function")
           delete debugState[key];

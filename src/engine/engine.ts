@@ -8,22 +8,22 @@ import AccurateMouseFollower from "../world/mousefollower/accuratemousefollower"
 
 const CONFIG = Config.getConfig("ENGINE");
 export default class Engine {
-  constructor() {
-    this.logger = new Logger(this, "Engine");
-    this.world = new World();
-    this.updater = new PeriodecExecuter("Update Loop", CONFIG.UPDATE_INTERVAL, this.update, this);
+  logger = new Logger(this, "Engine");
+  world = new World();
+  updater = new PeriodecExecuter("Update Loop", CONFIG.UPDATE_INTERVAL, this.update, this);
 
+  constructor() {
     EventManager.on("engine_start", () => this.updater.start());
     EventManager.on("engine_stop", () => this.updater.stop());
   }
 
   /**
-   * @param {Number} ms milliseonds since last update
+   * @param  ms milliseonds since last update
    */
-  update(ms) {
+  update(ms: number) {
     this.world.getObjects().forEach((obj, i) => {
-      obj.triggerUpdate(ms);
-      EventManager.trigger("render_command", i, obj.getRenderingCommand());
+      let changed = obj.triggerUpdate(ms);
+      changed && EventManager.trigger("render_command", i, obj.getRenderingCommand());
     });
     EventManager.trigger("render_all");
     Logger.fps(ms);

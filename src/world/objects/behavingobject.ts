@@ -1,23 +1,25 @@
-import StaticObject from "./staticobject";
-import Behavior from "../behaviour/behaviour"; //eslint-disable-line no-unused-vars
+import DynamicObject, { DynamicObjectParameter } from "./dynamicobject";
+import Behavior from "../behaviour/behaviour";
 
-export default class DynamicObject extends StaticObject {
-  constructor(params) {
+
+export interface BehavingObjectParameter extends DynamicObjectParameter {
+  BEHAVIORS: Behavior[]
+}
+
+export default class BehavingObject extends DynamicObject {
+  private __behaviors__: { [name: string]: Behavior } = {};
+  private __activeBehaviors__: { [name: string]: Behavior } = {};
+
+  constructor(params: BehavingObjectParameter) {
     super(params);
-    this.__behaviors__ = {};
-    this.__activeBehaviors__ = {};
-
     //init behaviors
-    let behaviors = params.BEHAVIORS.map(Clazz => new Clazz(this));
+    let behaviors = params.BEHAVIORS.map((Clazz: any) => new Clazz(this));
     for (let i = 0; i < behaviors.length; i++)
       this.addBehavior(behaviors[i]);
   }
 
-  /**
-   * @param {Behavior} behavior
-   * @returns {Behavior}
-   */
-  addBehavior(behavior) {
+
+  addBehavior(behavior: Behavior) {
     let name = behavior.getName();
     if (this.__behaviors__[name])
       throw "behavior already registered: " + name;
@@ -25,27 +27,19 @@ export default class DynamicObject extends StaticObject {
     return behavior;
   }
 
-  /**
-   * @param {Behavior} behavior
-   */
-  removeBehavior(behavior) {
+  removeBehavior(behavior: Behavior) {
     let name = behavior.getName();
     if (this.__activeBehaviors__[name])
       this.deactivateBehavior(name);
     delete this.__behaviors__[name];
   }
 
-  /**
-   * @param {String} name
-   */
-  activateBehavior(name) {
+  activateBehavior(name: string) {
     this.__activeBehaviors__[name] = this.__behaviors__[name];
     this.__behaviors__[name].activate();
   }
-  /**
-   * @param {String} name
-   */
-  activateBehaviorOnly(name) {
+
+  activateBehaviorOnly(name: string) {
     let state = this.__activeBehaviors__[name];
     delete this.__activeBehaviors__[name];
     this.deactivateAllActiveBehaviors();
@@ -54,10 +48,8 @@ export default class DynamicObject extends StaticObject {
     else
       this.activateBehavior(name);
   }
-  /**
-   * @param {String} name
-   */
-  deactivateBehavior(name) {
+
+  deactivateBehavior(name: string) {
     this.__activeBehaviors__[name].deactivate();
     delete this.__activeBehaviors__[name];
   }
@@ -68,17 +60,10 @@ export default class DynamicObject extends StaticObject {
       this.deactivateBehavior(active[i]);
   }
 
-  /**
-   * @returns {{[name:string]: Behavior}}
-   */
   getActiveBehaviors() {
     return Object.assign({}, this.__activeBehaviors__);
   }
 
-
-  /**
-   * @returns {String[]}
-   */
   getBehaviorNames() {
     return Object.keys(this.__behaviors__);
   }

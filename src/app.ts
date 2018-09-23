@@ -5,22 +5,21 @@ import EventManager from "./services/eventmanager";
 import Logger from "./services/logger";
 
 export default class App {
+  engine = new Engine();
+  renderer = new Renderer();
+  inputManager = new InputManager(this.renderer);
+  isRunning = false;
+
   constructor() {
-    this.engine = new Engine();
-    this.renderer = new Renderer();
-    this.inputManager = new InputManager(this.renderer);
-    this.isRunning = false;
     EventManager.on("input_keydown_Space", () => this.isRunning ? this.stop() : this.start());
     EventManager.on("input_keydown_Enter", () => {
       for (let i = 0; i < 10; i++)
         this.engine.addRandomFollower();
-      console.log(this.engine.world.getObjects().length);
     });
     EventManager.on("input_keydown_Delete", () => {
-      let len = Math.min(10, this.engine.world.getObjects());
+      let len = Math.min(10, this.engine.world.getObjects().length);
       for (let i = 0; i < len; i++)
-        this.engine.world.removeObject(0);
-      console.log(this.engine.world.getObjects());
+        this.engine.world.removeLastObject();
     });
   }
 

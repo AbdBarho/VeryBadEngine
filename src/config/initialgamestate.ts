@@ -2,15 +2,19 @@ import Vector from "../math/vector";
 import MouseFollowerBehaviors from "../world/mousefollower/mousefollowerbehaviors";
 
 const MAX_TICKS_PER_SECOND = 60;
-export default {
+let state: any = {
+  LOGGER: {
+    VERBOSITY: 2
+  },
   ENGINE: {
     UPDATE_INTERVAL: 1000 / MAX_TICKS_PER_SECOND
   },
-  VIEWPORT: {
-    SIZE: new Vector([1920, 1080 ]),
+  CANVAS: {
+    SCALE: new Vector(2),
+    SHIFT: new Vector(2),
+    SIZE: new Vector(2),
+    BASE_SIZE: new Vector([1920, 1080]),
     ASPECT_RATIO: 16 / 9,
-    ACTUAL_SIZE: new Vector(2),
-    SCALE: new Vector(2)
   },
   MOUSE: new Vector(2),
   WORLD: {
@@ -39,5 +43,6 @@ export default {
     ACCELERATION_SCALE: 1500,
     BEHAVIORS: MouseFollowerBehaviors
   }
-
 };
+
+export default state;

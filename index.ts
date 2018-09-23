@@ -1,13 +1,14 @@
 import App from "./src/app";
 import EventManager from "./src/services/eventmanager";
+import AccurateMouseFollower from "./src/world/mousefollower/accuratemousefollower";
 // import EngineWorker from "./src/webworker/engine.worker";
 // let worker = new EngineWorker();
 
 window.addEventListener("load", () => {
   let game = new App();
-  window.game = game;
-  window.eventManager = EventManager;
-  // for (let i = 0; i < 100; i++)
+  (window as any).game = game;
+  (window as any).eventManager = EventManager;
+  for (let i = 0; i < 100; i++)
     game.engine.addRandomFollower();
   setTimeout(() => game.start(), 0);
 });

@@ -1,36 +1,43 @@
-import MovingObject from "../objects/movingobject";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
 import EventManager from "../../services/eventmanager";
 import NumberKeysMapper from "../../engine/numbekeysmapper";
 import Config from "../../config/config";
+import MovingObject, { MovingObjectParameter } from "../objects/movingobject";
+import FillRect from "../../ui/rendercommands/fillrect";
+
+export interface MouseFollowerParameter extends MovingObjectParameter { };
 
 export default class MouseFollower extends MovingObject {
+  target: Vector;
+  distance = new Vector(2);
+  color: string;
+  mapper: NumberKeysMapper;
+  lookAhedSteps = 0;
+  randomFactorScale = 0;
+  stopOnReach = false;
+
   constructor(params = Config.getConfig("MOUSE_FOLLOWER")) {
     super(params);
-
-    this.distance = new Vector(2);
     this.target = Config.getMousePos();
     this.color = MathHelper.getRandomColor();
-    this.LOOK_AHED_STEPS = 0;
-    this.RANDOM_FACTOR_SCALE = 0;
-    this.STOP_ON_REACH = false;
 
     let behaviors = this.getBehaviorNames();
-    this.mapper = new NumberKeysMapper((num) => {
-      this.activateBehaviorOnly(behaviors[--num]);
+    this.mapper = new NumberKeysMapper((_, i: number) => {
+      this.activateBehaviorOnly(behaviors[i]);
     }, [1, 2, 3, 4]);
+
     EventManager.on("input_mousemove", this.setTarget, this);
   }
 
-  setTarget(pos) {
+  setTarget(pos: Vector) {
     this.target = pos.copy();
   }
 
-  update() {
+  update(dt: number) {
     this.updateDistance();
-    if (this.STOP_ON_REACH && this.targetReached())
-      return this.getRenderingCommand();
+    if (this.stopOnReach && this.targetReached())
+      return false;
     //set a
     this.updateDirection();
     // x += v
@@ -38,6 +45,7 @@ export default class MouseFollower extends MovingObject {
     // v += a
     this.setSpeed(this.velocity.addVec(this.acceleration));
     this.keepInWorld();
+    return true;
   }
 
   updateDistance() {
@@ -49,26 +57,24 @@ export default class MouseFollower extends MovingObject {
   }
 
   updateDirection() {
-    let step = this.pos.copy().addVec(this.velocity.copy().mulNum(this.LOOK_AHED_STEPS));
+    let step = this.pos.copy().addVec(this.velocity.copy().mulNum(this.lookAhedSteps));
     let dir = MathHelper.direction2d(step, this.target);
-    let r = MathHelper.getRandomWithSign() * this.RANDOM_FACTOR_SCALE;
+    let r = MathHelper.getSignedRandom() * this.randomFactorScale;
     this.setAcceleration(dir.addNum(r));
   }
 
   setMovementParameters(lookAhed = 0, randomScale = 0, stopOnReach = false) {
-    this.LOOK_AHED_STEPS = lookAhed;
-    this.RANDOM_FACTOR_SCALE = randomScale;
-    this.STOP_ON_REACH = stopOnReach;
+    this.lookAhedSteps = lookAhed;
+    this.randomFactorScale = randomScale;
+    this.stopOnReach = stopOnReach;
   }
 
   getRenderingCommand() {
-    let pos = this.pos.copy().subVec(this.centerShift);
-    return {
-      command: "fillRect",
+    return new FillRect({
+      size: this.size.copy(),
+      position: this.pos.copy().subVec(this.centerShift),
       color: this.color,
-      pos: pos.floor(),
-      size: this.size.copy()
-    };
+    });
   }
 
   destroy() {

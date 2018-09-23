@@ -4,6 +4,7 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "run webpack",
       "type": "npm",
       "script": "dev",
       "problemMatcher": [],
@@ -11,11 +12,6 @@
         "kind": "build",
         "isDefault": true
       }
-    },
-    {
-      "type": "npm",
-      "script": "server",
-      "problemMatcher": []
     }
   ]
 }

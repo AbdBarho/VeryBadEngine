@@ -1,17 +1,15 @@
 import Logger from "./logger";
 export default class PeriodicExecuter {
-  /**
-   * @param {String} name
-   * @param {Number} updateInterval
-   * @param {Function} callback
-   * @param {any} context
-   */
-  constructor(name, updateInterval, callback, context) {
+  logger: Logger;
+  updateInterval: number;
+  callback: (num: number) => void;
+  timer: number | null = null;
+  lastTime = 0;
+
+  constructor(name: string, updateInterval: number, callback: (num: number) => void, context?: any) {
     this.logger = new Logger(this, name);
     this.updateInterval = updateInterval;
-    this.callback = callback.bind(context);
-    this.timer = null;
-    this.lastTime = 0;
+    this.callback = context ? callback.bind(context) : callback;
   }
 
   start() {
@@ -30,7 +28,7 @@ export default class PeriodicExecuter {
     let timeTaken = performance.now() - now;
     let nextUpdateDelay = this.updateInterval - timeTaken;
     if (nextUpdateDelay < 0) {
-      // this.logger.log(1, "update took extra", -nextUpdateDelay, "ms, updateInterval is", this.updateInterval, "ms");
+      // this.logger.log(1, "update took extra", -nextUpdateDelay, "ms");
       nextUpdateDelay = 0;
     }
     this.lastTime = now;
