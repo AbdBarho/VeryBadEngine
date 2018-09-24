@@ -1,21 +1,39 @@
 import MathHelper from "./math";
 
+type Param = (Vector | number | string | undefined);
 
 interface mapFunction { (val: number, index: number, arr: number[]): number }
 
 export default class Vector {
-  private values: number[];
-
+  values: number[];
+  cachedValues: number[] = [];
   constructor(values: number | number[]) {
     if (typeof values === "number")
       values = Array(values).fill(0);
     this.values = values;
   }
 
-  get = (index: number) => this.values[index] || 0;
-  set = (index: number, newVal: number) => { this.values[index] = newVal; }
-  getValues = () => this.values.slice(0);
-  getLength = () => this.values.length;
+  get(index: number) {
+    return this.values[index] || 0;
+  }
+
+  getValues() {
+    return this.values.slice(0);
+  }
+  
+  getLength() {
+    return this.values.length;
+  }
+
+  cache() {
+    this.cachedValues = this.values.slice(0);
+    return this;
+  }
+
+  uncache() {
+    this.values = this.cachedValues;
+    return this;
+  }
 
   addNum(num: number) {
     for (let i = 0; i < this.values.length; i++)

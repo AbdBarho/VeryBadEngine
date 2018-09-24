@@ -1,12 +1,17 @@
 import Vector from "../math/vector";
 import MouseFollowerBehaviors from "../objects/mousefollower/mousefollowerbehaviors";
 
+const TIME_SCALE = 1000;
 const MAX_TICKS_PER_SECOND = 60;
+const speedPerSecond = (val: number) => val * (TIME_SCALE / 1000);
+const accelerationPerSecond = (val: number) => val * ((TIME_SCALE / 1000) ** 2);
+
 let state: any = {
   LOGGER: {
     VERBOSITY: 2
   },
   ENGINE: {
+    TIME_SCALE,
     UPDATE_INTERVAL: 1000 / MAX_TICKS_PER_SECOND
   },
   CANVAS: {
@@ -38,9 +43,9 @@ let state: any = {
     CENTER_SHIFT: new Vector([10, 10]),
     VELOCITY: new Vector(2),
     ACCELERATION: new Vector(2),
-    MAX_VELOCITY: 500,
-    MAX_ACCELERATION: 1000,
-    ACCELERATION_SCALE: 1500,
+    MAX_VELOCITY: speedPerSecond(500),
+    MAX_ACCELERATION: accelerationPerSecond(1000),
+    ACCELERATION_SCALE: accelerationPerSecond(1500),
     BEHAVIORS: MouseFollowerBehaviors
   }
 };

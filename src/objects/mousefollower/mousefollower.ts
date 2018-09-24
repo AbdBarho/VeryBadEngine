@@ -6,7 +6,6 @@ import Config from "../../config/config";
 import MovingObject, { MovingObjectParameter } from "../movingobject";
 import FillRect from "../../ui/rendercommands/fillrect";
 
-export interface MouseFollowerParameter extends MovingObjectParameter { };
 
 export default class MouseFollower extends MovingObject {
   target: Vector;
@@ -31,7 +30,7 @@ export default class MouseFollower extends MovingObject {
   }
 
   setTarget(pos: Vector) {
-    this.target = pos.copy();
+    this.target = pos;
   }
 
   update(dt: number) {
@@ -57,24 +56,20 @@ export default class MouseFollower extends MovingObject {
   }
 
   updateDirection() {
-    let step = this.pos.copy().addVec(this.velocity.copy().mulNum(this.lookAhedSteps));
+    this.pos.cache();
+    this.velocity.cache();
+    let step = this.pos.addVec(this.velocity.mulNum(this.lookAhedSteps));
     let dir = MathHelper.direction2d(step, this.target);
     let r = MathHelper.getSignedRandom() * this.randomFactorScale;
     this.setAcceleration(dir.addNum(r));
+    this.pos.uncache();
+    this.velocity.uncache();
   }
 
   setMovementParameters(lookAhed = 0, randomScale = 0, stopOnReach = false) {
     this.lookAhedSteps = lookAhed;
     this.randomFactorScale = randomScale;
     this.stopOnReach = stopOnReach;
-  }
-
-  getRenderingCommand() {
-    return new FillRect({
-      size: this.size.copy(),
-      position: this.pos.copy().subVec(this.centerShift),
-      color: this.color,
-    });
   }
 
   destroy() {

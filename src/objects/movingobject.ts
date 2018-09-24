@@ -11,6 +11,7 @@ export interface MovingObjectParameter extends BehavingObjectParameter {
 
 //FIXME: move collision detection to engine
 const WORLD_EDGES = Config.getConfig("WORLD").SIZE;
+
 export default class MovingObject extends BehavingObject {
   velocity: Vector;
   acceleration: Vector;
@@ -32,16 +33,25 @@ export default class MovingObject extends BehavingObject {
 
   timeStep(dt: number) {
     // Symplectic Euler
-    this.setSpeed(this.velocity.addVec(this.acceleration.copy().mulNum(dt)));
-    this.pos.addVec(this.velocity.copy().mulNum(dt));
+    this.acceleration.cache();
+    this.setSpeed(this.velocity.addVec(this.acceleration.mulNum(dt)));
+    this.acceleration.uncache();
+
+    this.velocity.cache();
+    this.pos.addVec(this.velocity.mulNum(dt));
+    this.velocity.uncache();
   }
 
   setSpeed(vector: Vector) {
-    this.velocity = vector.limitValues(-this.MAX_VELOCITY, this.MAX_VELOCITY);
+    this.velocity = vector;
+    if (isFinite(this.MAX_VELOCITY))
+      this.velocity.limitValues(-this.MAX_VELOCITY, this.MAX_VELOCITY);
   }
 
   setAcceleration(vector: Vector) {
-    this.acceleration = vector.limitValues(-this.MAX_ACCELERATION, this.MAX_ACCELERATION);
+    this.acceleration = vector;
+    if (isFinite(this.MAX_ACCELERATION))
+      this.acceleration.limitValues(-this.MAX_ACCELERATION, this.MAX_ACCELERATION);
   }
 
   //FIXME move to physics engine

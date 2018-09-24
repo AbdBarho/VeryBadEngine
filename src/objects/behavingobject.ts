@@ -1,12 +1,11 @@
-import DynamicObject, { DynamicObjectParameter } from "./dynamicobject";
 import Behavior from "./behaviour/behaviour";
+import BoundingBox, { BoundingBoxParameter } from "./boundingbox";
 
-
-export interface BehavingObjectParameter extends DynamicObjectParameter {
+export interface BehavingObjectParameter extends BoundingBoxParameter {
   BEHAVIORS: Behavior[]
 }
 
-export default class BehavingObject extends DynamicObject {
+export default class BehavingObject extends BoundingBox {
   private __behaviors__: { [name: string]: Behavior } = {};
   private __activeBehaviors__: { [name: string]: Behavior } = {};
 

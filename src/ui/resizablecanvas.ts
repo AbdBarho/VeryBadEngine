@@ -66,10 +66,6 @@ export default class ResizableCanvas {
     return Object.assign({}, this.parameters);
   }
 
-  getCanvas() {
-    return this.canvas;
-  }
-
   getContext() {
     return this.ctx;
   }

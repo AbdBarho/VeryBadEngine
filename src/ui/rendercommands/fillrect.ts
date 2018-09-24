@@ -1,36 +1,39 @@
 import RenderCommand from "./rendercommand";
 import Vector from "../../math/vector";
+import BoundingBox from "../../objects/boundingbox";
+import { CanvasParameters } from "../resizablecanvas";
 
-export interface FillRectParamter {
-  position: Vector,
-  size: Vector,
-  color: string
-}
 
 export default class FillRect extends RenderCommand {
-  position: Vector;
-  size: Vector;
-  color: string;
   cachedValues: number[] = [];
+  pos: Vector;
+  size: Vector;
+  centerShift: Vector;
 
-  constructor(params: FillRectParamter) {
-    super();
-    this.position = params.position;
-    this.size = params.size;
-    this.color = params.color;
+  constructor(target: BoundingBox, canvasParams: CanvasParameters) {
+    super(target, canvasParams);
+    this.pos = this.target.pos;
+    this.size = this.target.size;
+    this.centerShift = this.target.centerShift;
+    this.calculate();
   }
 
-  scaleAndShift(scale: Vector, shift?: Vector) {
-    if (shift)
-      this.position.subVec(shift);
-    this.position.mulVec(scale);
-    this.size.mulVec(scale);
-    this.cachedValues = this.position.getValues().concat(this.size.getValues());
+  calculate() {
+    this.pos.cache();
+    this.size.cache();
+    this.pos.subVec(this.centerShift)
+    this.pos.mulVec(this.params.SCALE);
+    this.size.mulVec(this.params.SCALE);
+    this.cachedValues = this.pos.getValues().concat(this.size.getValues());
+    this.pos.uncache();
+    this.size.uncache();
     return this;
   }
 
   execute(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.color;
+    if (this.target.hasChanged())
+      this.calculate();
+    ctx.fillStyle = this.target.color;
     ctx.fillRect.apply(ctx, this.cachedValues);
   }
 

@@ -11,17 +11,6 @@ export default class Renderer extends Viewport {
 
   constructor() {
     super();
-
-    EventManager.on("render_start", () => { });
-    EventManager.on("render_stop", () => { });
-
-    EventManager.on("render_command", (index: number, command: RenderCommand) => {
-      if (command)
-        this.renderCommands[index] = command.scaleAndShift(this.parameters.SCALE);
-      else
-        delete this.renderCommands[index];
-    });
-
     EventManager.on("render_debug", (json: any) => {
       this.renderDebug(json);
     });
@@ -45,6 +34,7 @@ export default class Renderer extends Viewport {
     if (this.isRendering)
       requestAnimationFrame(this.raf);
   }
+
   renderDebug(debugState: {}) {
     let div = document.getElementById("state");
     let str = "";

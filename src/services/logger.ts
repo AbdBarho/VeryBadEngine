@@ -6,7 +6,8 @@ const GLOBAL_VERBOSITY = Config.getConfig("LOGGER").VERBOSITY;
 const LOGGERS = [console.error, console.warn, console.log];
 
 let debugState: any = {};
-const FPS_UPDATE_INTERVAL = 0.5;
+const FPS_UPDATE_INTERVAL = 500; //in ms
+const FPS_MULTIPLIER = 1000 / FPS_UPDATE_INTERVAL;
 let numUpdates = 0;
 let time = 0;
 export default class Logger {
@@ -42,7 +43,7 @@ export default class Logger {
     time += dt;
     if (time < FPS_UPDATE_INTERVAL)
       return;
-    this.debugInfo("FPS", Math.floor(numUpdates / FPS_UPDATE_INTERVAL));
+    this.debugInfo("FPS", (numUpdates * FPS_MULTIPLIER));
     time -= FPS_UPDATE_INTERVAL;
     numUpdates = 0;
   }

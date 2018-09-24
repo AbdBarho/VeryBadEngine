@@ -1,6 +1,13 @@
-import Vector from "../../math/vector";
+import BoundingBox from "../../objects/boundingbox";
+import { CanvasParameters } from "../resizablecanvas";
 
 export default abstract class RenderCommand {
-  abstract scaleAndShift(scale: Vector, shift?: Vector): this;
+  target: BoundingBox;
+  params: CanvasParameters;
+  constructor(target: BoundingBox, canvasParams: CanvasParameters) {
+    this.target = target;
+    this.params = canvasParams;
+  }
+  abstract calculate(): this;
   abstract execute(ctx: CanvasRenderingContext2D): void;
 }

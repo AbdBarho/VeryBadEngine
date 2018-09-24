@@ -1,11 +1,8 @@
-import MouseFollower, { MouseFollowerParameter } from "./mousefollower";
+import MouseFollower from "./mousefollower";
 import MathHelper from "../../math/math";
 import Config from "../../config/config";
 import Logger from "../../services/logger";
 
-export interface AccurateMouseFollowerParameter extends MouseFollowerParameter {
-  ACCELERATION_SCALE: number
-}
 
 export default class AccurateMouseFollower extends MouseFollower {
   accelerationScale: number;

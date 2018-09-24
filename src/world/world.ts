@@ -1,12 +1,13 @@
 import MathHelper from "../math/math";
 import Config from "../config/config";
 import Vector from "../math/vector";
-import DynamicObject from "../objects/dynamicobject";
 import EventManager from "../services/eventmanager";
 import Logger from "../services/logger";
+import BoundingBox from "../objects/boundingbox";
+import FillRect from "../ui/rendercommands/fillrect";
 
 export default class World {
-  objects: DynamicObject[] = [];
+  objects: BoundingBox[] = [];
   size: Vector;
   pos: Vector;
 
@@ -19,18 +20,24 @@ export default class World {
   addObject(obj: any) {
     this.objects.push(obj);
     Logger.debugInfo("NumObjects", this.objects.length);
+    return this.objects.length - 1;
   }
 
   removeObject(id: number) {
     let obj = this.objects[id];
     this.objects.splice(id, 1);
     obj.destroy();
-    EventManager.trigger("render_command", id, null);
     Logger.debugInfo("NumObjects", this.objects.length);
+    return id;
   }
 
   removeLastObject() {
-    this.removeObject(this.objects.length - 1);
+    return this.removeObject(this.objects.length - 1);
+  }
+
+  updateAll(dt: number) {
+    for (let i = 0; i < this.objects.length; i++)
+      this.objects[i].triggerUpdate(dt);
   }
 
   getObjects() {

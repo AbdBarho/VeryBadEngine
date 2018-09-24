@@ -1,44 +1,67 @@
 import Logger from "./logger";
-export default class PeriodicExecuter {
+export default abstract class PeriodicExecuter {
   logger: Logger;
-  updateInterval: number;
-  callback: (num: number) => void;
-  timer: number | null = null;
+  executeAfterTimeout: () => void;
+  timer = 0;
   lastTime = 0;
+  updateInterval = 0;
 
-  constructor(name: string, updateInterval: number, callback: (num: number) => void, context?: any) {
+  constructor(name: string) {
     this.logger = new Logger(this, name);
-    this.updateInterval = updateInterval;
-    this.callback = context ? callback.bind(context) : callback;
+    this.executeAfterTimeout = () => this.run();
   }
 
-  start() {
+  start(updateInterval = 17) {
     let now = performance.now();
     let delay = now - this.lastTime;
-    delay = delay < this.updateInterval ? delay : 0;
-    this.lastTime = now - (this.updateInterval - delay);
-    this.timer = setTimeout(() => this.run(), delay);
+    delay = delay < updateInterval ? delay : 0;
+    this.lastTime = now - (updateInterval - delay);
+    this.updateInterval = updateInterval;
+    this.beforeStart();
+    this.startTimer(delay);
   }
+  beforeStart() {
+    //nothing
+  }
+
+  startTimer(delay: number) {
+    this.timer = setTimeout(this.executeAfterTimeout, delay);
+  }
+
+
 
   run() {
     let now = performance.now();
     let dt = now - this.lastTime;
-    //divide by 1000 to call the update in seconds
-    this.callback(dt / 1000);
-    let timeTaken = performance.now() - now;
-    let nextUpdateDelay = this.updateInterval - timeTaken;
+    this.execute(dt);
+    let nextUpdateDelay = this.updateInterval - (performance.now() - now);
     if (nextUpdateDelay < 0) {
       // this.logger.log(1, "update took extra", -nextUpdateDelay, "ms");
       nextUpdateDelay = 0;
     }
     this.lastTime = now;
-    this.timer = setTimeout(() => this.run(), nextUpdateDelay);
+    this.startTimer(nextUpdateDelay);
   }
 
+  /**
+   * @param dt num milliseconds since last call
+   */
+  abstract execute(dt: number): any;
+
   stop() {
-    if (this.timer !== null) {
-      clearTimeout(this.timer);
-      this.timer = null;
+    if (this.timer !== 0) {
+      this.clearTimer();
+      this.timer = 0;
+      this.updateInterval = 0;
+      this.afterStop();
     }
+  }
+
+  clearTimer() {
+    clearTimeout(this.timer);
+  }
+
+  afterStop() {
+    //nothing
   }
 }
