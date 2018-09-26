@@ -1,5 +1,5 @@
 import Vector from "../math/vector";
-import MouseFollowerBehaviors from "../objects/mousefollower/mousefollowerbehaviors";
+import MouseFollowerStateManager from "../objects/mousefollower/mousefollowerbehaviors";
 
 const TIME_SCALE = 1000;
 const MAX_TICKS_PER_SECOND = 60;
@@ -34,8 +34,7 @@ let state: any = {
     VELOCITY: new Vector(2),
     ACCELERATION: new Vector(2),
     MAX_VELOCITY: 10,
-    MAX_ACCELERATION: 10,
-    BEHAVIORS: MouseFollowerBehaviors
+    MAX_ACCELERATION: 10
   },
   ACCURATE_MOUSE_FOLLOWER: {
     POSITION: new Vector(2),
@@ -45,8 +44,7 @@ let state: any = {
     ACCELERATION: new Vector(2),
     MAX_VELOCITY: speedPerSecond(500),
     MAX_ACCELERATION: accelerationPerSecond(1000),
-    ACCELERATION_SCALE: accelerationPerSecond(1500),
-    BEHAVIORS: MouseFollowerBehaviors
+    ACCELERATION_SCALE: accelerationPerSecond(1500)
   }
 };
 

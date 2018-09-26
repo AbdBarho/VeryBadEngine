@@ -1,4 +1,4 @@
-class EventManager {
+export class EventManager {
   __listeners__ : any = {};
   /**
    * register event listerner

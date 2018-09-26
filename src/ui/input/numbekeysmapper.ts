@@ -1,4 +1,4 @@
-import EventManager from "../services/eventmanager";
+import EventManager from "../../services/eventmanager";
 
 interface NumberKeysMapperCallback {
   (num: number, i: number): void

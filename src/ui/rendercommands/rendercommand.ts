@@ -1,5 +1,5 @@
 import BoundingBox from "../../objects/boundingbox";
-import { CanvasParameters } from "../resizablecanvas";
+import { CanvasParameters } from "../canvas";
 
 export default abstract class RenderCommand {
   target: BoundingBox;

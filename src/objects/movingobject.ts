@@ -1,8 +1,8 @@
 import Vector from "../math/vector";
 import Config from "../config/config";
-import BehavingObject, { BehavingObjectParameter } from "./behavingobject";
+import BoundingBox, { BoundingBoxParameter } from "./boundingbox";
 
-export interface MovingObjectParameter extends BehavingObjectParameter {
+export interface MovingObjectParameter extends BoundingBoxParameter {
   VELOCITY: Vector,
   ACCELERATION: Vector,
   MAX_VELOCITY: number,
@@ -12,7 +12,7 @@ export interface MovingObjectParameter extends BehavingObjectParameter {
 //FIXME: move collision detection to engine
 const WORLD_EDGES = Config.getConfig("WORLD").SIZE;
 
-export default class MovingObject extends BehavingObject {
+export default class MovingObject extends BoundingBox {
   velocity: Vector;
   acceleration: Vector;
   MAX_VELOCITY: number;

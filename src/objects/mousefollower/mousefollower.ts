@@ -1,13 +1,14 @@
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
 import EventManager from "../../services/eventmanager";
-import NumberKeysMapper from "../../engine/numbekeysmapper";
+import NumberKeysMapper from "../../ui/input/numbekeysmapper";
 import Config from "../../config/config";
-import MovingObject, { MovingObjectParameter } from "../movingobject";
-import FillRect from "../../ui/rendercommands/fillrect";
+import MovingObject from "../movingobject";
+import MouseFollowerStateManager from "./mousefollowerbehaviors";
 
 
 export default class MouseFollower extends MovingObject {
+  movement = new MouseFollowerStateManager(this);
   target: Vector;
   distance = new Vector(2);
   color: string;
@@ -15,18 +16,13 @@ export default class MouseFollower extends MovingObject {
   lookAhedSteps = 0;
   randomFactorScale = 0;
   stopOnReach = false;
+  isFrozen = false;
 
   constructor(params = Config.getConfig("MOUSE_FOLLOWER")) {
     super(params);
     this.target = Config.getMousePos();
     this.color = MathHelper.getRandomColor();
-
-    let behaviors = this.getBehaviorNames();
-    this.mapper = new NumberKeysMapper((_, i: number) => {
-      this.activateBehaviorOnly(behaviors[i]);
-    }, [1, 2, 3, 4]);
-
-    EventManager.on("input_mousemove", this.setTarget, this);
+    this.mapper = new NumberKeysMapper((_, i: number) => this.movement.activateState(i), [1, 2, 3, 4]);
   }
 
   setTarget(pos: Vector) {
@@ -34,6 +30,8 @@ export default class MouseFollower extends MovingObject {
   }
 
   update(dt: number) {
+    if (this.isFrozen)
+      return false;
     this.updateDistance();
     if (this.stopOnReach && this.targetReached())
       return false;
@@ -75,5 +73,9 @@ export default class MouseFollower extends MovingObject {
   destroy() {
     this.mapper.destroy();
     EventManager.off("input_mousemove", this.setTarget);
+  }
+
+  doNotUpdate() {
+    return false;
   }
 }

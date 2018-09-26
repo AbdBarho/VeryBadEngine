@@ -1,8 +1,6 @@
-import Renderer from "./ui/renderer";
-import InputManager from "./engine/inputmanager";
+import UI from "./ui/ui";
 import EventManager from "./services/eventmanager";
 import Logger from "./services/logger";
-import PeriodicExecuter from "./services/periodicexecuter";
 import Config from "./config/config";
 import World from "./world/world";
 import MouseFollower from "./objects/mousefollower/mousefollower";
@@ -14,8 +12,7 @@ const CONFIG = Config.getConfig("ENGINE");
 
 export default class Engine extends RequestAnimationFrameExecuter {
   world = new World();
-  renderer = new Renderer();
-  inputManager = new InputManager(this.renderer);
+  renderer = new UI();
   isRunning = false;
   lastTime = 0;
 

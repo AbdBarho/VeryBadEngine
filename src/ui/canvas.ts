@@ -1,10 +1,8 @@
 import Logger from "../services/logger";
-import EventManager from "../services/eventmanager";
 import Confing from "../config/config";
 import Vector from "../math/vector";
 
 const CONFIG = Confing.getConfig("CANVAS");
-const SIZE: Vector = CONFIG.SIZE;
 const ASPECT_RATIO = CONFIG.ASPECT_RATIO;
 
 export interface CanvasParameters {
@@ -15,7 +13,7 @@ export interface CanvasParameters {
   ASPECT_RATIO: number,
 }
 
-export default class ResizableCanvas {
+export default class Canvas {
   logger = new Logger(this, "Canvas");
   canvas = document.createElement("canvas");
   ctx: CanvasRenderingContext2D;
@@ -36,8 +34,7 @@ export default class ResizableCanvas {
   update() {
     this.resize();
     this.calculateParameters();
-    EventManager.trigger("canvas", this.getParamaters());
-    Logger.debugInfo(this.parameters);
+    // Logger.debugInfo(this.parameters);
   }
 
   resize() {
@@ -60,10 +57,6 @@ export default class ResizableCanvas {
     this.parameters.SCALE = this.parameters.SIZE.copy().divVec(this.parameters.BASE_SIZE);
     let rect = this.canvas.getBoundingClientRect();
     this.parameters.SHIFT = new Vector([rect.left, rect.top]);
-  }
-
-  getParamaters() {
-    return Object.assign({}, this.parameters);
   }
 
   getContext() {

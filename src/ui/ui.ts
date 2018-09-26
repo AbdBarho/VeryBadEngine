@@ -1,38 +1,33 @@
 import Logger from "../services/logger";
-import Viewport from "./viewport";
 import EventManager from "../services/eventmanager";
 import RenderCommand from "./rendercommands/rendercommand";
+import Canvas from "./canvas";
+import InputManager from "./input/inputmanager";
 
 
-export default class Renderer extends Viewport {
+export default class UI extends Canvas {
   logger = new Logger(this, "Renderer");
+  inputManager = new InputManager(this);
   renderCommands: { [id: number]: RenderCommand } = {};
-  isRendering = false;
 
   constructor() {
     super();
     EventManager.on("render_debug", (json: any) => {
       this.renderDebug(json);
     });
-
-    EventManager.on("render_all", () => {
-      this.renderAll();
-    });
   }
 
   renderAll() {
     this.backgroundColor("black");
-    let i = 0;
     for (let i in this.renderCommands) {
       let command = this.renderCommands[i];
       command && command.execute(this.ctx);
     }
   }
 
-  raf() {
-    this.renderAll();
-    if (this.isRendering)
-      requestAnimationFrame(this.raf);
+  backgroundColor(color: string) {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   renderDebug(debugState: {}) {

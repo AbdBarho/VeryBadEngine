@@ -1,7 +1,7 @@
 import RenderCommand from "./rendercommand";
 import Vector from "../../math/vector";
 import BoundingBox from "../../objects/boundingbox";
-import { CanvasParameters } from "../resizablecanvas";
+import { CanvasParameters } from "../canvas";
 
 
 export default class FillRect extends RenderCommand {

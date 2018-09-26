@@ -1,56 +1,43 @@
-import Behavior from "../behaviour/behaviour";
 import MouseFollower from "./mousefollower";
+import StateManager, { State } from "../states/statemanager";
 
-class MouseFollowerBehavior extends Behavior {
-  follower: MouseFollower;
-  constructor(name: string, context: MouseFollower) {
-    super(name);
-    this.follower = context;
+class Freeze extends State {
+  constructor() {
+    super("Freeze");
   }
+  activate(context: MouseFollower) { context.isFrozen = true; }
+  deactivate(context: MouseFollower) { context.isFrozen = false; }
 }
 
-class Freeze extends MouseFollowerBehavior {
-  constructor(context: MouseFollower) {
-    super("Freeze", context);
+class Circle extends State {
+  constructor() {
+    super("Circle");
   }
-
-  activate() {
-    this.storage.update = this.follower.update;
-    this.follower.update = () => false;
-  }
-
-  deactivate() {
-    this.follower.update = this.storage.update;
-    delete this.storage.update;
-  }
+  activate(context: MouseFollower) { context.setMovementParameters(0, 0, false); }
 }
 
-class Circle extends MouseFollowerBehavior {
-  constructor(context: MouseFollower) {
-    super("Circle", context);
+class ParticleEffect extends State {
+  constructor() {
+    super("Particle Effect");
   }
-
-  activate = () => this.follower.setMovementParameters(0, 0, false);
-  deactivate = () => { };
+  activate(context: MouseFollower) { context.setMovementParameters(0, 1, false); }
 }
 
-class ParticleEffect extends MouseFollowerBehavior {
-  constructor(context: MouseFollower) {
-    super("Particle Effect", context);
+class PerfectFollower extends State {
+  constructor() {
+    super("Perfect Follower");
   }
-
-
-  activate = () => this.follower.setMovementParameters(0, 1, false);
-  deactivate = () => { };
-}
-
-class PerfectFollower extends MouseFollowerBehavior {
-  constructor(context: MouseFollower) {
-    super("Perfect Follower", context);
-  }
-  activate = () => this.follower.setMovementParameters(0.5, 0, true);
-  deactivate = () => { };
+  activate(context: MouseFollower) { context.setMovementParameters(0.5, 0, true); }
 }
 
 
-export default [Freeze, Circle, ParticleEffect, PerfectFollower];
+let states = [new Freeze(), new Circle(), new ParticleEffect(), new PerfectFollower()];
+
+export default class MouseFollowerStateManager extends StateManager {
+  constructor(instance: MouseFollower) {
+    super(instance);
+  }
+  getState(id: number) {
+    return states[id];
+  }
+}

@@ -12,6 +12,8 @@ export default class AccurateMouseFollower extends MouseFollower {
   }
 
   update(dt: number) {
+    if (this.isFrozen)
+      return false;
     this.updateDistance();
     if (this.stopOnReach && this.targetReached())
       return false;

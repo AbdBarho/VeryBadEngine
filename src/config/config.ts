@@ -4,11 +4,14 @@ import initialgamestate from "./initialgamestate";
 
 class Config {
   state = initialgamestate;
-  getMousePos = () => this.state.MOUSE.copy();
-  getConfig = (name: string) => copy(this.state[name]);
-
   constructor() {
-    EventManager.on("input_mousemove", (vec: Vector) => this.state.MOUSE = vec);
+    EventManager.on("input_mousemove", (vec: Vector) => this.state.MOUSE.setVec(vec));
+  }
+  getMousePos() {
+    return this.state.MOUSE;
+  }
+  getConfig(name: string) {
+    return copy(this.state[name]);
   }
 }
 

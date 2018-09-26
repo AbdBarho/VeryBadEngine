@@ -20,9 +20,17 @@ export default class Vector {
   getValues() {
     return this.values.slice(0);
   }
-  
+
   getLength() {
     return this.values.length;
+  }
+
+  setVec(vector: Vector) {
+    this.values = vector.values;
+  }
+
+  setArr(arr: number[]) {
+    this.values = arr;
   }
 
   cache() {
