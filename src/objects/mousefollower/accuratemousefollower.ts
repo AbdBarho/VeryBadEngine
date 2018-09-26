@@ -23,13 +23,23 @@ export default class AccurateMouseFollower extends MouseFollower {
   }
 
   updateDirection() {
-    let step = this.pos;
-    if (this.lookAhedSteps === 1)
-      step = step.copy().addVec(this.velocity);
-    else if (this.lookAhedSteps !== 0)
-      step = step.copy().addVec(this.velocity.copy().mulNum(this.lookAhedSteps));
+    let dir;
+    if (this.lookAhedSteps === 1) {
+      this.pos.cache();
+      this.pos.addVec(this.velocity);
+      dir = MathHelper.direction2d(this.pos, this.target).mulNum(this.accelerationScale);
+      this.pos.uncache();
+    } else if (this.lookAhedSteps !== 0) {
+      this.pos.cache();
+      this.velocity.cache();
+      this.pos.addVec(this.velocity.mulNum(this.lookAhedSteps));
+      dir = MathHelper.direction2d(this.pos, this.target).mulNum(this.accelerationScale);
+      this.velocity.uncache();
+      this.pos.uncache();
+    } else {
+      dir = MathHelper.direction2d(this.pos, this.target).mulNum(this.accelerationScale);
+    }
 
-    let dir = MathHelper.direction2d(step, this.target).mulNum(this.accelerationScale);
     if (this.randomFactorScale !== 0)
       dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale);
 
