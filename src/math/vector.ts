@@ -11,6 +11,7 @@ export default class Vector {
     if (typeof values === "number")
       values = Array(values).fill(0);
     this.values = values;
+    this.cachedValues = new Array(this.values.length).fill(0);
   }
 
   get(index: number) {
@@ -18,6 +19,10 @@ export default class Vector {
   }
 
   getValues() {
+    return this.values;
+  }
+
+  copyValues() {
     return this.values.slice(0);
   }
 
@@ -26,20 +31,25 @@ export default class Vector {
   }
 
   setVec(vector: Vector) {
-    this.values = vector.values;
+    return this.setArr(vector.values);
   }
 
   setArr(arr: number[]) {
-    this.values = arr;
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = arr[i];
+    return this;
   }
 
   cache() {
-    this.cachedValues = this.values.slice(0);
+    for (let i = 0; i < this.values.length; i++)
+      this.cachedValues[i] = this.values[i];
     return this;
   }
 
   uncache() {
+    let old = this.values;
     this.values = this.cachedValues;
+    this.cachedValues = old;
     return this;
   }
 
@@ -144,7 +154,7 @@ export default class Vector {
   }
 
   copy() {
-    return new Vector(this.getValues());
+    return new Vector(this.copyValues());
   }
 }
 

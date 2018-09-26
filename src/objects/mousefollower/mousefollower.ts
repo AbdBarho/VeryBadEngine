@@ -25,10 +25,6 @@ export default class MouseFollower extends MovingObject {
     this.mapper = new NumberKeysMapper((_, i: number) => this.movement.activateState(i), [1, 2, 3, 4]);
   }
 
-  setTarget(pos: Vector) {
-    this.target = pos;
-  }
-
   update(dt: number) {
     if (this.isFrozen)
       return false;
@@ -46,7 +42,9 @@ export default class MouseFollower extends MovingObject {
   }
 
   updateDistance() {
-    this.distance = this.target.copy().subVec(this.pos).abs();
+    this.target.cache();
+    this.distance.setVec(this.target.subVec(this.pos).abs());
+    this.target.uncache();
   }
 
   targetReached() {
@@ -72,7 +70,6 @@ export default class MouseFollower extends MovingObject {
 
   destroy() {
     this.mapper.destroy();
-    EventManager.off("input_mousemove", this.setTarget);
   }
 
   doNotUpdate() {

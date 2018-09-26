@@ -43,13 +43,13 @@ export default class MovingObject extends BoundingBox {
   }
 
   setSpeed(vector: Vector) {
-    this.velocity = vector;
+    this.velocity.setVec(vector);
     if (isFinite(this.MAX_VELOCITY))
       this.velocity.limitValues(-this.MAX_VELOCITY, this.MAX_VELOCITY);
   }
 
   setAcceleration(vector: Vector) {
-    this.acceleration = vector;
+    this.acceleration.setVec(vector);
     if (isFinite(this.MAX_ACCELERATION))
       this.acceleration.limitValues(-this.MAX_ACCELERATION, this.MAX_ACCELERATION);
   }

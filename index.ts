@@ -7,7 +7,7 @@ window.addEventListener("load", () => {
   let game = new Engine();
   (window as any).game = game;
   (window as any).eventManager = EventManager;
-  for (let i = 0; i < 100; i++)
+  for (let i = 0; i < 5000; i++)
     game.addRandomFollower();
   setTimeout(() => game.start(), 0);
 });

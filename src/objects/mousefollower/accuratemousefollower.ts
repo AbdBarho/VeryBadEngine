@@ -44,7 +44,7 @@ export default class AccurateMouseFollower extends MouseFollower {
 
     if (this.randomFactorScale !== 0)
       dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale);
-
     this.setAcceleration(dir);
   }
 }
+

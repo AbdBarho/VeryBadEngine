@@ -19,9 +19,12 @@ export default class UI extends Canvas {
 
   renderAll() {
     this.backgroundColor("black");
-    for (let i in this.renderCommands) {
-      let command = this.renderCommands[i];
-      command && command.execute(this.ctx);
+    let i = 0;
+    let command = this.renderCommands[i];
+    while (command) {
+      command.execute(this.ctx);
+      i++;
+      command = this.renderCommands[i];
     }
   }
 

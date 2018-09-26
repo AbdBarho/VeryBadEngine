@@ -5,7 +5,7 @@ import { CanvasParameters } from "../canvas";
 
 
 export default class FillRect extends RenderCommand {
-  cachedValues: number[] = [];
+  cachedValues: number[] = new Array(4).fill(0);
   pos: Vector;
   size: Vector;
   centerShift: Vector;
@@ -24,7 +24,12 @@ export default class FillRect extends RenderCommand {
     this.pos.subVec(this.centerShift)
     this.pos.mulVec(this.params.SCALE);
     this.size.mulVec(this.params.SCALE);
-    this.cachedValues = this.pos.getValues().concat(this.size.getValues());
+    //prevents GC
+    this.cachedValues[0] = this.pos.get(0);
+    this.cachedValues[1] = this.pos.get(1);
+    this.cachedValues[2] = this.size.get(0);
+    this.cachedValues[3] = this.size.get(1);
+    
     this.pos.uncache();
     this.size.uncache();
     return this;
