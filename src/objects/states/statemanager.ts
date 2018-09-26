@@ -1,13 +1,16 @@
+interface anyFunc { (...params: any[]): any }
 export class State {
   private name: string;
-  constructor(name = "NullState") {
+  activate: (context: any) => any;
+  deactivate: (context: any) => any;
+  constructor(name = "NullState", activate: anyFunc = () => { }, deactivate: anyFunc = () => { }) {
     this.name = name;
+    this.activate = activate;
+    this.deactivate = deactivate;
   }
   getName() {
     return this.name;
   }
-  activate(target: any) { }
-  deactivate(target: any) { }
 }
 
 export default abstract class StateManager {
