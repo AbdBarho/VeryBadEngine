@@ -2,6 +2,7 @@ import Engine from "../engine";
 
 class EngineWorker extends Engine {
   constructor() {
+    console.log("cretead worker");
     super();
     self.addEventListener("message", (e) => this.onMessage(e));
   }

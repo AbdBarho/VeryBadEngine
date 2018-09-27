@@ -26,19 +26,18 @@ module.exports = {
         use: ['babel-loader', 'ts-loader']
       },
       {
-        test: /\.worker\.js$/,
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }, {
+        test: /\.worker\.(j|t)s$/,
         use: {
           loader: 'worker-loader',
           options: {
             inline: true
           }
-        }
-      },
-      {
-        test: /\.js$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader'
         }
       }
     ]
