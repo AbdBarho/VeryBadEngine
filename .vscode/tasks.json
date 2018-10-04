@@ -7,7 +7,8 @@
       "label": "run webpack",
       "type": "npm",
       "script": "dev",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "group": "build"
     }
   ]
 }

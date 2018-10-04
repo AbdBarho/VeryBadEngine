@@ -12,12 +12,13 @@ const CONFIG = Config.getConfig("ENGINE");
 
 export default class Engine extends RequestAnimationFrameExecuter {
   world = new World();
-  renderer = new UI();
+  renderer: UI;
   isRunning = false;
   lastTime = 0;
 
-  constructor() {
+  constructor(ui: UI) {
     super("Engine Loop");
+    this.renderer = ui;
     EventManager.on("input_keydown_Space", () => this.isRunning ? this.stop() : this.start(CONFIG.UPDATE_INTERVAL));
     EventManager.on("input_keydown_Enter", () => {
       for (let i = 0; i < 10; i++)

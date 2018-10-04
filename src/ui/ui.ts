@@ -18,7 +18,9 @@ export default class UI extends Canvas {
   }
 
   renderAll() {
-    this.backgroundColor("black");
+    //background
+    this.ctx.fillStyle = "black";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     let i = 0;
     let command = this.renderCommands[i];
     while (command) {
@@ -27,12 +29,7 @@ export default class UI extends Canvas {
       command = this.renderCommands[i];
     }
   }
-
-  backgroundColor(color: string) {
-    this.ctx.fillStyle = color;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
+  
   renderDebug(debugState: {}) {
     let div = document.getElementById("state");
     let str = "";

@@ -2,29 +2,16 @@ import Vector from "../math/vector";
 
 
 const TIME_SCALE = 1000;
-const MAX_TICKS_PER_SECOND = 60;
 const speedPerSecond = (val: number) => val * (TIME_SCALE / 1000);
 const accelerationPerSecond = (val: number) => val * ((TIME_SCALE / 1000) ** 2);
 
-let state: any = {
-  LOGGER: {
-    VERBOSITY: 2
-  },
-  ENGINE: {
-    TIME_SCALE,
-    UPDATE_INTERVAL: 1000 / MAX_TICKS_PER_SECOND
-  },
+export default {
   CANVAS: {
-    SCALE: new Vector(2),
-    SHIFT: new Vector(2),
-    SIZE: new Vector(2),
     BASE_SIZE: new Vector([1920, 1080]),
     ASPECT_RATIO: 16 / 9,
   },
-  MOUSE: new Vector(2),
   WORLD: {
-    SIZE: new Vector([1920, 1080]),
-    POSITION: new Vector(2)
+    SIZE: new Vector([1920, 1080])
   },
   MOUSE_FOLLOWER: {
     NUM_DIMENSIONS: 2,
@@ -47,5 +34,3 @@ let state: any = {
     ACCELERATION_SCALE: accelerationPerSecond(1500)
   }
 };
-
-export default state;

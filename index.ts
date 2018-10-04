@@ -1,11 +1,13 @@
-// import Engine from "./src/webworker/index";
+import Engine from "./src2/engine/engine";
+
+/*
 import Engine from "./src/engine";
-import EventManager from "./src/services/eventmanager";
+import UI from "./src/ui/ui";
 
 let run = () => {
-  let game = new Engine();
+  let ui = new UI();
+  let game = new Engine(ui);
   (window as any).game = game;
-  (window as any).eventManager = EventManager;
   for (let i = 0; i < 100; i++)
     game.addRandomFollower();
   setTimeout(() => game.start(), 0);
@@ -14,11 +16,20 @@ let run = () => {
 import EngineWorker from './src/webworker/engine.worker';
 
 let run2 = () => {
+  // @ts-ignore
   let worker = new EngineWorker();
   console.log(worker);
   worker.postMessage("Hello")
   console.log("posted");
 }
+*/
 
+let run = () => {
+  let game = new Engine();
+  (window as any).game = game;
+  // for (let i = 0; i < 100; i++)
+  //   game.addRandomFollower();
+  // setTimeout(() => game.start(), 0);
+}
 
 window.addEventListener("load", run);
