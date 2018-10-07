@@ -7,21 +7,31 @@ interface MovementSystemObject extends Entity {
   acceleration: Vector;
   velocity: Vector;
   position: Vector;
+  maxVelocity: number;
+  maxAcceleration: number;
 }
 
 export default class MovementSystem extends System {
   constructor() {
-    super(["position", "velocity", "acceleration"]);
+    super(["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
   }
 
   updateEntity(entity: MovementSystemObject, dt: number) {
     if (entity.isFrozen)
       return
-    
+
+    //limit acceleration
+    entity.acceleration.limitByMaxNumber(entity.maxAcceleration);
+
+    //update speed
     entity.acceleration.cache();
     entity.velocity.addVec(entity.acceleration.mulNum(dt));
     entity.acceleration.uncache();
 
+    //limit speed
+    entity.velocity.limitByMaxNumber(entity.maxVelocity)
+
+    //update position
     entity.velocity.cache();
     entity.position.addVec(entity.velocity.mulNum(dt));
     entity.velocity.uncache();

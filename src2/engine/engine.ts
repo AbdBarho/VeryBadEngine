@@ -7,8 +7,6 @@ import InputManager from "./inputmanager";
 import EntityFactory from "../factory/factory";
 import Canvas from "./canvas";
 import MouseFollowerSystem from "../systems/mousefollower";
-import SpeedLimiter from "../systems/speedlimiter";
-import AccelerationLimiter from "../systems/accelerationlimiter";
 
 export default class Engine extends ECS {
   inputManager: InputManager;
@@ -20,8 +18,6 @@ export default class Engine extends ECS {
     this.inputManager = new InputManager(this.ui);
     this.systems = [
       new MouseFollowerSystem(),
-      new SpeedLimiter(),
-      new AccelerationLimiter(),
       new MovementSystem(),
       new BackgroundRenderer(this.ui),
       new RectangleRenderer(this.ui)
@@ -29,6 +25,19 @@ export default class Engine extends ECS {
     this.executer = new PeriodicExecuter(this.update.bind(this));
     for (let i = 0; i < 1000; i++)
       this.addEntity(EntityFactory.createMouseFollower());
+
     this.executer.start();
+    let isRunning = true;
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        if (isRunning) {
+          this.executer.stop();
+          isRunning = false;
+        } else {
+          this.executer.start();
+          isRunning = true;
+        }
+      }
+    });
   }
 }

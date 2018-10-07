@@ -11,7 +11,7 @@ export default class Vector {
     if (typeof values === "number")
       values = Array(values).fill(0);
     this.values = values;
-    this.cachedValues = new Array(this.values.length).fill(0);
+    this.cachedValues = Array(this.values.length).fill(0);
   }
 
   get(index: number) {
@@ -108,7 +108,13 @@ export default class Vector {
     return this;
   }
 
-  limitByMax(vec: Vector) {
+  limitByMaxNumber(num: number) {
+    for (let i = 0, len = this.values.length; i < len; i++)
+      this.values[i] = MathHelper.limitBetween(this.values[i], -num, num);
+    return this;
+  }
+
+  limitByMaxVec(vec: Vector) {
     for (let i = 0; i < this.values.length; i++) {
       let max = Math.abs(vec.get(i));
       this.values[i] = MathHelper.limitBetween(this.values[i], -max, max);
@@ -160,5 +166,11 @@ export default class Vector {
 
 
 function getMaxLength(vectors: Vector[]) {
-  return vectors.reduce((acc, vec) => Math.max(acc, vec.getLength()), 0);
+  let max = -Infinity;
+  for (let i = 0, len = vectors.length; i < len; i++){
+    const vecLen = vectors[i].getLength();
+    if (vecLen > max)
+      max = vecLen;
+  }
+  return max;
 }

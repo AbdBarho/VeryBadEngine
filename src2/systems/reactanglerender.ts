@@ -22,7 +22,8 @@ export default class RectangleRenderer extends System {
       entity.hasChanged = false;
     }
     this.ui.ctx.fillStyle = entity.rectModel.color;
-    this.ui.ctx.fillRect.apply(this.ui.ctx, entity.rectModel.cachedDimensions);
+    let dims = entity.rectModel.cachedDimensions;
+    this.ui.ctx.fillRect(dims[0], dims[1], dims[2], dims[3]);
   }
 
   private calculate(entity: RectangleModelObject) {

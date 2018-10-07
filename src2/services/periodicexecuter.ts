@@ -1,3 +1,5 @@
+import Logger from "./logger";
+
 export default class PeriodicExecuter {
   executeAfterTimeout: () => void;
   callback: (dt: number) => any;
@@ -21,6 +23,7 @@ export default class PeriodicExecuter {
   run() {
     let now = performance.now();
     let dt = now - this.lastTime;
+    Logger.fps(dt);
     this.callback(dt);
     this.lastTime = now;
     this.timer = requestAnimationFrame(this.executeAfterTimeout);
