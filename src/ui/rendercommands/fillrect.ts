@@ -29,7 +29,7 @@ export default class FillRect extends RenderCommand {
     this.cachedValues[1] = this.pos.get(1);
     this.cachedValues[2] = this.size.get(0);
     this.cachedValues[3] = this.size.get(1);
-    
+
     this.pos.uncache();
     this.size.uncache();
     return this;
@@ -38,6 +38,7 @@ export default class FillRect extends RenderCommand {
   execute(ctx: CanvasRenderingContext2D) {
     if (this.target.hasChanged())
       this.calculate();
+    //@ts-ignore
     ctx.fillStyle = this.target.color;
     ctx.fillRect.apply(ctx, this.cachedValues);
   }

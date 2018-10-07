@@ -9,6 +9,7 @@ import Canvas from "./canvas";
 import MouseFollowerSystem from "../systems/mousefollower";
 import InputSystem from "../systems/input";
 import Logger from "../services/logger";
+import KeepInWorld from "../systems/keepinworld";
 
 export default class Engine extends ECS {
   input: InputManager;
@@ -22,13 +23,14 @@ export default class Engine extends ECS {
     this.input = new InputManager(this.ui);
     this.systems = [
       new InputSystem(this.input),
-      new MouseFollowerSystem(this.input),
+      new MouseFollowerSystem(this.input, this),
       new MovementSystem(),
+      new KeepInWorld(),
       new BackgroundRenderer(this.ui),
       new RectangleRenderer(this.ui)
     ];
     this.executer = new PeriodicExecuter(this.update.bind(this));
-    for (let i = 0; i < 100; i++)
+    for (let i = 0; i < 500; i++)
       this.addEntity(EntityFactory.createMouseFollower());
 
     window.addEventListener("keydown", (e) => {

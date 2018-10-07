@@ -78,4 +78,11 @@ export default class Logger {
       str += key + ": " + value + "\n";
     div!.innerText = str;
   }
+
+  static debugState(obj: any) {
+    obj = Object.assign({}, obj)
+    for (let key in obj)
+      obj[key] = obj[key].toString();
+    this.debugInfo(obj);
+  }
 }

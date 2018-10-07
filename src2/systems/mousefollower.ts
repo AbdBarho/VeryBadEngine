@@ -5,6 +5,9 @@ import MathHelper from "../math/math";
 import InputManager from "../engine/inputmanager";
 import Logger from "../services/logger";
 import { RectangularModel } from "../ecs/component";
+import initconfig from "../config/initconfig";
+import Engine from "../engine/engine";
+import EntityFactory from "../factory/factory";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
@@ -14,20 +17,36 @@ interface MouseFollowerEntity extends Entity {
   rectModel: RectangularModel;
 }
 
-let ACCELERATION_SCALE = 0.0015;
+interface MouseFollowerConfig {
+  isFrozen: boolean;
+  stopOnReach: boolean;
+  destroyOnReach: boolean;
+  respawnOnDestroy: boolean;
+  lookAheadSteps: number;
+  randomFactorScale: number;
+}
+
+let ACCELERATION_SCALE = initconfig.ENTITIES.MOUSE_FOLLOWER.ACCELERATION_SCALE;
 export default class MouseFollowerSystem extends System {
   input: InputManager;
-  isFrozen = false;
-  stopOnReach = false;
-  lookAheadSteps = 0;
-  randomFactorScale = 0;
+  engine: Engine;
+  config: MouseFollowerConfig = {
+    isFrozen: false,
+    stopOnReach: false,
+    destroyOnReach: true,
+    respawnOnDestroy: true,
+    lookAheadSteps: 250,
+    randomFactorScale: 0
+  }
   target = new Vector(2);
 
-  constructor(inputManager: InputManager) {
+  constructor(inputManager: InputManager, engine: Engine) {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
+    this.engine = engine;
     this.input.on("keydown", this.handleKey, this);
     this.input.on("mousemove", this.mouseMove, this);
+    Logger.debugState(Object.assign({}, this.config));
   }
 
   mouseMove(mousePos: Vector | string) {
@@ -35,38 +54,75 @@ export default class MouseFollowerSystem extends System {
   }
 
   handleKey(keyName: string | Vector) {
-    if (keyName === "Digit1")
-      this.isFrozen = !this.isFrozen;
+    if (keyName === "Enter")
+      this.spawnMouseFollowers();
+    else if (keyName === "Delete")
+      this.removeMouseFollowers();
+    else if (keyName === "Digit1")
+      this.config.isFrozen = !this.config.isFrozen;
     else if (keyName === "Digit2")
-      this.setMovementParameters(0, 0, false);
+      this.config.stopOnReach = !this.config.stopOnReach;
     else if (keyName === "Digit3")
-      this.setMovementParameters(0, 1, false);
+      this.config.destroyOnReach = !this.config.destroyOnReach;
     else if (keyName === "Digit4")
-      this.setMovementParameters(250, 0, true);
+      this.config.respawnOnDestroy = !this.config.respawnOnDestroy;
+    else if (keyName === "Digit5")
+      this.config.lookAheadSteps = this.config.lookAheadSteps === 0 ? 250 : 0;
+    else if (keyName === "Digit6")
+      this.config.randomFactorScale = this.config.randomFactorScale === 0 ? 1 : 0;
+
+    Logger.debugState(Object.assign({}, this.config));
   }
 
-  setMovementParameters(lookAhed = 0, randomScale = 0, stopOnReach = false) {
-    this.isFrozen = false;
-    this.lookAheadSteps = lookAhed;
-    this.randomFactorScale = randomScale;
-    this.stopOnReach = stopOnReach;
+  spawnMouseFollowers() {
+    for (let i = 0; i < 100; i++)
+      this.engine.addEntity(EntityFactory.createMouseFollower());
+    Logger.debugState({
+      "Num mouseFollowers": Object.keys(this.entities).length
+    });
+  }
+
+  removeMouseFollowers() {
+    let i = 100;
+    for (let id in this.entities) {
+      this.engine.removeEntity(id);
+      if (--i == 0)
+        break;
+    }
+    Logger.debugState({
+      "Num mouseFollowers": Object.keys(this.entities).length
+    });
+  }
+
+  setMovementParameters(obj: MouseFollowerConfig) {
+    Object.assign(this.config, obj);
   }
 
   updateEntity(entity: MouseFollowerEntity, dt: number) {
-    entity.isFrozen = this.isFrozen
-    if (this.isFrozen)
+    entity.isFrozen = this.config.isFrozen
+    if (this.config.isFrozen)
       return;
 
-    if (this.stopOnReach && this.targetReached(entity)) {
-      entity.isFrozen = true;
-      return;
+    if (this.config.destroyOnReach || this.config.stopOnReach) {
+      if (this.targetReached(entity)) {
+        if (this.config.stopOnReach)
+          entity.isFrozen = true;
+
+        if (this.config.destroyOnReach) {
+          this.engine.removeEntity(entity.ID);
+          if (this.config.respawnOnDestroy)
+            this.engine.addEntity(EntityFactory.createMouseFollower());
+        }
+
+        return;
+      }
     }
-
     let dir;
-    if (this.lookAheadSteps !== 0) {
+    let lookAhead = this.config.lookAheadSteps;
+    if (lookAhead !== 0) {
       entity.position.cache();
       entity.velocity.cache();
-      entity.position.addVec(entity.velocity.mulNum(this.lookAheadSteps));
+      entity.position.addVec(entity.velocity.mulNum(lookAhead));
       dir = MathHelper.direction2d(entity.position, this.target).mulNum(ACCELERATION_SCALE);
       entity.velocity.uncache();
       entity.position.uncache();
@@ -74,8 +130,9 @@ export default class MouseFollowerSystem extends System {
       dir = MathHelper.direction2d(entity.position, this.target).mulNum(ACCELERATION_SCALE);
     }
 
-    if (this.randomFactorScale !== 0)
-      dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * ACCELERATION_SCALE);
+    let randScale = this.config.randomFactorScale;
+    if (randScale !== 0)
+      dir.addNum(MathHelper.getSignedRandom() * randScale * ACCELERATION_SCALE);
 
     entity.acceleration.setVec(dir);
     entity.hasChanged = true;

@@ -14,6 +14,7 @@ export default {
   },
   ENTITIES: {
     MOUSE_FOLLOWER: {
+      ACCELERATION_SCALE: accelerationPerSecond(1500),
       MAX_ACCELERATION: accelerationPerSecond(1000),
       MAX_VELOCITY: speedPerSecond(500)
     }

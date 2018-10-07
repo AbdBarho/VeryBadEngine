@@ -28,8 +28,8 @@ export default class System {
       delete this.entities[entity.ID];
   }
 
-  removeEntity(entity: Entity) {
-    delete this.entities[entity.ID];
+  removeEntity(entityID: string) {
+    delete this.entities[entityID];
   }
 
   update(dt: number) {
