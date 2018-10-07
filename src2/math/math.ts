@@ -35,8 +35,9 @@ export default class MathHelper {
   }
 
   static getRandomVector(maxs: number[]) {
+    let vals = []
     for (let i = 0; i < maxs.length; i++)
-      maxs[i] = this.getRandomInt(maxs[i]);
-    return new Vector(maxs);
+      vals.push(this.getRandomInt(maxs[i]));
+    return new Vector(vals);
   }
 }

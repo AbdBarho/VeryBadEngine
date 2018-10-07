@@ -76,6 +76,6 @@ export default class Logger {
     let str = "";
     for (let [key, value] of Object.entries(debugState))
       str += key + ": " + value + "\n";
-    div!.textContent = str;
+    div!.innerText = str;
   }
 }

@@ -2,9 +2,7 @@ import Entity from "../ecs/entity";
 import Vector from "../math/vector";
 import IDGenerator from "./idgenerator";
 import MathHelper from "../math/math";
-
-const speedPerSecond = (val: number) => val / 1000;
-const accelerationPerSecond = (val: number) => val * (1000 ** 2);
+import Initconfig from "../config/initconfig";
 
 export default class EntityFactory {
   static createRect(): Entity {
@@ -28,9 +26,9 @@ export default class EntityFactory {
     return {
       ...this.createRect(),
       mouseFollower: true,
-      position: MathHelper.getRandomVector([1920, 1080]),
-      maxAcceleration: accelerationPerSecond(1000),
-      maxVelocity: speedPerSecond(500)
+      position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
+      maxAcceleration: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
+      maxVelocity: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
     }
   }
 }

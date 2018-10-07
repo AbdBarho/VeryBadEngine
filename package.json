@@ -23,20 +23,19 @@
   },
   "homepage": "https://github.com/AbdBarho/VeryBadEngine#readme",
   "devDependencies": {
-    "@babel/core": "^7.1.0",
+    "@babel/core": "^7.1.2",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-typescript": "^7.1.0",
-    "@babel/runtime": "^7.0.0",
-    "babel-loader": "^8.0.2",
+    "@babel/runtime": "^7.1.2",
+    "babel-loader": "^8.0.4",
     "circular-dependency-plugin": "^5.0.2",
-    "eslint": "^5.6.0",
     "http-server": "^0.11.1",
     "inline-source-cli": "^1.2.0",
-    "ts-loader": "^5.1.1",
-    "typescript": "^3.0.3",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.0",
+    "ts-loader": "^5.2.1",
+    "typescript": "^3.1.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
     "worker-loader": "^2.0.0"
   }
 }

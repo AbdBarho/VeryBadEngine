@@ -4,6 +4,9 @@ export default class System {
   required: ComponentName[];
   entities: { [ID: string]: Entity } = {};
 
+  /**
+   * @param required requried components, if nothing given, the system will not contain any entities
+   */
   constructor(required: ComponentName[]) {
     this.required = required;
   }
@@ -16,6 +19,9 @@ export default class System {
   }
 
   processCompatibility(entity: Entity) {
+    if (this.required.length === 0)
+      return;
+
     if (this.checkCompatibility(entity))
       this.entities[entity.ID] = entity;
     else
@@ -26,12 +32,16 @@ export default class System {
     delete this.entities[entity.ID];
   }
 
-  updateEnities(dt: number) {
+  update(dt: number) {
     for (let id in this.entities)
       this.updateEntity(this.entities[id], dt);
   }
 
   updateEntity(entity: Entity, dt: number) {
+    //nothing
+  }
+
+  destroy() {
     //nothing
   }
 }

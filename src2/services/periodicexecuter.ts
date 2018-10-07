@@ -6,6 +6,7 @@ export default class PeriodicExecuter {
   timer = 0;
   lastTime = 0;
   updateInterval = 0;
+  isRunning = false;
 
   constructor(callback: (dt: number) => any) {
     this.callback = callback;
@@ -13,6 +14,9 @@ export default class PeriodicExecuter {
   }
 
   start(updateInterval = 17) {
+    if (this.isRunning)
+      return;
+    this.isRunning = true;
     let now = performance.now();
     let delay = now - this.lastTime;
     delay = delay < updateInterval ? delay : 0;
@@ -30,6 +34,7 @@ export default class PeriodicExecuter {
   }
 
   stop() {
+    this.isRunning = false;
     if (this.timer !== 0) {
       cancelAnimationFrame(this.timer);
       this.timer = 0;

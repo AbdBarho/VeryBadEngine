@@ -16,7 +16,7 @@ export default class Canvas {
     scale: new Vector(2),
     shift: new Vector(2),
     size: new Vector(2),
-    baseSize: initConfig.CANVAS.BASE_SIZE,
+    baseSize: new Vector(initConfig.CANVAS.BASE_SIZE.slice()),
     aspectRatio: initConfig.CANVAS.ASPECT_RATIO
   };
 

@@ -7,7 +7,8 @@ export default class BackgroundRenderer extends System {
     super([]);
     this.ui = ui;
   }
-  updateEnities() {
+
+  update() {
     this.ui.ctx.fillStyle = "black";
     this.ui.ctx.fillRect(0, 0, this.ui.canvas.width, this.ui.canvas.height);
   }
