@@ -1,18 +1,24 @@
-import System from "./system";
-import Entity from "./entity";
+import IEntity from "./entity";
+import  ISystem  from "./system/isystem";
+
 
 export default class ECS {
-  systems: System[] = [];
-  entities: { [ID: string]: Entity } = {};
+  systems: ISystem[] = [];
+  queuedEntities: IEntity[] = [];
+  entities: { [ID: string]: IEntity } = {};
 
 
-  addEntity(entity: Entity) {
+  private addEntity(entity: IEntity) {
     for (let i = 0, len = this.systems.length; i < len; i++)
       this.systems[i].processCompatibility(entity);
     this.entities[entity.ID] = entity;
   }
 
-  reCheckEntity(entity: Entity) {
+  queueEntity(entity: IEntity) {
+    this.queuedEntities.push(entity);
+  }
+
+  reCheckEntity(entity: IEntity) {
     return this.addEntity(entity);
   }
 
@@ -23,6 +29,11 @@ export default class ECS {
   }
 
   update(dt: number) {
+    if (this.queuedEntities.length) {
+      for (let i = 0, len = this.queuedEntities.length; i < len; i++)
+        this.addEntity(this.queuedEntities[i]);
+      this.queuedEntities = [];
+    }
     for (let i = 0, len = this.systems.length; i < len; i++)
       this.systems[i].update(dt);
   }

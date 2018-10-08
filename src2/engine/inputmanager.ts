@@ -45,4 +45,8 @@ export default class InputManager extends QueuedEventManager {
   on(event: InputEvent, callback: InputCallback, context?: any) {
     return super.on(event, callback, context);
   }
+
+  getMousePosition() {
+    return this.mousePos.copy();
+  }
 }

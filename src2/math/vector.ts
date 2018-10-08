@@ -154,6 +154,13 @@ export default class Vector {
     return true;
   }
 
+  normSquared() {
+    let sum = 0;
+    for (let i = 0; i < this.values.length; i++)
+      sum += this.values[i] * this.values[i];
+    return sum;
+  }
+
 
   map(func: mapFunction, context?: any) {
     return new Vector(this.values.map((el, i, arr) => func.call(context, el, i, arr)));

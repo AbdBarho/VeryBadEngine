@@ -12,6 +12,12 @@ export default class MathHelper {
     return new Vector([Math.cos(angle), -Math.sin(angle)]);
   }
 
+  static rotation2d(vec: Vector) {
+    let angle = this.atan2(vec.get(0), vec.get(1));
+    // we use -y because the y is positive when we go down the canvas, not up just like in normal math
+    return new Vector([Math.cos(angle), -Math.sin(angle)]);
+  }
+
   static getRandomInt(max: number, min = 0) {
     return Math.floor(Math.random() * (max - min)) + min;
   }

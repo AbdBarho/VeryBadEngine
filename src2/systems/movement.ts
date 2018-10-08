@@ -1,9 +1,9 @@
-import System from "../ecs/system";
-import Entity from "../ecs/entity";
+import System from "../ecs/system/system";
+import IEntity from "../ecs/entity";
 import Vector from "../math/vector";
 
 
-interface MovementSystemObject extends Entity {
+interface MovementSystemObject extends IEntity {
   acceleration: Vector;
   velocity: Vector;
   position: Vector;

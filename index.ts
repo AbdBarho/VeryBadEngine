@@ -1,18 +1,6 @@
 import Engine from "./src2/engine/engine";
 
 /*
-import Engine from "./src/engine";
-import UI from "./src/ui/ui";
-
-let run = () => {
-  let ui = new UI();
-  let game = new Engine(ui);
-  (window as any).game = game;
-  for (let i = 0; i < 100; i++)
-    game.addRandomFollower();
-  setTimeout(() => game.start(), 0);
-}
-
 import EngineWorker from './src/webworker/engine.worker';
 
 let run2 = () => {
@@ -24,12 +12,6 @@ let run2 = () => {
 }
 */
 
-let run = () => {
-  let game = new Engine();
-  (window as any).game = game;
-  // for (let i = 0; i < 100; i++)
-  //   game.addRandomFollower();
-  // setTimeout(() => game.start(), 0);
-}
+let run = () => (window as any).game = new Engine();
 
 window.addEventListener("load", run);

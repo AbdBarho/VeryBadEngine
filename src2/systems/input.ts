@@ -1,4 +1,4 @@
-import System from "../ecs/system";
+import System from "../ecs/system/system";
 import InputManager from "../engine/inputmanager";
 
 export default class InputSystem extends System {

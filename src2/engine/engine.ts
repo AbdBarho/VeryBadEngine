@@ -1,6 +1,6 @@
 import ECS from "../ecs/ecs";
 import MovementSystem from "../systems/movement";
-import RectangleRenderer from "../systems/reactanglerender";
+import RectangleRenderer from "../systems/rectanglerender";
 import PeriodicExecuter from "../services/periodicexecuter";
 import BackgroundRenderer from "../systems/background";
 import InputManager from "./inputmanager";
@@ -10,28 +10,38 @@ import MouseFollowerSystem from "../systems/mousefollower";
 import InputSystem from "../systems/input";
 import Logger from "../services/logger";
 import KeepInWorld from "../systems/keepinworld";
+import ExplosionSystem from "../systems/explosion";
+import ExplosionOnClick from "../systems/explosiononclick";
 
-export default class Engine extends ECS {
+export default class Engine {
+  ecs: ECS;
   input: InputManager;
   executer: PeriodicExecuter;
   ui: Canvas;
   isRunning = false;
 
   constructor() {
-    super();
     this.ui = new Canvas();
     this.input = new InputManager(this.ui);
-    this.systems = [
+    this.ecs = new ECS();
+    this.ecs.systems = [
       new InputSystem(this.input),
-      new MouseFollowerSystem(this.input, this),
+
+      new ExplosionSystem(),
+      new ExplosionOnClick(this.input, this.ecs),
+
+      new MouseFollowerSystem(this.input, this.ecs),
+
+
       new MovementSystem(),
       new KeepInWorld(),
+
       new BackgroundRenderer(this.ui),
       new RectangleRenderer(this.ui)
     ];
-    this.executer = new PeriodicExecuter(this.update.bind(this));
+    this.executer = new PeriodicExecuter((dt: number) => this.ecs.update(dt));
     for (let i = 0; i < 500; i++)
-      this.addEntity(EntityFactory.createMouseFollower());
+      this.ecs.queueEntity(EntityFactory.createMouseFollower());
 
     window.addEventListener("keydown", (e) => {
       if (e.code === "Space")

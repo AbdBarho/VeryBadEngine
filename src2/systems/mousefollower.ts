@@ -1,15 +1,15 @@
-import System from "../ecs/system";
-import Entity from "../ecs/entity";
+import System from "../ecs/system/system";
+import IEntity from "../ecs/entity";
 import Vector from "../math/vector";
 import MathHelper from "../math/math";
 import InputManager from "../engine/inputmanager";
 import Logger from "../services/logger";
 import { RectangularModel } from "../ecs/component";
 import initconfig from "../config/initconfig";
-import Engine from "../engine/engine";
 import EntityFactory from "../factory/factory";
+import ECS from "../ecs/ecs";
 
-interface MouseFollowerEntity extends Entity {
+interface MouseFollowerEntity extends IEntity {
   mouseFollower: boolean;
   acceleration: Vector;
   position: Vector;
@@ -29,23 +29,24 @@ interface MouseFollowerConfig {
 let ACCELERATION_SCALE = initconfig.ENTITIES.MOUSE_FOLLOWER.ACCELERATION_SCALE;
 export default class MouseFollowerSystem extends System {
   input: InputManager;
-  engine: Engine;
+  ecs: ECS;
   config: MouseFollowerConfig = {
     isFrozen: false,
     stopOnReach: false,
-    destroyOnReach: true,
+    destroyOnReach: false,
     respawnOnDestroy: true,
-    lookAheadSteps: 250,
+    lookAheadSteps: 0,
     randomFactorScale: 0
   }
-  target = new Vector(2);
+  target = new Vector([1000,500]);
 
-  constructor(inputManager: InputManager, engine: Engine) {
+  constructor(inputManager: InputManager, ecs: ECS) {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
-    this.engine = engine;
+    this.ecs = ecs;
     this.input.on("keydown", this.handleKey, this);
-    this.input.on("mousemove", this.mouseMove, this);
+    //FIXEME:
+    // this.input.on("mousemove", this.mouseMove, this);
     Logger.debugState(Object.assign({}, this.config));
   }
 
@@ -76,7 +77,7 @@ export default class MouseFollowerSystem extends System {
 
   spawnMouseFollowers() {
     for (let i = 0; i < 100; i++)
-      this.engine.addEntity(EntityFactory.createMouseFollower());
+      this.ecs.queueEntity(EntityFactory.createMouseFollower());
     Logger.debugState({
       "Num mouseFollowers": Object.keys(this.entities).length
     });
@@ -85,7 +86,7 @@ export default class MouseFollowerSystem extends System {
   removeMouseFollowers() {
     let i = 100;
     for (let id in this.entities) {
-      this.engine.removeEntity(id);
+      this.ecs.removeEntity(id);
       if (--i == 0)
         break;
     }
@@ -109,9 +110,9 @@ export default class MouseFollowerSystem extends System {
           entity.isFrozen = true;
 
         if (this.config.destroyOnReach) {
-          this.engine.removeEntity(entity.ID);
+          this.ecs.removeEntity(entity.ID);
           if (this.config.respawnOnDestroy)
-            this.engine.addEntity(EntityFactory.createMouseFollower());
+            this.ecs.queueEntity(EntityFactory.createMouseFollower());
         }
 
         return;
