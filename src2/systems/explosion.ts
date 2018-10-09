@@ -55,7 +55,7 @@ export default class ExplosionSystem extends MultiSystem {
     let mag2 = target.position.magSquared();
     let distanceScale = mag2 / (source.maxExplosionDistance ** 2);
     if (distanceScale < 1) {
-      let power = (1 - distanceScale) * source.explosionVelocity;
+      let power = StepFunctions.smoothStart(1 - distanceScale, 4) * source.explosionVelocity;
       let dir = MathHelper.rotation2d(target.position);
       // this.plot(dir);
       target.velocity.addVec(dir.mulNum(power));

@@ -24,28 +24,29 @@ interface MouseFollowerConfig {
   respawnOnDestroy: boolean;
   lookAheadSteps: number;
   randomFactorScale: number;
+  accelerationScale: number;
 }
 
-let ACCELERATION_SCALE = initconfig.ENTITIES.MOUSE_FOLLOWER.ACCELERATION_SCALE;
+const CONFIG = initconfig.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {
   input: InputManager;
   ecs: ECS;
   config: MouseFollowerConfig = {
-    isFrozen: false,
-    stopOnReach: false,
-    destroyOnReach: false,
-    respawnOnDestroy: true,
-    lookAheadSteps: 0,
-    randomFactorScale: 0
+    isFrozen: CONFIG.IS_FROZEN,
+    stopOnReach: CONFIG.STOP_ON_REACH,
+    destroyOnReach: CONFIG.DESTROY_ON_REACH,
+    respawnOnDestroy: CONFIG.RESPAWN_ON_DESTROY,
+    lookAheadSteps: CONFIG.LOOK_AHEAD_STEPS,
+    randomFactorScale: CONFIG.RANDOM_FACTOR_SCALE,
+    accelerationScale: CONFIG.ACCELERATION_SCALE
   }
-  target = new Vector([1000,500]);
+  target = new Vector([1000, 500]);
 
   constructor(inputManager: InputManager, ecs: ECS) {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
     this.input.on("keydown", this.handleKey, this);
-    //FIXEME:
     this.input.on("mousemove", this.mouseMove, this);
     Logger.debugState(Object.assign({}, this.config));
   }
@@ -95,7 +96,7 @@ export default class MouseFollowerSystem extends System {
     });
   }
 
-  setMovementParameters(obj: MouseFollowerConfig) {
+  setMovementParameters(obj: { [key in keyof MouseFollowerConfig]: number | boolean }) {
     Object.assign(this.config, obj);
   }
 
@@ -119,21 +120,21 @@ export default class MouseFollowerSystem extends System {
       }
     }
     let dir;
-    let lookAhead = this.config.lookAheadSteps;
-    if (lookAhead !== 0) {
+    let { lookAheadSteps, randomFactorScale, accelerationScale } = this.config;
+
+    if (lookAheadSteps !== 0) {
       entity.position.cache();
       entity.velocity.cache();
-      entity.position.addVec(entity.velocity.mulNum(lookAhead));
-      dir = MathHelper.direction2d(entity.position, this.target).mulNum(ACCELERATION_SCALE);
+      entity.position.addVec(entity.velocity.mulNum(lookAheadSteps));
+      dir = MathHelper.direction2d(entity.position, this.target).mulNum(accelerationScale);
       entity.velocity.uncache();
       entity.position.uncache();
     } else {
-      dir = MathHelper.direction2d(entity.position, this.target).mulNum(ACCELERATION_SCALE);
+      dir = MathHelper.direction2d(entity.position, this.target).mulNum(accelerationScale);
     }
 
-    let randScale = this.config.randomFactorScale;
-    if (randScale !== 0)
-      dir.addNum(MathHelper.getSignedRandom() * randScale * ACCELERATION_SCALE);
+    if (randomFactorScale !== 0)
+      dir.addNum(MathHelper.getSignedRandom() * randomFactorScale * accelerationScale);
 
     entity.acceleration.setVec(dir);
     entity.hasChanged = true;
