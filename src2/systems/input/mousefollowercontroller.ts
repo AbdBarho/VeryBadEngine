@@ -48,6 +48,8 @@ export default class MouseFollowerController extends System {
       default:
         break;
     }
+
+    Logger.debugState(Object.assign({}, this.system.config));
   }
 
   spawnMouseFollowers() {

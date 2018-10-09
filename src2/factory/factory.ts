@@ -34,11 +34,17 @@ export default class EntityFactory {
     return {
       ...this.createRect(),
       position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
-      velocity: new Vector([1, 0]),
+      velocity: new Vector([.2, 0]),
       wrapAroundWorld: true,
-      explodes: true,
+      // explodes: true,
       maxAcceleration: 1,
-      maxVelocity: 2
+      maxVelocity: Infinity,
+      rectModel: {
+        size: new Vector([10, 10]),
+        centerShift: new Vector([5, 5]),
+        color: "rgba(255,255,255,0.3)",
+        cachedDimensions: [0, 0, 0, 0]
+      }
     }
   }
 

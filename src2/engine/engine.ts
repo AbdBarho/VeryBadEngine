@@ -46,9 +46,11 @@ export default class Engine {
       // new CirclePlot(this.ui)
     ];
     this.executer = new PeriodicExecuter((dt: number) => this.ecs.update(dt));
+    for (let i = 0; i < 100; i++)
+      this.ecs.queueEntity(EntityFactory.createSideScroller());
+
     for (let i = 0; i < 500; i++)
-    this.ecs.queueEntity(EntityFactory.createMouseFollower());
-    // this.ecs.queueEntity(EntityFactory.createSideScroller());
+      this.ecs.queueEntity(EntityFactory.createMouseFollower());
 
     window.addEventListener("keydown", (e) => {
       if (e.code === "Space")

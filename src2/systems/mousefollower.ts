@@ -54,12 +54,6 @@ export default class MouseFollowerSystem extends System {
     this.target = mousePos as Vector;
   }
 
-
-  setMovementParameters(obj: { [key in keyof MouseFollowerConfig]: number | boolean }) {
-    Object.assign(this.config, obj);
-    Logger.debugState(Object.assign({}, this.config));
-  }
-
   updateEntity(entity: MouseFollowerEntity, dt: number) {
     entity.isFrozen = this.config.isFrozen
     if (this.config.isFrozen)
