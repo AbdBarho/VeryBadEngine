@@ -1,5 +1,5 @@
 import System from "../../ecs/system/system";
-import InputManager from "../../engine/inputmanager";
+import InputManager from "../../core/inputmanager";
 import Logger from "../../services/logger";
 import MouseFollowerSystem from "../mousefollower";
 import ECS from "../../ecs/ecs";

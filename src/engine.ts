@@ -1,64 +1,82 @@
-import UI from "./ui/ui";
-import EventManager from "./services/eventmanager";
+import ECS from "./ecs/ecs";
+import MovementSystem from "./systems/movement/movement";
+import RectangleRenderer from "./systems/render/rectangle";
+import PeriodicExecuter from "./services/periodicexecuter";
+import BackgroundRenderer from "./systems/render/background";
+import InputManager from "./core/inputmanager";
+import EntityFactory from "./factory/factory";
+import Canvas from "./core/canvas";
+import MouseFollowerSystem from "./systems/mousefollower";
+import InputSystem from "./systems/input/input";
 import Logger from "./services/logger";
-import Config from "./config/config";
-import World from "./world/world";
-import MouseFollower from "./objects/mousefollower/mousefollower";
-import AccurateMouseFollower from "./objects/mousefollower/accuratemousefollower";
-import FillRect from "./ui/rendercommands/fillrect";
-import RequestAnimationFrameExecuter from "./services/rafexecuter";
+import KeepInWorld from "./systems/movement/keepinworld";
+import ExplosionSystem from "./systems/explosion";
+import ExplosionOnClick from "./systems/input/explosiononclick";
+import WrapAroundWorld from "./systems/movement/wraparoundworld";
+import MouseFollowerController from "./systems/input/mousefollowercontroller";
+import CirclePlot from "./systems/render/circleplot";
 
-const CONFIG = Config.getConfig("ENGINE");
-
-export default class Engine extends RequestAnimationFrameExecuter {
-  world = new World();
-  renderer: UI;
+export default class Engine {
+  ecs: ECS;
+  input: InputManager;
+  executer: PeriodicExecuter;
+  ui: Canvas;
   isRunning = false;
-  lastTime = 0;
 
-  constructor(ui: UI) {
-    super("Engine Loop");
-    this.renderer = ui;
-    EventManager.on("input_keydown_Space", () => this.isRunning ? this.stop() : this.start(CONFIG.UPDATE_INTERVAL));
-    EventManager.on("input_keydown_Enter", () => {
-      for (let i = 0; i < 10; i++)
-        this.addRandomFollower();
-    });
-    EventManager.on("input_keydown_Delete", () => {
-      let len = Math.min(10, this.world.getObjects().length);
-      for (let i = 0; i < len; i++)
-        this.deleteRandomFollower()
-    });
+  constructor() {
+    this.ui = new Canvas();
+    this.input = new InputManager(this.ui);
+    this.ecs = new ECS();
+    this.executer = new PeriodicExecuter((dt: number) => this.ecs.update(dt));
+    this.init();
   }
 
-  beforeStart() {
+  init() {
+    this.createSystems();
+    for (let i = 0; i < 100; i++)
+      this.ecs.queueEntity(EntityFactory.createSideScroller());
+
+    for (let i = 0; i < 500; i++)
+      this.ecs.queueEntity(EntityFactory.createMouseFollower());
+
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space")
+        this.isRunning ? this.stop() : this.start();
+    });
+    this.start();
+  }
+
+  createSystems() {
+    let mousefollowerSys = new MouseFollowerSystem(this.input, this.ecs);
+    this.ecs.systems = [
+      new InputSystem(this.input),
+
+      new ExplosionSystem(this.ecs),
+      new ExplosionOnClick(this.input, this.ecs),
+
+      new MouseFollowerController(this.input, this.ecs, mousefollowerSys),
+      mousefollowerSys,
+
+      new MovementSystem(),
+      new KeepInWorld(),
+      new WrapAroundWorld(),
+
+      new BackgroundRenderer(this.ui),
+      new RectangleRenderer(this.ui),
+      // new CirclePlot(this.ui)
+    ];
+  }
+
+  start() {
+    this.executer.start();
     this.isRunning = true;
-    Logger.debugInfo("isRunning", "true");
+    Logger.debugInfo("isRunning", this.isRunning.toString());
   }
 
-  execute(dt: number) {
-    Logger.fps(dt);
-    dt /= CONFIG.TIME_SCALE;
-    this.world.updateAll(dt);
-    this.renderer.renderAll();
-  }
-
-  afterStop() {
+  stop() {
+    this.executer.stop();
     this.isRunning = false;
-    Logger.debugInfo("isRunning", "false");
+    Logger.debugInfo("isRunning", this.isRunning.toString());
   }
 
-
-  addRandomFollower() {
-    let follower = new AccurateMouseFollower();
-    let pos = this.world.getRandomPosition();
-    follower.setPosition(pos);
-    let id = this.world.addObject(follower);
-    this.renderer.renderCommands[id] = new FillRect(follower, this.renderer.parameters);
-  }
-
-  deleteRandomFollower() {
-    let id = this.world.removeLastObject();
-    delete this.renderer.renderCommands[id]
-  }
 }

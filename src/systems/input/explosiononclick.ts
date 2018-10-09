@@ -1,5 +1,5 @@
 import System from "../../ecs/system/system";
-import InputManager from "../../engine/inputmanager";
+import InputManager from "../../core/inputmanager";
 import Vector from "../../math/vector";
 import EntityFactory from "../../factory/factory";
 import ECS from "../../ecs/ecs";

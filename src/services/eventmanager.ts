@@ -1,4 +1,4 @@
-export class EventManager {
+export default class EventManager {
   __listeners__ : any = {};
   /**
    * register event listerner
@@ -47,5 +47,30 @@ export class EventManager {
   }
 }
 
-let instance = new EventManager();
-export default instance;
+export interface QueuedEvent {
+  event: string;
+  parameters: any[]
+}
+
+export class QueuedEventManager extends EventManager {
+  queue: QueuedEvent[] = [];
+
+  queueEvent(event: string, ...parameters: any[]) {
+    this.queue.push({
+      event,
+      parameters
+    });
+  }
+
+  executeQueue() {
+    if (this.queue.length === 0)
+      return;
+
+    let queue = this.queue;
+    this.queue = [];
+    for (let i = 0, len = queue.length; i < len; i++) {
+      let el = queue[i];
+      this.trigger(el.event, ...el.parameters);
+    }
+  }
+}

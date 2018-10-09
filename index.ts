@@ -1,5 +1,3 @@
-import Engine from "./src2/engine/engine";
-
 /*
 import EngineWorker from './src/webworker/engine.worker';
 
@@ -11,7 +9,7 @@ let run2 = () => {
   console.log("posted");
 }
 */
-
+import Engine from "./src/engine";
 let run = () => (window as any).game = new Engine();
 
 window.addEventListener("load", run);

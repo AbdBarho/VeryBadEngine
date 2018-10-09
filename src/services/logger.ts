@@ -1,8 +1,7 @@
-import EventManager from "./eventmanager";
 import Vector from "../math/vector";
-import Config from "../config/config";
+import Config from "../config/initconfig";
 
-const GLOBAL_VERBOSITY = Config.getConfig("LOGGER").VERBOSITY;
+const GLOBAL_VERBOSITY = Config.LOGGER.VERBOSITY;
 const LOGGERS = [console.error, console.warn, console.log];
 
 let debugState: any = {};
@@ -10,6 +9,7 @@ const FPS_UPDATE_INTERVAL = 500; //in ms
 const FPS_MULTIPLIER = 1000 / FPS_UPDATE_INTERVAL;
 let numUpdates = 0;
 let time = 0;
+
 export default class Logger {
   private prefix: string;
   private verbosity = GLOBAL_VERBOSITY;
@@ -68,6 +68,21 @@ export default class Logger {
       debugState[name] = val;
     }
 
-    EventManager.trigger("render_debug", debugState);
+    this.renderDebug();
+  }
+
+  static renderDebug() {
+    let div = document.getElementById("state");
+    let str = "";
+    for (let [key, value] of Object.entries(debugState))
+      str += key + ": " + value + "\n";
+    div!.innerText = str;
+  }
+
+  static debugState(obj: any) {
+    obj = Object.assign({}, obj)
+    for (let key in obj)
+      obj[key] = obj[key].toString();
+    this.debugInfo(obj);
   }
 }

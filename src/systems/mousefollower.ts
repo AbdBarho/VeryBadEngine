@@ -2,7 +2,7 @@ import System from "../ecs/system/system";
 import IEntity from "../ecs/entity";
 import Vector from "../math/vector";
 import MathHelper from "../math/math";
-import InputManager from "../engine/inputmanager";
+import InputManager from "../core/inputmanager";
 import Logger from "../services/logger";
 import { RectangularModel } from "../ecs/component";
 import initconfig from "../config/initconfig";
