@@ -1,5 +1,5 @@
-import System from "../ecs/system/system";
-import Canvas from "../engine/canvas";
+import System from "../../ecs/system/system";
+import Canvas from "../../engine/canvas";
 
 //always bottom right
 const radius = 100;

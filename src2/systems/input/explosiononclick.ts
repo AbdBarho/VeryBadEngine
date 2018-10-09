@@ -1,8 +1,8 @@
-import System from "../ecs/system/system";
-import InputManager from "../engine/inputmanager";
-import Vector from "../math/vector";
-import EntityFactory from "../factory/factory";
-import ECS from "../ecs/ecs";
+import System from "../../ecs/system/system";
+import InputManager from "../../engine/inputmanager";
+import Vector from "../../math/vector";
+import EntityFactory from "../../factory/factory";
+import ECS from "../../ecs/ecs";
 
 export default class ExplosionOnClick extends System {
   input: InputManager;

@@ -1,8 +1,8 @@
-import System from "../ecs/system/system";
-import IEntity from "../ecs/entity";
-import { RectangularModel } from "../ecs/component";
-import UI from "../engine/canvas";
-import Vector from "../math/vector";
+import System from "../../ecs/system/system";
+import IEntity from "../../ecs/entity";
+import { RectangularModel } from "../../ecs/component";
+import UI from "../../engine/canvas";
+import Vector from "../../math/vector";
 
 interface RectangleModelObject extends IEntity {
   position: Vector;

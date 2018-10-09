@@ -1,8 +1,8 @@
-import System from "../ecs/system/system";
-import IEntity from "../ecs/entity";
-import Vector from "../math/vector";
-import { RectangularModel } from "../ecs/component";
-import initconfig from "../config/initconfig";
+import System from "../../ecs/system/system";
+import IEntity from "../../ecs/entity";
+import Vector from "../../math/vector";
+import { RectangularModel } from "../../ecs/component";
+import initconfig from "../../config/initconfig";
 
 const WORLD_EDGES = new Vector(initconfig.WORLD.SIZE.slice());
 

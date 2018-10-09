@@ -46,7 +46,6 @@ export default class MouseFollowerSystem extends System {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
-    this.input.on("keydown", this.handleKey, this);
     this.input.on("mousemove", this.mouseMove, this);
     Logger.debugState(Object.assign({}, this.config));
   }
@@ -55,49 +54,10 @@ export default class MouseFollowerSystem extends System {
     this.target = mousePos as Vector;
   }
 
-  handleKey(keyName: string | Vector) {
-    if (keyName === "Enter")
-      this.spawnMouseFollowers();
-    else if (keyName === "Delete")
-      this.removeMouseFollowers();
-    else if (keyName === "Digit1")
-      this.config.isFrozen = !this.config.isFrozen;
-    else if (keyName === "Digit2")
-      this.config.stopOnReach = !this.config.stopOnReach;
-    else if (keyName === "Digit3")
-      this.config.destroyOnReach = !this.config.destroyOnReach;
-    else if (keyName === "Digit4")
-      this.config.respawnOnDestroy = !this.config.respawnOnDestroy;
-    else if (keyName === "Digit5")
-      this.config.lookAheadSteps = this.config.lookAheadSteps === 0 ? 250 : 0;
-    else if (keyName === "Digit6")
-      this.config.randomFactorScale = this.config.randomFactorScale === 0 ? 1 : 0;
-
-    Logger.debugState(Object.assign({}, this.config));
-  }
-
-  spawnMouseFollowers() {
-    for (let i = 0; i < 100; i++)
-      this.ecs.queueEntity(EntityFactory.createMouseFollower());
-    Logger.debugState({
-      "Num mouseFollowers": Object.keys(this.entities).length
-    });
-  }
-
-  removeMouseFollowers() {
-    let i = 100;
-    for (let id in this.entities) {
-      this.ecs.removeEntity(id);
-      if (--i == 0)
-        break;
-    }
-    Logger.debugState({
-      "Num mouseFollowers": Object.keys(this.entities).length
-    });
-  }
 
   setMovementParameters(obj: { [key in keyof MouseFollowerConfig]: number | boolean }) {
     Object.assign(this.config, obj);
+    Logger.debugState(Object.assign({}, this.config));
   }
 
   updateEntity(entity: MouseFollowerEntity, dt: number) {
@@ -115,7 +75,6 @@ export default class MouseFollowerSystem extends System {
           if (this.config.respawnOnDestroy)
             this.ecs.queueEntity(EntityFactory.createMouseFollower());
         }
-
         return;
       }
     }
@@ -150,7 +109,6 @@ export default class MouseFollowerSystem extends System {
   }
 
   destroy() {
-    this.input.off("keydown", this.handleKey);
     this.input.off("mousemove", this.mouseMove);
   }
 }

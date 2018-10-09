@@ -1,19 +1,20 @@
 import ECS from "../ecs/ecs";
-import MovementSystem from "../systems/movement";
-import RectangleRenderer from "../systems/rectanglerender";
+import MovementSystem from "../systems/movement/movement";
+import RectangleRenderer from "../systems/render/rectangle";
 import PeriodicExecuter from "../services/periodicexecuter";
-import BackgroundRenderer from "../systems/background";
+import BackgroundRenderer from "../systems/render/background";
 import InputManager from "./inputmanager";
 import EntityFactory from "../factory/factory";
 import Canvas from "./canvas";
 import MouseFollowerSystem from "../systems/mousefollower";
-import InputSystem from "../systems/input";
+import InputSystem from "../systems/input/input";
 import Logger from "../services/logger";
-import KeepInWorld from "../systems/keepinworld";
+import KeepInWorld from "../systems/movement/keepinworld";
 import ExplosionSystem from "../systems/explosion";
-import ExplosionOnClick from "../systems/explosiononclick";
-import WrapAroundWorld from "../systems/wraparoundworld";
-import CirclePlot from "../systems/circleplot";
+import ExplosionOnClick from "../systems/input/explosiononclick";
+import WrapAroundWorld from "../systems/movement/wraparoundworld";
+import CirclePlot from "../systems/render/circleplot";
+import MouseFollowerController from "../systems/input/mousefollowercontroller";
 
 export default class Engine {
   ecs: ECS;
@@ -26,13 +27,15 @@ export default class Engine {
     this.ui = new Canvas();
     this.input = new InputManager(this.ui);
     this.ecs = new ECS();
+    let mousefollowerSys = new MouseFollowerSystem(this.input, this.ecs);
     this.ecs.systems = [
       new InputSystem(this.input),
 
       new ExplosionSystem(this.ecs),
       new ExplosionOnClick(this.input, this.ecs),
 
-      new MouseFollowerSystem(this.input, this.ecs),
+      new MouseFollowerController(this.input, this.ecs, mousefollowerSys),
+      mousefollowerSys,
 
       new MovementSystem(),
       new KeepInWorld(),
@@ -65,4 +68,5 @@ export default class Engine {
     this.isRunning = false;
     Logger.debugInfo("isRunning", this.isRunning.toString());
   }
+
 }

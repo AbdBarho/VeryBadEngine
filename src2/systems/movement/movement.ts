@@ -1,7 +1,7 @@
-import System from "../ecs/system/system";
-import IEntity from "../ecs/entity";
-import Vector from "../math/vector";
-import Logger from "../services/logger";
+import System from "../../ecs/system/system";
+import IEntity from "../../ecs/entity";
+import Vector from "../../math/vector";
+import Logger from "../../services/logger";
 
 
 interface MovementSystemObject extends IEntity {
