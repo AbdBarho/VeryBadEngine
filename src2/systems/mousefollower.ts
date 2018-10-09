@@ -46,7 +46,7 @@ export default class MouseFollowerSystem extends System {
     this.ecs = ecs;
     this.input.on("keydown", this.handleKey, this);
     //FIXEME:
-    // this.input.on("mousemove", this.mouseMove, this);
+    this.input.on("mousemove", this.mouseMove, this);
     Logger.debugState(Object.assign({}, this.config));
   }
 

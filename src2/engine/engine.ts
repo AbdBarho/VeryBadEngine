@@ -12,6 +12,7 @@ import Logger from "../services/logger";
 import KeepInWorld from "../systems/keepinworld";
 import ExplosionSystem from "../systems/explosion";
 import ExplosionOnClick from "../systems/explosiononclick";
+import WrapAroundWorld from "../systems/wraparoundworld";
 
 export default class Engine {
   ecs: ECS;
@@ -35,13 +36,15 @@ export default class Engine {
 
       new MovementSystem(),
       new KeepInWorld(),
+      new WrapAroundWorld(),
 
       new BackgroundRenderer(this.ui),
       new RectangleRenderer(this.ui)
     ];
     this.executer = new PeriodicExecuter((dt: number) => this.ecs.update(dt));
     for (let i = 0; i < 500; i++)
-      this.ecs.queueEntity(EntityFactory.createMouseFollower());
+    this.ecs.queueEntity(EntityFactory.createMouseFollower());
+    // this.ecs.queueEntity(EntityFactory.createSideScroller());
 
     window.addEventListener("keydown", (e) => {
       if (e.code === "Space")

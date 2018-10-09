@@ -154,11 +154,18 @@ export default class Vector {
     return true;
   }
 
-  normSquared() {
+  magSquared() {
     let sum = 0;
     for (let i = 0; i < this.values.length; i++)
       sum += this.values[i] * this.values[i];
     return sum;
+  }
+
+  normalizeLength() {
+    let mag = Math.sqrt(this.magSquared());
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] /= mag;
+    return this;
   }
 
 

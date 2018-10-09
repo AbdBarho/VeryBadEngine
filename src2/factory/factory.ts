@@ -29,25 +29,38 @@ export default class EntityFactory {
     }
   }
 
-  static createMouseFollower() {
+  static createSideScroller() {
     return {
       ...this.createRect(),
-      keepInWorld: true,
-      mouseFollower: true,
-      explodes: true,
       position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
+      velocity: new Vector([10, 0]),
+      wrapAroundWorld: true,
+      explodes: true,
       maxAcceleration: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
       maxVelocity: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
     }
   }
 
-  static createExplosion(){
+  static createMouseFollower() {
+    return {
+      ...this.createRect(),
+      wrapAroundWorld: true,
+      mouseFollower: true,
+      explodes: true,
+      position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
+      //FIXME: batched systems
+      maxAcceleration: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
+      maxVelocity: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
+    }
+  }
+
+  static createExplosion() {
     return {
       ...this.createBasicEntity(),
       position: new Vector(2),
       explosion: true,
-      explosionVelocity: 800,
-      maxExplosionDistance: 1200
+      explosionVelocity: 500,
+      maxExplosionDistance: 500
     }
   }
 }

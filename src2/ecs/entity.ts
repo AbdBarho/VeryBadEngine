@@ -13,7 +13,9 @@ export default interface IEntity {
   maxVelocity?: number;
   acceleration?: Vector;
   maxAcceleration?: number;
+  // world ends
   keepInWorld?: boolean;
+  wrapAroundWorld?: boolean;
   //render
   rectModel?: RectangularModel;
   //mouse follower

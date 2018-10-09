@@ -44,16 +44,15 @@ export default class ExplosionSystem extends MultiSystem {
     target.position.cache();
     //distance
     target.position.subVec(source.position);
-    let norm = target.position.normSquared();
-    target.position.uncache();
     //FIXME: always splits into 4, why?
-    let distanceScale = norm / (source.maxExplosionDistance ** 2);
+    let mag2 = target.position.magSquared();
+    let distanceScale = mag2 / (source.maxExplosionDistance ** 2);
     if (distanceScale < 1) {
       let power = (1 - distanceScale) * source.explosionVelocity;
-      let dir = MathHelper.direction2d(source.position, target.position);
-      target.velocity.addVec(dir.mulNum(power));
+      let dir = MathHelper.rotation2d(target.position).mulNum(power);
+      // Logger.debugInfo({ power, "added speed": target.position });
+      target.velocity.addVec(dir);
     }
-
+    target.position.uncache();
   }
-
 }
