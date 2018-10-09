@@ -4,6 +4,8 @@ import ObjectUtils from "../util/object";
 import StepFunctions from "../math/step";
 import MathHelper from "../math/math";
 import Logger from "../services/logger";
+import ECS from "../ecs/ecs";
+import EntityFactory from "../factory/factory";
 
 interface ExplosionEntity {
   position: Vector;
@@ -19,11 +21,17 @@ interface ExplodableEntity {
 }
 
 export default class ExplosionSystem extends MultiSystem {
-  constructor() {
+  point = [0, 0];
+  constructor(ecs: ECS) {
     super([
       { name: "sources", compontents: ["explosion", "explosionVelocity", "maxExplosionDistance", "position"] },
       { name: "targets", compontents: ["explodes", "velocity", "position"] }
     ]);
+
+    ecs.queueEntity({
+      ...EntityFactory.createBasicEntity(),
+      debugCirclePoint: this.point
+    });
   }
 
   update(dt: number) {
@@ -44,15 +52,19 @@ export default class ExplosionSystem extends MultiSystem {
     target.position.cache();
     //distance
     target.position.subVec(source.position);
-    //FIXME: always splits into 4, why?
     let mag2 = target.position.magSquared();
     let distanceScale = mag2 / (source.maxExplosionDistance ** 2);
     if (distanceScale < 1) {
       let power = (1 - distanceScale) * source.explosionVelocity;
-      let dir = MathHelper.rotation2d(target.position).mulNum(power);
-      // Logger.debugInfo({ power, "added speed": target.position });
-      target.velocity.addVec(dir);
+      let dir = MathHelper.rotation2d(target.position);
+      // this.plot(dir);
+      target.velocity.addVec(dir.mulNum(power));
     }
     target.position.uncache();
+  }
+
+  plot(dir: Vector) {
+    this.point[0] = dir.values[0];
+    this.point[1] = dir.values[1];
   }
 }

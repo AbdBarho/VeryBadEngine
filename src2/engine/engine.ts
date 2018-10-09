@@ -13,6 +13,7 @@ import KeepInWorld from "../systems/keepinworld";
 import ExplosionSystem from "../systems/explosion";
 import ExplosionOnClick from "../systems/explosiononclick";
 import WrapAroundWorld from "../systems/wraparoundworld";
+import CirclePlot from "../systems/circleplot";
 
 export default class Engine {
   ecs: ECS;
@@ -28,18 +29,18 @@ export default class Engine {
     this.ecs.systems = [
       new InputSystem(this.input),
 
-      new ExplosionSystem(),
+      new ExplosionSystem(this.ecs),
       new ExplosionOnClick(this.input, this.ecs),
 
       new MouseFollowerSystem(this.input, this.ecs),
-
 
       new MovementSystem(),
       new KeepInWorld(),
       new WrapAroundWorld(),
 
       new BackgroundRenderer(this.ui),
-      new RectangleRenderer(this.ui)
+      new RectangleRenderer(this.ui),
+      // new CirclePlot(this.ui)
     ];
     this.executer = new PeriodicExecuter((dt: number) => this.ecs.update(dt));
     for (let i = 0; i < 500; i++)

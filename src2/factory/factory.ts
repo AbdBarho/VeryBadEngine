@@ -3,6 +3,7 @@ import IDGenerator from "./idgenerator";
 import MathHelper from "../math/math";
 import Initconfig from "../config/initconfig";
 import IEntity from "../ecs/entity";
+import initconfig from "../config/initconfig";
 
 (window as any).IDGen = IDGenerator;
 
@@ -33,11 +34,11 @@ export default class EntityFactory {
     return {
       ...this.createRect(),
       position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
-      velocity: new Vector([10, 0]),
+      velocity: new Vector([1, 0]),
       wrapAroundWorld: true,
       explodes: true,
-      maxAcceleration: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
-      maxVelocity: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
+      maxAcceleration: 1,
+      maxVelocity: 2
     }
   }
 
@@ -59,8 +60,8 @@ export default class EntityFactory {
       ...this.createBasicEntity(),
       position: new Vector(2),
       explosion: true,
-      explosionVelocity: 500,
-      maxExplosionDistance: 500
+      explosionVelocity: initconfig.ENTITIES.EXPLOSION.VELOCTIY,
+      maxExplosionDistance: initconfig.ENTITIES.EXPLOSION.DISTANCE
     }
   }
 }

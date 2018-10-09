@@ -25,5 +25,7 @@ export default interface IEntity {
   explosionVelocity?: number;
   maxExplosionDistance?: number;
   explodes?: boolean;
+  //debug
+  debugCirclePoint?: number[];
 
 }
