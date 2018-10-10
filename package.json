@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "webpack --mode=production --progress && inline-source --compress true --root ./ ./index.html ./bundle.html",
+    "build": "webpack --mode=production && inline-source ./index.html ./dist/bundle.html --root ./ --compress",
     "server": "http-server ./ -p 8001"
   },
   "repository": {
@@ -23,17 +23,11 @@
   },
   "homepage": "https://github.com/AbdBarho/VeryBadEngine#readme",
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-typescript": "^7.1.0",
-    "@babel/runtime": "^7.1.2",
-    "babel-loader": "^8.0.4",
     "circular-dependency-plugin": "^5.0.2",
     "http-server": "^0.11.1",
     "inline-source-cli": "^1.2.0",
     "ts-loader": "^5.2.1",
-    "typescript": "^3.1.1",
+    "typescript": "^3.1.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "worker-loader": "^2.0.0"

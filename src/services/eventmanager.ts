@@ -17,8 +17,8 @@ export default class EventManager {
    * @param context
    */
   once(event: string, callback: Function, context?: any) {
-    let helper = () => {
-      callback.apply(context, arguments);
+    let helper = (...args: any[]) => {
+      callback.apply(context, args);
       this.off(event, helper);
     };
     this.on(event, helper, context);
