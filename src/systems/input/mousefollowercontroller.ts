@@ -1,17 +1,17 @@
-import System from "../../ecs/system/system";
 import InputManager from "../../core/inputmanager";
 import Logger from "../../services/logger";
 import MouseFollowerSystem from "../mousefollower";
 import ECS from "../../ecs/ecs";
 import EntityFactory from "../../factory/factory";
 import Vector from "../../math/vector";
+import EmptySystem from "../../ecs/system/emptysystem";
 
-export default class MouseFollowerController extends System {
+export default class MouseFollowerController extends EmptySystem {
   input: InputManager;
   ecs: ECS;
   system: MouseFollowerSystem;
   constructor(input: InputManager, ecs: ECS, system: MouseFollowerSystem) {
-    super([]);
+    super();
     this.input = input;
     this.ecs = ecs;
     this.system = system;

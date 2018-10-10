@@ -1,10 +1,10 @@
-import System from "../../ecs/system/system";
 import InputManager from "../../core/inputmanager";
+import EmptySystem from "../../ecs/system/emptysystem";
 
-export default class InputSystem extends System {
+export default class InputSystem extends EmptySystem {
   inputManager: InputManager;
   constructor(inputManager: InputManager) {
-    super([]);
+    super();
     this.inputManager = inputManager;
   }
 

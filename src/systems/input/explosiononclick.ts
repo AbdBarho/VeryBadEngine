@@ -1,14 +1,14 @@
-import System from "../../ecs/system/system";
 import InputManager from "../../core/inputmanager";
 import Vector from "../../math/vector";
 import EntityFactory from "../../factory/factory";
 import ECS from "../../ecs/ecs";
+import EmptySystem from "../../ecs/system/emptysystem";
 
-export default class ExplosionOnClick extends System {
+export default class ExplosionOnClick extends EmptySystem {
   input: InputManager;
   ecs: ECS;
   constructor(input: InputManager, ecs: ECS) {
-    super([]);
+    super();
     this.ecs = ecs;
     this.input = input;
     this.update = this.doNothing;
