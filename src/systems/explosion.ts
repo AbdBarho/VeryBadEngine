@@ -28,10 +28,7 @@ export default class ExplosionSystem extends MultiSystem {
       { name: "targets", compontents: ["explodes", "velocity", "position"] }
     ]);
 
-    ecs.queueEntity({
-      ...EntityFactory.createBasicEntity(),
-      debugCirclePoint: this.point
-    });
+    // ecs.queueEntity({ ...EntityFactory.createBasicEntity(), debugCirclePoint: this.point });
   }
 
   update(dt: number) {

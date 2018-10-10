@@ -21,6 +21,7 @@ export default class EntityFactory {
       position: new Vector(2),
       velocity: new Vector(2),
       acceleration: new Vector(2),
+      moves: true,
       rectModel: {
         size: new Vector([10, 10]),
         centerShift: new Vector([5, 5]),

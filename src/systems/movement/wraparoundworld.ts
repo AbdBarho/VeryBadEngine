@@ -15,6 +15,8 @@ export default class WrapAroundWorld extends System {
   }
 
   updateEntity(entity: WrappedEntity) {
+    if (!entity.hasChanged)
+      return;
     let pos = entity.position;
     for (let i = 0; i < WORLD_SIZE.length; i++)
       pos.values[i] = (pos.values[i] + WORLD_SIZE[i]) % WORLD_SIZE[i];

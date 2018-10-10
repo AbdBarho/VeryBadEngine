@@ -5,6 +5,7 @@ import Logger from "../../services/logger";
 
 
 interface MovementSystemObject extends IEntity {
+  moves: boolean;
   acceleration: Vector;
   velocity: Vector;
   position: Vector;
@@ -14,7 +15,7 @@ interface MovementSystemObject extends IEntity {
 
 export default class MovementSystem extends System {
   constructor() {
-    super(["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
+    super(["moves", "position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
   }
 
   updateEntity(entity: MovementSystemObject, dt: number) {

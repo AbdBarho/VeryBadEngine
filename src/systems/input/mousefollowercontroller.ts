@@ -28,7 +28,7 @@ export default class MouseFollowerController extends EmptySystem {
         this.removeMouseFollowers();
         break;
       case "Digit1":
-        this.system.config.isFrozen = !this.system.config.isFrozen;
+        this.system.reverseFreezeState();
         break;
       case "Digit2":
         this.system.config.stopOnReach = !this.system.config.stopOnReach;

@@ -54,20 +54,39 @@ export default class MouseFollowerSystem extends System {
     this.target = mousePos as Vector;
   }
 
-  updateEntity(entity: MouseFollowerEntity, dt: number) {
-    entity.isFrozen = this.config.isFrozen
+  freeze() {
+    this.config.isFrozen = true;
+    for (let id in this.entities)
+      this.entities[id].isFrozen = true;
+  }
+
+  unfreeze() {
+    this.config.isFrozen = false;
+    for (let id in this.entities)
+      this.entities[id].isFrozen = false;
+  }
+
+  reverseFreezeState() {
+    this.config.isFrozen ? this.unfreeze() : this.freeze();
+  }
+
+  update(dt: number) {
     if (this.config.isFrozen)
       return;
+    return super.update(dt);
+  }
 
+  updateEntity(entity: MouseFollowerEntity, dt: number) {
     if (this.config.destroyOnReach || this.config.stopOnReach) {
       if (this.targetReached(entity)) {
         if (this.config.stopOnReach)
           entity.isFrozen = true;
 
-        if (this.config.destroyOnReach) {
+        if (this.config.destroyOnReach && this.config.respawnOnDestroy) {
+            //simulate respawn
+            Object.assign(entity, EntityFactory.createMouseFollower(), { ID: entity.ID });
+        } else if (this.config.destroyOnReach) {
           this.ecs.removeEntity(entity.ID);
-          if (this.config.respawnOnDestroy)
-            this.ecs.queueEntity(EntityFactory.createMouseFollower());
         }
         return;
       }
@@ -90,6 +109,7 @@ export default class MouseFollowerSystem extends System {
       dir.addNum(MathHelper.getSignedRandom() * randomFactorScale * accelerationScale);
 
     entity.acceleration.setVec(dir);
+    entity.isFrozen = false;
     entity.hasChanged = true;
   }
 

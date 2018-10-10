@@ -8,6 +8,7 @@ export default interface IEntity {
   hasChanged: boolean;
   isFrozen: boolean;
   //movement
+  moves?: boolean;
   position?: Vector;
   velocity?: Vector;
   maxVelocity?: number;

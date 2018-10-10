@@ -18,7 +18,8 @@ export default class KeepInWorld extends System {
   }
 
 
-  updateEntity(enitity: KeepInWorldRectangle) {
-    enitity.position.limitByMinMax(enitity.rectModel.centerShift, WORLD_EDGES);
+  updateEntity(entity: KeepInWorldRectangle) {
+    if (entity.hasChanged)
+      entity.position.limitByMinMax(entity.rectModel.centerShift, WORLD_EDGES);
   }
 }
