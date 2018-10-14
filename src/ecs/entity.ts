@@ -1,5 +1,5 @@
-import { RectangularModel } from "./component";
 import Vector from "../math/vector";
+import { ExplosionModel, RectangularModel } from "./component";
 
 export type ComponentName = keyof IEntity;
 
@@ -25,6 +25,7 @@ export default interface IEntity {
   explosion?: boolean;
   explosionVelocity?: number;
   maxExplosionDistance?: number;
+  explosionModel?: ExplosionModel;
   explodes?: boolean;
   //debug
   debugCirclePoint?: number[];

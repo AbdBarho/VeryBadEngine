@@ -29,6 +29,14 @@ export default class MathHelper {
     return "rgb(" + r + "," + g + "," + b + ")";
   }
 
+  static getRandomColorWithAlpha() {
+    let r = this.getRandomInt(256);
+    let g = this.getRandomInt(256);
+    let b = this.getRandomInt(256);
+    let a = Math.random();
+    return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+  }
+
   static getSignedRandom() {
     let r = Math.random();
     if (Math.random() < 0.5)

@@ -6,3 +6,10 @@ export type RectangularModel = {
   color: string;
   cachedDimensions: number[];
 }
+
+export type ExplosionModel = {
+  color: string;
+  radius: Vector;
+  lifeTime: number;
+  progress: number;
+}

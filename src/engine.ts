@@ -1,20 +1,20 @@
-import ECS from "./ecs/ecs";
-import MovementSystem from "./systems/movement/movement";
-import RectangleRenderer from "./systems/render/rectangle";
-import PeriodicExecuter from "./services/periodicexecuter";
-import BackgroundRenderer from "./systems/render/background";
-import InputManager from "./core/inputmanager";
-import EntityFactory from "./factory/factory";
 import Canvas from "./core/canvas";
-import MouseFollowerSystem from "./systems/mousefollower";
-import InputSystem from "./systems/input/input";
+import InputManager from "./core/inputmanager";
+import ECS from "./ecs/ecs";
+import EntityFactory from "./factory/factory";
 import Logger from "./services/logger";
-import KeepInWorld from "./systems/movement/keepinworld";
+import PeriodicExecuter from "./services/periodicexecuter";
 import ExplosionSystem from "./systems/explosion";
 import ExplosionOnClick from "./systems/input/explosiononclick";
-import WrapAroundWorld from "./systems/movement/wraparoundworld";
+import InputSystem from "./systems/input/input";
 import MouseFollowerController from "./systems/input/mousefollowercontroller";
-import CirclePlot from "./systems/render/circleplot";
+import MouseFollowerSystem from "./systems/mousefollower";
+import KeepInWorld from "./systems/movement/keepinworld";
+import MovementSystem from "./systems/movement/movement";
+import WrapAroundWorld from "./systems/movement/wraparoundworld";
+import BackgroundRenderer from "./systems/render/background";
+import ExplosionRender from "./systems/render/explosion";
+import RectangleRenderer from "./systems/render/rectangle";
 
 export default class Engine {
   ecs: ECS;
@@ -63,6 +63,7 @@ export default class Engine {
 
       new BackgroundRenderer(this.ui),
       new RectangleRenderer(this.ui),
+      new ExplosionRender(this.ui, this.ecs)
       // new CirclePlot(this.ui)
     ];
   }

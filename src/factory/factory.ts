@@ -68,7 +68,13 @@ export default class EntityFactory {
       position: new Vector(2),
       explosion: true,
       explosionVelocity: initconfig.ENTITIES.EXPLOSION.VELOCTIY,
-      maxExplosionDistance: initconfig.ENTITIES.EXPLOSION.DISTANCE
+      maxExplosionDistance: initconfig.ENTITIES.EXPLOSION.DISTANCE,
+      explosionModel: {
+        color: MathHelper.getRandomColor(),
+        radius: new Vector([500, 500]),
+        lifeTime: 700,
+        progress: 0
+      }
     }
   }
 }

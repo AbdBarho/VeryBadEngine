@@ -17,7 +17,7 @@ export default class IDGenerator {
   }
 
   static stats() {
-    console.log(0, "used:", Object.keys(global_id_hash).length, "out of",
-      Math.pow(chars.length, ID_LENGTH), "possiblilites");
+    console.log("used " + Object.keys(global_id_hash).length + " out of " +
+      Math.pow(chars.length, ID_LENGTH) + " possiblilites");
   }
 }
