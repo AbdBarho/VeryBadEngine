@@ -1,9 +1,9 @@
 import Vector from "../math/vector";
 import { ExplosionModel, RectangularModel } from "./component";
 
-export type ComponentName = keyof IEntity;
+export type ComponentName = keyof Entity;
 
-export default interface IEntity {
+export default interface Entity {
   ID: string;
   hasChanged: boolean;
   isFrozen: boolean;

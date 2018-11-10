@@ -1,6 +1,6 @@
-import Canvas from "./canvas";
 import Vector from "../math/vector";
 import { QueuedEventManager } from "../services/eventmanager";
+import Canvas from "./canvas";
 
 type InputEvent = "keydown" | "keyup" | "mousedown" | "mouseup" | "mousemove";
 type InputCallback = (value: string | Vector) => any;

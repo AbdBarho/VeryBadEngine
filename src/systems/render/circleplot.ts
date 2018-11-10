@@ -1,5 +1,5 @@
-import System from "../../ecs/system/system";
 import Canvas from "../../core/canvas";
+import System from "../../ecs/system/system";
 
 //always bottom right
 const radius = 100;
@@ -13,16 +13,16 @@ export default class CirclePlot extends System {
   }
 
   updateEntity(entity: any) {
-    let starty = this.canvas.config.size.get(1) - diameter;
+    let startY = this.canvas.config.size.get(1) - diameter;
     let ctx = this.canvas.ctx;
     ctx.fillStyle = "white";
-    ctx.fillRect(0, starty, diameter, diameter);
+    ctx.fillRect(0, startY, diameter, diameter);
     ctx.beginPath();
-    ctx.arc(radius, starty + radius, radius, 0, 2 * Math.PI);
+    ctx.arc(radius, startY + radius, radius, 0, 2 * Math.PI);
     ctx.stroke();
 
     let x = entity.debugCirclePoint[0] * radius + radius;
-    let y = entity.debugCirclePoint[1] * radius + radius +starty;
+    let y = entity.debugCirclePoint[1] * radius + radius +startY;
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, 2 * Math.PI);
     ctx.fillStyle = "red";

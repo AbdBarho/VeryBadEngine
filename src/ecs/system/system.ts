@@ -1,25 +1,25 @@
-import IEntity, { ComponentName } from "../entity";
-import ISystem from "./isystem";
+import Entity, { ComponentName } from "../entity";
+import ISystem from "./iSystem";
 
 export default class System implements ISystem {
   required: ComponentName[];
-  entities: { [ID: string]: IEntity } = {};
+  entities: { [ID: string]: Entity } = {};
 
   /**
-   * @param required requried components, if nothing given, the system will not contain any entities
+   * @param required required components, if nothing given, the system will not contain any entities
    */
   constructor(required: ComponentName[]) {
     this.required = required;
   }
 
-  private checkCompatibility(entity: IEntity) {
+  private checkCompatibility(entity: Entity) {
     for (let i = 0, len = this.required.length; i < len; i++)
       if (!(this.required[i] in entity))
         return false;
     return true;
   }
 
-  processCompatibility(entity: IEntity) {
+  processCompatibility(entity: Entity) {
     if (this.required.length === 0)
       return;
 
@@ -38,7 +38,7 @@ export default class System implements ISystem {
       this.updateEntity(this.entities[id], dt);
   }
 
-  updateEntity(entity: IEntity, dt: number) {
+  updateEntity(entity: Entity, dt: number) {
     //nothing
   }
 

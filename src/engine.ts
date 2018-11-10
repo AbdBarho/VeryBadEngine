@@ -1,17 +1,17 @@
 import Canvas from "./core/canvas";
-import InputManager from "./core/inputmanager";
+import InputManager from "./core/inputManager";
 import ECS from "./ecs/ecs";
 import EntityFactory from "./factory/factory";
 import Logger from "./services/logger";
-import PeriodicExecuter from "./services/periodicexecuter";
+import PeriodicExecuter from "./services/periodicExecuter";
 import ExplosionSystem from "./systems/explosion";
-import ExplosionOnClick from "./systems/input/explosiononclick";
+import ExplosionOnClick from "./systems/input/explosionOnClick";
 import InputSystem from "./systems/input/input";
-import MouseFollowerController from "./systems/input/mousefollowercontroller";
-import MouseFollowerSystem from "./systems/mousefollower";
-import KeepInWorld from "./systems/movement/keepinworld";
+import MouseFollowerController from "./systems/input/mouseFollowerController";
+import MouseFollowerSystem from "./systems/mouseFollower";
+import KeepInWorld from "./systems/movement/keepInWorld";
 import MovementSystem from "./systems/movement/movement";
-import WrapAroundWorld from "./systems/movement/wraparoundworld";
+import WrapAroundWorld from "./systems/movement/wrapAroundWorld";
 import BackgroundRenderer from "./systems/render/background";
 import ExplosionRender from "./systems/render/explosion";
 import RectangleRenderer from "./systems/render/rectangle";
@@ -33,9 +33,11 @@ export default class Engine {
 
   init() {
     this.createSystems();
+    //background
     for (let i = 0; i < 100; i++)
       this.ecs.queueEntity(EntityFactory.createSideScroller());
 
+    //in game followers
     for (let i = 0; i < 500; i++)
       this.ecs.queueEntity(EntityFactory.createMouseFollower());
 
@@ -47,15 +49,15 @@ export default class Engine {
   }
 
   createSystems() {
-    let mousefollowerSys = new MouseFollowerSystem(this.input, this.ecs);
+    let mouseFollowerSys = new MouseFollowerSystem(this.input, this.ecs);
     this.ecs.systems = [
       new InputSystem(this.input),
 
-      new ExplosionSystem(this.ecs),
+      new ExplosionSystem(),
       new ExplosionOnClick(this.input, this.ecs),
 
-      new MouseFollowerController(this.input, this.ecs, mousefollowerSys),
-      mousefollowerSys,
+      new MouseFollowerController(this.input, this.ecs, mouseFollowerSys),
+      mouseFollowerSys,
 
       new MovementSystem(),
       new KeepInWorld(),

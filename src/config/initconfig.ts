@@ -18,15 +18,15 @@ export default {
       MAX_VELOCITY: speedPerSecond(500)
     },
     EXPLOSION: {
-      VELOCTIY: speedPerSecond(500) * 2, // * 2 to counter v0
+      VELOCITY: speedPerSecond(500) * 2, // * 2 to counter v0
       DISTANCE: 1000
     }
   },
   SYSTEMS: {
     MOUSE_FOLLOWER_SYSTEM: {
       IS_FROZEN: false,
-      STOP_ON_REACH: true,
-      DESTROY_ON_REACH: true,
+      STOP_ON_REACH: false,
+      DESTROY_ON_REACH: false,
       RESPAWN_ON_DESTROY: true,
       LOOK_AHEAD_STEPS: 0,
       RANDOM_FACTOR_SCALE: 0,

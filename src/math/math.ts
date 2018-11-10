@@ -48,10 +48,10 @@ export default class MathHelper {
     return Math.max(Math.min(num, max), min);
   }
 
-  static getRandomVector(maxs: number[]) {
-    let vals = []
-    for (let i = 0; i < maxs.length; i++)
-      vals.push(this.getRandomInt(maxs[i]));
-    return new Vector(vals);
+  static getRandomVector(maxValues: number[]) {
+    let values = []
+    for (let i = 0; i < maxValues.length; i++)
+      values.push(this.getRandomInt(maxValues[i]));
+    return new Vector(values);
   }
 }

@@ -1,12 +1,12 @@
 import System from "../../ecs/system/system";
-import IEntity from "../../ecs/entity";
+import Entity from "../../ecs/entity";
 import Vector from "../../math/vector";
 import { RectangularModel } from "../../ecs/component";
 import initconfig from "../../config/initconfig";
 
 const WORLD_EDGES = new Vector(initconfig.WORLD.SIZE.slice());
 
-interface KeepInWorldRectangle extends IEntity {
+interface KeepInWorldRectangle extends Entity {
   position: Vector;
   keepInWorld: boolean;
   rectModel: RectangularModel;

@@ -1,9 +1,9 @@
 import System from "../../ecs/system/system";
 import Vector from "../../math/vector";
-import IEntity from "../../ecs/entity";
+import Entity from "../../ecs/entity";
 import initconfig from "../../config/initconfig";
 
-interface WrappedEntity extends IEntity{
+interface WrappedEntity extends Entity{
   position: Vector;
   wrapAroundWorld: boolean;
 }

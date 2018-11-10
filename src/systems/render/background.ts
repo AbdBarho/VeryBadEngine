@@ -1,5 +1,5 @@
 import UI from "../../core/canvas";
-import EmptySystem from "../../ecs/system/emptysystem";
+import EmptySystem from "../../ecs/system/emptySystem";
 
 export default class BackgroundRenderer extends EmptySystem {
   ui: UI;

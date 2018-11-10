@@ -1,10 +1,10 @@
-import InputManager from "../../core/inputmanager";
-import Logger from "../../services/logger";
-import MouseFollowerSystem from "../mousefollower";
+import InputManager from "../../core/inputManager";
 import ECS from "../../ecs/ecs";
+import EmptySystem from "../../ecs/system/emptySystem";
 import EntityFactory from "../../factory/factory";
 import Vector from "../../math/vector";
-import EmptySystem from "../../ecs/system/emptysystem";
+import Logger from "../../services/logger";
+import MouseFollowerSystem from "../mouseFollower";
 
 export default class MouseFollowerController extends EmptySystem {
   input: InputManager;

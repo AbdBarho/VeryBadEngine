@@ -1,10 +1,10 @@
 import System from "../../ecs/system/system";
-import IEntity from "../../ecs/entity";
+import Entity from "../../ecs/entity";
 import { RectangularModel } from "../../ecs/component";
 import UI from "../../core/canvas";
 import Vector from "../../math/vector";
 
-interface RectangleModelObject extends IEntity {
+interface RectangleModelObject extends Entity {
   position: Vector;
   rectModel: RectangularModel;
 }

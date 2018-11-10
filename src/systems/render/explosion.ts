@@ -1,12 +1,12 @@
 import Canvas from "../../core/canvas";
 import { ExplosionModel } from "../../ecs/component";
 import ECS from "../../ecs/ecs";
-import IEntity from "../../ecs/entity";
+import Entity from "../../ecs/entity";
 import System from "../../ecs/system/system";
-import Vector from "../../math/vector";
 import StepFunctions from "../../math/step";
+import Vector from "../../math/vector";
 
-interface Explosion extends IEntity {
+interface Explosion extends Entity {
   position: Vector;
   explosion: boolean;
   explosionModel: ExplosionModel;
@@ -30,6 +30,8 @@ export default class ExplosionRender extends System {
       this.ecs.removeEntity(entity.ID);
       return;
     }
+
+
 
     radius.cache();
     position.cache();

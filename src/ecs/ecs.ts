@@ -1,24 +1,24 @@
-import IEntity from "./entity";
-import  ISystem  from "./system/isystem";
+import Entity from "./entity";
+import ISystem from "./system/iSystem";
 
 
 export default class ECS {
   systems: ISystem[] = [];
-  queuedEntities: IEntity[] = [];
-  entities: { [ID: string]: IEntity } = {};
+  queuedEntities: Entity[] = [];
+  entities: { [ID: string]: Entity } = {};
 
 
-  private addEntity(entity: IEntity) {
+  private addEntity(entity: Entity) {
     for (let i = 0, len = this.systems.length; i < len; i++)
       this.systems[i].processCompatibility(entity);
     this.entities[entity.ID] = entity;
   }
 
-  queueEntity(entity: IEntity) {
+  queueEntity(entity: Entity) {
     this.queuedEntities.push(entity);
   }
 
-  reCheckEntity(entity: IEntity) {
+  reCheckEntity(entity: Entity) {
     return this.addEntity(entity);
   }
 

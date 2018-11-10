@@ -154,15 +154,19 @@ export default class Vector {
     return true;
   }
 
-  magSquared() {
+  magnitudeSquared() {
     let sum = 0;
     for (let i = 0; i < this.values.length; i++)
       sum += this.values[i] * this.values[i];
     return sum;
   }
 
+  magnitude() {
+    return Math.sqrt(this.magnitudeSquared());
+  }
+
   normalizeLength() {
-    let mag = Math.sqrt(this.magSquared());
+    let mag = Math.sqrt(this.magnitudeSquared());
     for (let i = 0; i < this.values.length; i++)
       this.values[i] /= mag;
     return this;

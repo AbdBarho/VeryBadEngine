@@ -1,8 +1,8 @@
-import ISystem from "./isystem";
-import IEntity from "../entity";
+import Entity from "../entity";
+import ISystem from "./iSystem";
 
 export default class EmptySystem implements ISystem {
   update(dt: number) { }
-  processCompatibility(entity: IEntity) { }
+  processCompatibility(entity: Entity) { }
   removeEntity(entityId: string) { }
 }

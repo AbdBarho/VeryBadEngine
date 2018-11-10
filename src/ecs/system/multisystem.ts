@@ -1,14 +1,14 @@
-import ISystem from "./isystem";
-import IEntity, { ComponentName } from "../entity";
+import ISystem from "./iSystem";
+import Entity, { ComponentName } from "../entity";
 
 interface Group {
   name: string;
-  compontents: ComponentName[];
+  components: ComponentName[];
 }
 
 export default class MultiSystem implements ISystem {
   groups: Group[];
-  entities: { [group: string]: { [id: string]: IEntity } } = {};
+  entities: { [group: string]: { [id: string]: Entity } } = {};
 
   constructor(groups: Group[]) {
     this.groups = groups;
@@ -16,14 +16,14 @@ export default class MultiSystem implements ISystem {
       this.entities[group.name] = {};
   }
 
-  private checkCompatibility(group: Group, entity: IEntity) {
-    for (let i = 0, len = group.compontents.length; i < len; i++)
-      if (!(group.compontents[i] in entity))
+  private checkCompatibility(group: Group, entity: Entity) {
+    for (let i = 0, len = group.components.length; i < len; i++)
+      if (!(group.components[i] in entity))
         return false;
     return true;
   }
 
-  processCompatibility(entity: IEntity) {
+  processCompatibility(entity: Entity) {
     if (this.groups.length === 0)
       return;
 

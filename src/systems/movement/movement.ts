@@ -1,10 +1,10 @@
 import System from "../../ecs/system/system";
-import IEntity from "../../ecs/entity";
+import Entity from "../../ecs/entity";
 import Vector from "../../math/vector";
 import Logger from "../../services/logger";
 
 
-interface MovementSystemObject extends IEntity {
+interface MovementSystemObject extends Entity {
   moves: boolean;
   acceleration: Vector;
   velocity: Vector;

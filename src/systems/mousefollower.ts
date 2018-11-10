@@ -1,15 +1,15 @@
 import System from "../ecs/system/system";
-import IEntity from "../ecs/entity";
+import Entity from "../ecs/entity";
 import Vector from "../math/vector";
 import MathHelper from "../math/math";
-import InputManager from "../core/inputmanager";
+import InputManager from "../core/inputManager";
 import Logger from "../services/logger";
 import { RectangularModel } from "../ecs/component";
 import initconfig from "../config/initconfig";
 import EntityFactory from "../factory/factory";
 import ECS from "../ecs/ecs";
 
-interface MouseFollowerEntity extends IEntity {
+interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
   acceleration: Vector;
   position: Vector;

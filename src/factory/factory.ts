@@ -1,9 +1,7 @@
 import Vector from "../math/vector";
-import IDGenerator from "./idgenerator";
+import IDGenerator from "./idGenerator";
 import MathHelper from "../math/math";
 import Initconfig from "../config/initconfig";
-import IEntity from "../ecs/entity";
-import initconfig from "../config/initconfig";
 
 (window as any).IDGen = IDGenerator;
 
@@ -37,7 +35,6 @@ export default class EntityFactory {
       position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
       velocity: new Vector([.2, 0]),
       wrapAroundWorld: true,
-      // explodes: true,
       maxAcceleration: 1,
       maxVelocity: Infinity,
       rectModel: {
@@ -67,8 +64,8 @@ export default class EntityFactory {
       ...this.createBasicEntity(),
       position: new Vector(2),
       explosion: true,
-      explosionVelocity: initconfig.ENTITIES.EXPLOSION.VELOCTIY,
-      maxExplosionDistance: initconfig.ENTITIES.EXPLOSION.DISTANCE,
+      explosionVelocity: Initconfig.ENTITIES.EXPLOSION.VELOCITY,
+      maxExplosionDistance: Initconfig.ENTITIES.EXPLOSION.DISTANCE,
       explosionModel: {
         color: MathHelper.getRandomColor(),
         radius: new Vector([500, 500]),

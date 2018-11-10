@@ -2,7 +2,7 @@ import InputManager from "../../core/inputmanager";
 import Vector from "../../math/vector";
 import EntityFactory from "../../factory/factory";
 import ECS from "../../ecs/ecs";
-import EmptySystem from "../../ecs/system/emptysystem";
+import EmptySystem from "../../ecs/system/emptySystem";
 
 export default class ExplosionOnClick extends EmptySystem {
   input: InputManager;

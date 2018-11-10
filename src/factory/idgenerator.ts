@@ -1,4 +1,5 @@
 let global_id_hash: { [id: string]: number } = {};
+
 const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const ID_LENGTH = 8;
 
@@ -18,6 +19,6 @@ export default class IDGenerator {
 
   static stats() {
     console.log("used " + Object.keys(global_id_hash).length + " out of " +
-      Math.pow(chars.length, ID_LENGTH) + " possiblilites");
+      Math.pow(chars.length, ID_LENGTH) + " possibilities");
   }
 }

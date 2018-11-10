@@ -1,11 +1,8 @@
-import MultiSystem from "../ecs/system/multisystem";
+import MultiSystem from "../ecs/system/multiSystem";
 import Vector from "../math/vector";
 import ObjectUtils from "../util/object";
 import StepFunctions from "../math/step";
 import MathHelper from "../math/math";
-import Logger from "../services/logger";
-import ECS from "../ecs/ecs";
-import EntityFactory from "../factory/factory";
 
 interface ExplosionEntity {
   position: Vector;
@@ -21,14 +18,11 @@ interface ExplodableEntity {
 }
 
 export default class ExplosionSystem extends MultiSystem {
-  point = [0, 0];
-  constructor(ecs: ECS) {
+  constructor() {
     super([
-      { name: "sources", compontents: ["explosion", "explosionVelocity", "maxExplosionDistance", "position"] },
-      { name: "targets", compontents: ["explodes", "velocity", "position"] }
+      { name: "sources", components: ["explosion", "explosionVelocity", "maxExplosionDistance", "position"] },
+      { name: "targets", components: ["explodes", "velocity", "position"] }
     ]);
-
-    // ecs.queueEntity({ ...EntityFactory.createBasicEntity(), debugCirclePoint: this.point });
   }
 
   update(dt: number) {
@@ -40,7 +34,7 @@ export default class ExplosionSystem extends MultiSystem {
     for (let id in sources)
       for (let targetId in targets)
         this.applyExplosion(sources[id] as ExplosionEntity, targets[targetId] as ExplodableEntity);
-    //all explosions handeled, new ones will be queud in the next frame, if any
+    //all explosions handled, new ones will be queued in the next frame, if any
     this.entities.sources = {};
 
   }
@@ -49,19 +43,14 @@ export default class ExplosionSystem extends MultiSystem {
     target.position.cache();
     //distance
     target.position.subVec(source.position);
-    let mag2 = target.position.magSquared();
-    let distanceScale = mag2 / (source.maxExplosionDistance ** 2);
+    let vectorLength = target.position.magnitude();
+    // console.log("length:", vectorLength);
+    let distanceScale = vectorLength / source.maxExplosionDistance;
     if (distanceScale < 1) {
-      let power = StepFunctions.smoothStart(1 - distanceScale, 4) * source.explosionVelocity;
+      let power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
       let dir = MathHelper.rotation2d(target.position);
-      // this.plot(dir);
       target.velocity.addVec(dir.mulNum(power));
     }
     target.position.uncache();
-  }
-
-  plot(dir: Vector) {
-    this.point[0] = dir.values[0];
-    this.point[1] = dir.values[1];
   }
 }

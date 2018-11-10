@@ -1,7 +1,7 @@
-import IEntity from "../entity";
+import Entity from "../entity";
 
 export default interface ISystem {
   update: (dt: number) => any;
-  processCompatibility: (entity: IEntity) => any;
+  processCompatibility: (entity: Entity) => any;
   removeEntity: (entityId: string) => any;
 }
