@@ -23,18 +23,14 @@ export default class ExplosionRender extends System {
 
   updateEntity(entity: Explosion, dt: number) {
     let { explosionModel, position } = entity;
-    let { progress, lifeTime, radius, color } = explosionModel;
+    let { progress, lifeTime, color, radius } = explosionModel;
     //update animation progress
     progress = progress + dt;
-    if (progress > lifeTime) {
-      this.ecs.removeEntity(entity.ID);
-      return;
-    }
+    if (progress > lifeTime)
+      return this.ecs.removeEntity(entity.ID);
 
-
-
-    radius.cache();
-    position.cache();
+    radius = radius.copy();
+    position = position.copy();
     let percent = progress / lifeTime;
 
     position.mulVec(this.canvas.config.scale);
@@ -44,15 +40,14 @@ export default class ExplosionRender extends System {
     let ctx = this.canvas.ctx;
     ctx.fillStyle = color.slice(0, -1) + "," + StepFunctions.smoothStart(1 - percent, 5) + ")";
     ctx.beginPath();
-    ctx.ellipse(position.values[0], position.values[1], radius.values[0], radius.values[1], 0, 0, 2 * Math.PI);
+    ctx.ellipse(position.get(0), position.get(1), radius.values[0], radius.values[1], 0, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
 
-    radius.uncache();
-    position.uncache();
     //save updated progress
     entity.explosionModel.progress = progress;
 
+    Vector.store(radius, position);
   }
 
 }

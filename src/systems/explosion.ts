@@ -1,6 +1,6 @@
 import MultiSystem from "../ecs/system/multiSystem";
 import Vector from "../math/vector";
-import ObjectUtils from "../util/object";
+import ObjectUtils from "../util/objectUtils";
 import StepFunctions from "../math/step";
 import MathHelper from "../math/math";
 
@@ -40,17 +40,18 @@ export default class ExplosionSystem extends MultiSystem {
   }
 
   applyExplosion(source: ExplosionEntity, target: ExplodableEntity) {
-    target.position.cache();
+    let pos = target.position.copy();
     //distance
-    target.position.subVec(source.position);
-    let vectorLength = target.position.magnitude();
+    pos.subVec(source.position);
+    let vectorLength = pos.magnitude();
     // console.log("length:", vectorLength);
     let distanceScale = vectorLength / source.maxExplosionDistance;
     if (distanceScale < 1) {
       let power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
-      let dir = MathHelper.rotation2d(target.position);
+      let dir = MathHelper.rotation2d(pos);
       target.velocity.addVec(dir.mulNum(power));
     }
-    target.position.uncache();
+
+    Vector.store(pos);
   }
 }

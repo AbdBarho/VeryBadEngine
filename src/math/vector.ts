@@ -1,17 +1,25 @@
 import MathHelper from "./math";
 
-type Param = (Vector | number | string | undefined);
+interface MapFunction { (val: number, index: number, arr: number[]): number }
 
-interface mapFunction { (val: number, index: number, arr: number[]): number }
 
 export default class Vector {
+  // caching to save memory and improve performance
+  static cachedInstances: Vector[] = [];
+  static store(...vectors: Vector[]) {
+    Vector.cachedInstances.push.apply(Vector.cachedInstances, vectors);
+  }
+  static copy(vec: Vector) {
+    let cached = Vector.cachedInstances.pop();
+    return cached ? cached.setVec(vec) : new Vector(vec.getLength()).setVec(vec);
+  }
+
+  // actual Vector class
   values: number[];
-  cachedValues: number[] = [];
   constructor(values: number | number[]) {
     if (typeof values === "number")
       values = Array(values).fill(0);
     this.values = values;
-    this.cachedValues = Array(this.values.length).fill(0);
   }
 
   get(index: number) {
@@ -40,18 +48,12 @@ export default class Vector {
     return this;
   }
 
-  cache() {
+  reset() {
     for (let i = 0; i < this.values.length; i++)
-      this.cachedValues[i] = this.values[i];
+      this.values[i] = 0;
     return this;
   }
 
-  uncache() {
-    let old = this.values;
-    this.values = this.cachedValues;
-    this.cachedValues = old;
-    return this;
-  }
 
   addNum(num: number) {
     for (let i = 0; i < this.values.length; i++)
@@ -173,15 +175,14 @@ export default class Vector {
   }
 
 
-  map(func: mapFunction, context?: any) {
+  map(func: MapFunction, context?: any) {
     return new Vector(this.values.map((el, i, arr) => func.call(context, el, i, arr)));
   }
 
   copy() {
-    return new Vector(this.copyValues());
+    return Vector.copy(this);
   }
 }
-
 
 function getMaxLength(vectors: Vector[]) {
   let max = -Infinity;

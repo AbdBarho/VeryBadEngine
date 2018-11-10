@@ -38,7 +38,7 @@ export default class Engine {
       this.ecs.queueEntity(EntityFactory.createSideScroller());
 
     //in game followers
-    for (let i = 0; i < 500; i++)
+    for (let i = 0; i < 1000; i++)
       this.ecs.queueEntity(EntityFactory.createMouseFollower());
 
     window.addEventListener("keydown", (e) => {

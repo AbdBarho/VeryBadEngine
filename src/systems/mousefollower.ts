@@ -1,13 +1,13 @@
-import System from "../ecs/system/system";
-import Entity from "../ecs/entity";
-import Vector from "../math/vector";
-import MathHelper from "../math/math";
-import InputManager from "../core/inputManager";
-import Logger from "../services/logger";
-import { RectangularModel } from "../ecs/component";
 import initconfig from "../config/initconfig";
-import EntityFactory from "../factory/factory";
+import InputManager from "../core/inputManager";
+import { RectangularModel } from "../ecs/component";
 import ECS from "../ecs/ecs";
+import Entity from "../ecs/entity";
+import System from "../ecs/system/system";
+import EntityFactory from "../factory/factory";
+import MathHelper from "../math/math";
+import Vector from "../math/vector";
+import Logger from "../services/logger";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
@@ -91,16 +91,16 @@ export default class MouseFollowerSystem extends System {
         return;
       }
     }
+
     let dir;
     let { lookAheadSteps, randomFactorScale, accelerationScale } = this.config;
 
     if (lookAheadSteps !== 0) {
-      entity.position.cache();
-      entity.velocity.cache();
-      entity.position.addVec(entity.velocity.mulNum(lookAheadSteps));
-      dir = MathHelper.direction2d(entity.position, this.target).mulNum(accelerationScale);
-      entity.velocity.uncache();
-      entity.position.uncache();
+      let pos = entity.position.copy();
+      let vel = entity.velocity.copy();
+      pos.addVec(vel.mulNum(lookAheadSteps));
+      dir = MathHelper.direction2d(pos, this.target).mulNum(accelerationScale);
+      Vector.store(pos, vel);
     } else {
       dir = MathHelper.direction2d(entity.position, this.target).mulNum(accelerationScale);
     }
@@ -114,11 +114,11 @@ export default class MouseFollowerSystem extends System {
   }
 
   targetReached(entity: MouseFollowerEntity) {
-    this.target.cache();
+    let target = this.target.copy();
     //calculate distance
-    this.target.subVec(entity.position).abs();
-    let reached = this.target.smallerThan(entity.rectModel.centerShift);
-    this.target.uncache();
+    target.subVec(entity.position).abs();
+    let reached = target.smallerThan(entity.rectModel.centerShift);
+    Vector.store(target);
     return reached;
   }
 

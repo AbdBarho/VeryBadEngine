@@ -22,22 +22,25 @@ export default class MovementSystem extends System {
     if (entity.isFrozen)
       return
 
+    let acc = entity.acceleration;
+    let vel = entity.velocity;
     //limit acceleration
-    entity.acceleration.limitByMaxNumber(entity.maxAcceleration);
+    acc.limitByMaxNumber(entity.maxAcceleration);
 
     //update speed
-    entity.acceleration.cache();
-    entity.velocity.addVec(entity.acceleration.mulNum(dt));
-    entity.acceleration.uncache();
+    let accCopy = acc.copy();
+    vel.addVec(accCopy.mulNum(dt));
 
     //limit speed
-    entity.velocity.limitByMaxNumber(entity.maxVelocity);
+    vel.limitByMaxNumber(entity.maxVelocity);
 
     //update position
-    entity.velocity.cache();
-    entity.position.addVec(entity.velocity.mulNum(dt));
-    entity.velocity.uncache();
+    let velCopy = vel.copy();
+    entity.position.addVec(velCopy.mulNum(dt));
 
     entity.hasChanged = true;
+
+    //save memory
+    Vector.store(accCopy, velCopy);
   }
 }
