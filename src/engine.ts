@@ -15,6 +15,7 @@ import WrapAroundWorld from "./systems/movement/wrapAroundWorld";
 import BackgroundColor from "./systems/render/background";
 import ExplosionRender from "./systems/render/explosion";
 import RectangleRenderer from "./systems/render/rectangle";
+import SlowMotion from "./systems/input/slowMotion";
 
 export default class Engine {
   ecs: ECS;
@@ -52,6 +53,7 @@ export default class Engine {
     let mouseFollowerSys = new MouseFollowerSystem(this.input, this.ecs);
     this.ecs.systems = [
       new InputSystem(this.input),
+      new SlowMotion(this.ecs, this.input),
 
       new ExplosionSystem(),
       new ExplosionOnClick(this.input, this.ecs),

@@ -6,6 +6,7 @@ export default class ECS {
   systems: ISystem[] = [];
   queuedEntities: Entity[] = [];
   entities: { [ID: string]: Entity } = {};
+  timeScale = 1;
 
   init() {
     for (let i = 0, len = this.systems.length; i < len; i++)
@@ -44,6 +45,6 @@ export default class ECS {
       this.queuedEntities = [];
     }
     for (let i = 0, len = this.systems.length; i < len; i++)
-      this.systems[i].update(dt);
+      this.systems[i].update(dt * this.timeScale);
   }
 }
