@@ -12,6 +12,10 @@ export default class System implements ISystem {
     this.required = required;
   }
 
+  init() {
+    
+  }
+
   private checkCompatibility(entity: Entity) {
     for (let i = 0, len = this.required.length; i < len; i++)
       if (!(this.required[i] in entity))

@@ -1,7 +1,7 @@
 export default class EventManager {
   __listeners__ : any = {};
   /**
-   * register event listerner
+   * register event listener
    * @param event event name
    * @param callback the callback function
    * @param context this context for the method
@@ -56,10 +56,7 @@ export class QueuedEventManager extends EventManager {
   queue: QueuedEvent[] = [];
 
   queueEvent(event: string, ...parameters: any[]) {
-    this.queue.push({
-      event,
-      parameters
-    });
+    this.queue.push({ event, parameters });
   }
 
   executeQueue() {
@@ -72,5 +69,9 @@ export class QueuedEventManager extends EventManager {
       let el = queue[i];
       this.trigger(el.event, ...el.parameters);
     }
+  }
+
+  emptyQueue() {
+    this.queue = [];
   }
 }

@@ -7,6 +7,15 @@ export default class ECS {
   queuedEntities: Entity[] = [];
   entities: { [ID: string]: Entity } = {};
 
+  init() {
+    for (let i = 0, len = this.systems.length; i < len; i++)
+      this.systems[i].init();
+  }
+
+  destroy() {
+    for (let i = 0, len = this.systems.length; i < len; i++)
+      this.systems[i].destroy();
+  }
 
   private addEntity(entity: Entity) {
     for (let i = 0, len = this.systems.length; i < len; i++)

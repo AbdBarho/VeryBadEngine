@@ -12,7 +12,10 @@ export default class ExplosionOnClick extends EmptySystem {
     this.ecs = ecs;
     this.input = input;
     this.update = this.doNothing;
-    input.on("mousedown", this.handleKey, this);
+  }
+
+  init() {
+    this.input.on("mousedown", this.handleKey, this);
   }
 
   handleKey(keyName: string | Vector) {

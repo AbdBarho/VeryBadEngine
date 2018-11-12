@@ -16,6 +16,10 @@ export default class MultiSystem implements ISystem {
       this.entities[group.name] = {};
   }
 
+  init() {
+    
+  }
+
   private checkCompatibility(group: Group, entity: Entity) {
     for (let i = 0, len = group.components.length; i < len; i++)
       if (!(group.components[i] in entity))

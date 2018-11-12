@@ -12,7 +12,7 @@ import MouseFollowerSystem from "./systems/mouseFollower";
 import KeepInWorld from "./systems/movement/keepInWorld";
 import MovementSystem from "./systems/movement/movement";
 import WrapAroundWorld from "./systems/movement/wrapAroundWorld";
-import BackgroundRenderer from "./systems/render/background";
+import BackgroundColor from "./systems/render/background";
 import ExplosionRender from "./systems/render/explosion";
 import RectangleRenderer from "./systems/render/rectangle";
 
@@ -63,7 +63,7 @@ export default class Engine {
       new KeepInWorld(),
       new WrapAroundWorld(),
 
-      new BackgroundRenderer(this.ui),
+      new BackgroundColor("#000", this.ui),
       new RectangleRenderer(this.ui),
       new ExplosionRender(this.ui, this.ecs)
       // new CirclePlot(this.ui)
@@ -71,6 +71,7 @@ export default class Engine {
   }
 
   start() {
+    this.ecs.init();
     this.executer.start();
     this.isRunning = true;
     Logger.debugInfo("isRunning", this.isRunning.toString());
@@ -78,6 +79,7 @@ export default class Engine {
 
   stop() {
     this.executer.stop();
+    this.ecs.destroy();
     this.isRunning = false;
     Logger.debugInfo("isRunning", this.isRunning.toString());
   }

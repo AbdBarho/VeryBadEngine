@@ -15,10 +15,12 @@ export default class MouseFollowerController extends EmptySystem {
     this.input = input;
     this.ecs = ecs;
     this.system = system;
-    this.input.on("keydown", this.handleKey, this);
   }
 
-
+  init() {
+    this.input.on("keydown", this.handleKey, this);
+  }
+  
   handleKey(keyName: string | Vector) {
     switch (keyName) {
       case "Enter":

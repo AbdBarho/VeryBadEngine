@@ -8,7 +8,15 @@ export default class InputSystem extends EmptySystem {
     this.inputManager = inputManager;
   }
 
+  init() {
+    this.inputManager.emptyQueue();
+  }
+
   update() {
     this.inputManager.executeQueue();
+  }
+
+  destroy() {
+    this.inputManager.emptyQueue();
   }
 }
