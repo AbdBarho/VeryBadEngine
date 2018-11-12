@@ -22,6 +22,7 @@ export default class InputManager extends QueuedEventManager {
     window.addEventListener("mousemove", e => this.mouseStateUpdate("mousemove", e));
 
     window.addEventListener("blur", () => this.clearAll());
+    window.addEventListener("contextmenu", e => e.preventDefault());
   }
 
   private updateButtonsState(event: string, name: string, isPressed: boolean) {
