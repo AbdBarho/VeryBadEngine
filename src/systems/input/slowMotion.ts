@@ -17,17 +17,17 @@ export default class SlowMotion extends EmptySystem {
   }
 
   init() {
-    this.inputManager.on("mousedown", this.slow, this);
-    this.inputManager.on("mouseup", this.restore, this);
+    this.inputManager.onKey("mousedown", this.slow, this);
+    this.inputManager.onKey("mouseup", this.restore, this);
   }
 
-  slow(key: string | Vector) {
+  slow(key: string) {
     if (key === "Mouse3") {
       this.ecs.timeScale = 0.25;
     }
   }
 
-  restore(key: string | Vector) {
+  restore(key: string) {
     if (key === "Mouse3") {
       this.ecs.timeScale = 1;
     }

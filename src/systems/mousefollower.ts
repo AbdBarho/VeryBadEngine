@@ -46,12 +46,15 @@ export default class MouseFollowerSystem extends System {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
-    this.input.on("mousemove", this.mouseMove, this);
     Logger.debugState(Object.assign({}, this.config));
   }
 
-  mouseMove(mousePos: Vector | string) {
-    this.target = mousePos as Vector;
+  init() {
+    this.input.onMouseMove(this.mouseMove, this);
+  }
+
+  mouseMove(mousePos: Vector) {
+    this.target = mousePos;
   }
 
   freeze() {
@@ -83,8 +86,8 @@ export default class MouseFollowerSystem extends System {
           entity.isFrozen = true;
 
         if (this.config.destroyOnReach && this.config.respawnOnDestroy) {
-            //simulate respawn
-            Object.assign(entity, EntityFactory.createMouseFollower(), { ID: entity.ID });
+          //simulate respawn
+          Object.assign(entity, EntityFactory.createMouseFollower(), { ID: entity.ID });
         } else if (this.config.destroyOnReach) {
           this.ecs.removeEntity(entity.ID);
         }
@@ -111,6 +114,8 @@ export default class MouseFollowerSystem extends System {
     entity.acceleration.setVec(dir);
     entity.isFrozen = false;
     entity.hasChanged = true;
+
+    Vector.store(dir);
   }
 
   targetReached(entity: MouseFollowerEntity) {

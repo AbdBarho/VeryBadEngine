@@ -2,9 +2,6 @@ import Vector from "../math/vector";
 import { QueuedEventManager } from "../services/eventmanager";
 import Canvas from "./canvas";
 
-type InputEvent = "keydown" | "keyup" | "mousedown" | "mouseup" | "mousemove";
-type InputCallback = (value: string | Vector) => any;
-
 export default class InputManager extends QueuedEventManager {
   ui: Canvas;
   buttonStates: { [key: string]: boolean } = {};
@@ -31,8 +28,9 @@ export default class InputManager extends QueuedEventManager {
   }
 
   private mouseStateUpdate(event: string, e: MouseEvent) {
+    Vector.store(this.mousePos);
     this.mousePos = this.ui.pixelToUnit(e.pageX, e.pageY);
-    this.queueEvent(event, this.mousePos.copy());
+    this.queueEvent(event, this.getMousePosition());
   }
 
   private clearAll() {
@@ -43,8 +41,12 @@ export default class InputManager extends QueuedEventManager {
     }
   }
 
-  on(event: InputEvent, callback: InputCallback, context?: any) {
+  onKey(event: "keydown" | "keyup" | "mousedown" | "mouseup", callback: (key: string) => any, context?: any) {
     return super.on(event, callback, context);
+  }
+
+  onMouseMove(callback: (mousePos: Vector) => any, context?: any) {
+    return super.on("mousemove", callback, context);
   }
 
   getMousePosition() {
