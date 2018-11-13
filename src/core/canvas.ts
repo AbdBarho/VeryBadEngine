@@ -13,10 +13,10 @@ export default class Canvas {
   canvas = document.createElement("canvas");
   ctx: CanvasRenderingContext2D;
   config: CanvasConfig = {
-    scale: new Vector(2),
-    shift: new Vector(2),
-    size: new Vector(2),
-    baseSize: new Vector(initConfig.CANVAS.BASE_SIZE.slice()),
+    scale: Vector.create(2),
+    shift: Vector.create(2),
+    size: Vector.create(2),
+    baseSize: Vector.create(initConfig.CANVAS.BASE_SIZE.slice()),
     aspectRatio: initConfig.CANVAS.ASPECT_RATIO
   };
 
@@ -61,7 +61,7 @@ export default class Canvas {
 
 
   pixelToUnit(x: number, y: number) {
-    let pos = new Vector([x, y]);
+    let pos = Vector.create([x, y]);
     pos.subVec(this.config.shift).divVec(this.config.scale).floor();
     return pos;
   }

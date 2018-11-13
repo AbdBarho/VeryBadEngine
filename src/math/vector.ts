@@ -5,20 +5,24 @@ interface MapFunction { (val: number, index: number, arr: number[]): number }
 
 export default class Vector {
   // caching to save memory and improve performance
-  static cachedInstances: Vector[] = [];
+  private static cachedInstances: Vector[] = [];
   static store(...vectors: Vector[]) {
     Vector.cachedInstances.push.apply(Vector.cachedInstances, vectors);
   }
+  static create(values: number | number[]) {
+    if (typeof values === "number")
+      values = Array(values).fill(0);
+    let cached = Vector.cachedInstances.pop();
+    return cached ? cached.assignValues(values) : new Vector(values);
+  }
   static copy(vec: Vector) {
     let cached = Vector.cachedInstances.pop();
-    return cached ? cached.setVec(vec) : new Vector(vec.getLength()).setVec(vec);
+    return cached ? cached.setVec(vec) : new Vector(vec.copyValues());
   }
 
   // actual Vector class
   values: number[];
-  constructor(values: number | number[]) {
-    if (typeof values === "number")
-      values = Array(values).fill(0);
+  private constructor(values: number[]) {
     this.values = values;
   }
 
@@ -28,6 +32,11 @@ export default class Vector {
 
   getValues() {
     return this.values;
+  }
+
+  assignValues(values: number[]) {
+    this.values = values;
+    return this;
   }
 
   copyValues() {
@@ -176,7 +185,7 @@ export default class Vector {
 
 
   map(func: MapFunction, context?: any) {
-    return new Vector(this.values.map((el, i, arr) => func.call(context, el, i, arr)));
+    return Vector.create(this.values.map((el, i, arr) => func.call(context, el, i, arr)));
   }
 
   copy() {

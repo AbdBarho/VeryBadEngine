@@ -40,7 +40,7 @@ export default class MouseFollowerSystem extends System {
     randomFactorScale: CONFIG.RANDOM_FACTOR_SCALE,
     accelerationScale: CONFIG.ACCELERATION_SCALE
   }
-  target = new Vector([1000, 500]);
+  target = Vector.create([1000, 500]);
 
   constructor(inputManager: InputManager, ecs: ECS) {
     super(["acceleration", "position", "velocity", "mouseFollower"]);

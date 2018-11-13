@@ -5,7 +5,7 @@ import Canvas from "./canvas";
 export default class InputManager extends QueuedEventManager {
   ui: Canvas;
   buttonStates: { [key: string]: boolean } = {};
-  mousePos = new Vector(2);
+  mousePos = Vector.create(2);
 
   constructor(ui: Canvas) {
     super();

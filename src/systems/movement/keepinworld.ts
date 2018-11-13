@@ -4,7 +4,7 @@ import Vector from "../../math/vector";
 import { RectangularModel } from "../../ecs/component";
 import initconfig from "../../config/initconfig";
 
-const WORLD_EDGES = new Vector(initconfig.WORLD.SIZE.slice());
+const WORLD_EDGES = Vector.create(initconfig.WORLD.SIZE.slice());
 
 interface KeepInWorldRectangle extends Entity {
   position: Vector;

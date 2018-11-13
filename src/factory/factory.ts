@@ -16,13 +16,13 @@ export default class EntityFactory {
   static createRect() {
     return {
       ...this.createBasicEntity(),
-      position: new Vector(2),
-      velocity: new Vector(2),
-      acceleration: new Vector(2),
+      position: Vector.create(2),
+      velocity: Vector.create(2),
+      acceleration: Vector.create(2),
       moves: true,
       rectModel: {
-        size: new Vector([10, 10]),
-        centerShift: new Vector([5, 5]),
+        size: Vector.create([10, 10]),
+        centerShift: Vector.create([5, 5]),
         color: MathHelper.getRandomColor(),
         cachedDimensions: [0, 0, 0, 0]
       }
@@ -33,13 +33,13 @@ export default class EntityFactory {
     return {
       ...this.createRect(),
       position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
-      velocity: new Vector([.2, 0]),
+      velocity: Vector.create([.2, 0]),
       wrapAroundWorld: true,
       maxAcceleration: 1,
       maxVelocity: Infinity,
       rectModel: {
-        size: new Vector([10, 10]),
-        centerShift: new Vector([5, 5]),
+        size: Vector.create([10, 10]),
+        centerShift: Vector.create([5, 5]),
         color: "rgba(255,255,255,0.3)",
         cachedDimensions: [0, 0, 0, 0]
       }
@@ -62,13 +62,13 @@ export default class EntityFactory {
   static createExplosion() {
     return {
       ...this.createBasicEntity(),
-      position: new Vector(2),
+      position: Vector.create(2),
       explosion: true,
       explosionVelocity: Initconfig.ENTITIES.EXPLOSION.VELOCITY,
       maxExplosionDistance: Initconfig.ENTITIES.EXPLOSION.DISTANCE,
       explosionModel: {
         color: MathHelper.getRandomColor(),
-        radius: new Vector([500, 500]),
+        radius: Vector.create([500, 500]),
         lifeTime: 700,
         progress: 0
       }
