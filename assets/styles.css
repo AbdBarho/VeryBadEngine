@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+  margin: 0 auto;
+  /* cursor: none; */
+}
+
+#state {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: fixed;
+  padding: 5px;
+  top: 0px;
+  left: 0px;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.8);
+  min-width: 160px;
+}
