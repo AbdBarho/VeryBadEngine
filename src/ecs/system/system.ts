@@ -6,31 +6,31 @@ export default class System implements ISystem {
   entities: { [ID: string]: Entity } = {};
 
   /**
-   * @param required required components, if nothing given, the system will not contain any entities
+   * @param required required components, if nothing given, the system will accept all entities
    */
   constructor(required: ComponentName[]) {
     this.required = required;
   }
 
   init() {
-    
+    //nothing
   }
 
-  private checkCompatibility(entity: Entity) {
+  protected isCompatible(entity: Entity) {
     for (let i = 0, len = this.required.length; i < len; i++)
       if (!(this.required[i] in entity))
         return false;
     return true;
   }
 
-  processCompatibility(entity: Entity) {
-    if (this.required.length === 0)
-      return;
-
-    if (this.checkCompatibility(entity))
+  addIfCompatible(entity: Entity) {
+    if (this.isCompatible(entity)) {
       this.entities[entity.ID] = entity;
-    else
+      return true;
+    } else {
       delete this.entities[entity.ID];
+      return false;
+    }
   }
 
   removeEntity(entityID: string) {

@@ -3,8 +3,11 @@ import ISystem from "./iSystem";
 
 export default class EmptySystem implements ISystem {
   init() { }
-  update(dt: number) { }
-  processCompatibility(entity: Entity) { }
+  update() { }
+  addIfCompatible(entity: Entity) {
+    // do not accept any entity, it should be empty
+    return false;
+  }
   removeEntity(entityId: string) { }
   destroy() { }
 }

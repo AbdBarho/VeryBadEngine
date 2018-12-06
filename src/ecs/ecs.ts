@@ -20,7 +20,7 @@ export default class ECS {
 
   private addEntity(entity: Entity) {
     for (let i = 0, len = this.systems.length; i < len; i++)
-      this.systems[i].processCompatibility(entity);
+      this.systems[i].addIfCompatible(entity);
     this.entities[entity.ID] = entity;
   }
 
