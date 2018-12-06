@@ -57,9 +57,15 @@ export default class Vector {
     return this;
   }
 
-  reset() {
+  clear() {
     for (let i = 0; i < this.values.length; i++)
       this.values[i] = 0;
+    return this;
+  }
+
+  fill(value: number) {
+    for (let i = 0; i < this.values.length; i++)
+      this.values[i] = value;
     return this;
   }
 

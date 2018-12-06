@@ -6,7 +6,6 @@ export type ComponentName = keyof Entity;
 export default interface Entity {
   ID: string;
   hasChanged: boolean;
-  isFrozen: boolean;
   //movement
   moves?: boolean;
   position?: Vector;

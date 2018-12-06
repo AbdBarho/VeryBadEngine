@@ -1,7 +1,6 @@
 import InputManager from "../../core/inputManager";
 import ECS from "../../ecs/ecs";
 import EmptySystem from "../../ecs/system/emptySystem";
-import Vector from "../../math/vector";
 
 export default class SlowMotion extends EmptySystem {
   ecs: ECS;

@@ -1,8 +1,8 @@
-import MultiSystem from "../ecs/system/multiSystem";
-import Vector from "../math/vector";
-import ObjectUtils from "../util/objectUtils";
-import StepFunctions from "../math/step";
-import MathHelper from "../math/math";
+import MultiSystem from "../../ecs/system/multiSystem";
+import Vector from "../../math/vector";
+import ObjectUtils from "../../util/objectUtils";
+import StepFunctions from "../../math/step";
+import MathHelper from "../../math/math";
 
 interface ExplosionEntity {
   position: Vector;

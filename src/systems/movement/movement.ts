@@ -19,9 +19,6 @@ export default class MovementSystem extends System {
   }
 
   updateEntity(entity: MovementSystemObject, dt: number) {
-    if (entity.isFrozen)
-      return
-
     let acc = entity.acceleration;
     let vel = entity.velocity;
     //limit acceleration

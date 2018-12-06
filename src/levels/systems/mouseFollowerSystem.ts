@@ -1,13 +1,13 @@
-import initconfig from "../config/initconfig";
-import InputManager from "../core/inputManager";
-import { RectangularModel } from "../ecs/component";
-import ECS from "../ecs/ecs";
-import Entity from "../ecs/entity";
-import System from "../ecs/system/system";
-import EntityFactory from "../factory/factory";
-import MathHelper from "../math/math";
-import Vector from "../math/vector";
-import Logger from "../services/logger";
+import initconfig from "../../config/initconfig";
+import InputManager from "../../core/inputManager";
+import { RectangularModel } from "../../ecs/component";
+import ECS from "../../ecs/ecs";
+import Entity from "../../ecs/entity";
+import System from "../../ecs/system/system";
+import EntityFactory from "../../factory/factory";
+import MathHelper from "../../math/math";
+import Vector from "../../math/vector";
+import Logger from "../../services/logger";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
@@ -46,7 +46,6 @@ export default class MouseFollowerSystem extends System {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
-    Logger.debugState(Object.assign({}, this.config));
   }
 
   init() {
@@ -57,20 +56,8 @@ export default class MouseFollowerSystem extends System {
     this.target = mousePos;
   }
 
-  freeze() {
-    this.config.isFrozen = true;
-    for (let id in this.entities)
-      this.entities[id].isFrozen = true;
-  }
-
-  unfreeze() {
-    this.config.isFrozen = false;
-    for (let id in this.entities)
-      this.entities[id].isFrozen = false;
-  }
-
-  reverseFreezeState() {
-    this.config.isFrozen ? this.unfreeze() : this.freeze();
+  changeFreezeState() {
+    this.config.isFrozen = !this.config.isFrozen;
   }
 
   update(dt: number) {
@@ -82,8 +69,10 @@ export default class MouseFollowerSystem extends System {
   updateEntity(entity: MouseFollowerEntity, dt: number) {
     if (this.config.destroyOnReach || this.config.stopOnReach) {
       if (this.targetReached(entity)) {
-        if (this.config.stopOnReach)
-          entity.isFrozen = true;
+        if (this.config.stopOnReach) {
+          entity.velocity.clear();
+          entity.acceleration.clear();
+        }
 
         if (this.config.destroyOnReach && this.config.respawnOnDestroy) {
           //simulate respawn
@@ -112,7 +101,6 @@ export default class MouseFollowerSystem extends System {
       dir.addNum(MathHelper.getSignedRandom() * randomFactorScale * accelerationScale);
 
     entity.acceleration.setVec(dir);
-    entity.isFrozen = false;
     entity.hasChanged = true;
 
     Vector.store(dir);
