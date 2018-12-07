@@ -1,17 +1,16 @@
-import UI from "../../core/canvas";
+import Canvas from "../../core/canvas";
 import EmptySystem from "../../ecs/system/emptySystem";
 
 export default class BackgroundColor extends EmptySystem {
-  ui: UI;
+  canvas: Canvas;
   color: string;
-  constructor(color: string, ui: UI) {
+  constructor(color: string, canvas: Canvas) {
     super();
     this.color = color;
-    this.ui = ui;
+    this.canvas = canvas;
   }
 
   update() {
-    this.ui.ctx.fillStyle = this.color;
-    this.ui.ctx.fillRect(0, 0, this.ui.canvas.width, this.ui.canvas.height);
+    this.canvas.backgroundSolidColor(this.color);
   }
 }

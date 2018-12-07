@@ -9,7 +9,7 @@ export type RectangularModel = {
 
 export type ExplosionModel = {
   color: string;
-  radius: Vector;
+  radius: number;
   lifeTime: number;
   progress: number;
 }

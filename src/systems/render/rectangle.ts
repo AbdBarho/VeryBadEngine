@@ -1,7 +1,7 @@
 import System from "../../ecs/system/system";
 import Entity from "../../ecs/entity";
 import { RectangularModel } from "../../ecs/component";
-import UI from "../../core/canvas";
+import Canvas from "../../core/canvas";
 import Vector from "../../math/vector";
 
 interface RectangleModelObject extends Entity {
@@ -10,10 +10,10 @@ interface RectangleModelObject extends Entity {
 }
 
 export default class RectangleRenderer extends System {
-  ui: UI;
-  constructor(ui: UI) {
+  canvas: Canvas;
+  constructor(canvas: Canvas) {
     super(["position", "rectModel"]);
-    this.ui = ui;
+    this.canvas = canvas;
   }
 
   updateEntity(entity: RectangleModelObject, dt: number) {
@@ -21,25 +21,26 @@ export default class RectangleRenderer extends System {
       this.calculate(entity);
       entity.hasChanged = false;
     }
-    this.ui.ctx.fillStyle = entity.rectModel.color;
-    let dims = entity.rectModel.cachedDimensions;
-    this.ui.ctx.fillRect(dims[0], dims[1], dims[2], dims[3]);
+    // this.canvas.ctx.fillStyle = entity.rectModel.color;
+    // let dims = entity.rectModel.cachedDimensions;
+    // this.canvas.ctx.fillRect(dims[0], dims[1], dims[2], dims[3]);
+    this.canvas.fillRect(entity.rectModel.cachedDimensions, entity.rectModel.color);
   }
 
   private calculate(entity: RectangleModelObject) {
     let pos = entity.position.copy();
-    let size = entity.rectModel.size.copy();
+    let size = entity.rectModel.size;
 
     pos.subVec(entity.rectModel.centerShift)
-    pos.mulVec(this.ui.config.scale);
-    size.mulVec(this.ui.config.scale);
+    // pos.mulVec(this.canvas.config.scale);
+    // size.mulVec(this.canvas.config.scale);
     //prevents GC
     let dims = entity.rectModel.cachedDimensions;
-    dims[0] = pos.get(0);
-    dims[1] = pos.get(1);
-    dims[2] = size.get(0);
-    dims[3] = size.get(1);
+    dims[0] = pos.values[0];
+    dims[1] = pos.values[1];
+    dims[2] = size.values[0];
+    dims[3] = size.values[1];
 
-    Vector.store(pos, size);
+    Vector.store(pos);
   }
 }
