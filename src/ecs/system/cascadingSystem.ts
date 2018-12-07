@@ -26,4 +26,9 @@ export default class CascadingSystem extends System {
     for (let i = 0, len = this.systems.length; i < len; i++)
       this.systems[i].removeEntity(entityID);
   }
+
+  destroy() {
+    for (let i = 0, len = this.systems.length; i < len; i++)
+      this.systems[i].destroy();
+  }
 }
