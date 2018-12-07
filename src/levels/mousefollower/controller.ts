@@ -3,8 +3,8 @@ import ECS from "../../ecs/ecs";
 import EmptySystem from "../../ecs/system/emptySystem";
 import EntityFactory from "../../factory/factory";
 import Logger from "../../services/logger";
-import MouseFollowerSystem from "./mouseFollowerSystem";
-import MouseFollowerMovementSystem from "./mouseFollowerMovementSystem";
+import MouseFollowerSystem from "./system";
+import MouseFollowerMovementSystem from "./movementSystem";
 
 export default class MouseFollowerController extends EmptySystem {
   input: InputManager;

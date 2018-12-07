@@ -7,7 +7,6 @@ import System from "../../ecs/system/system";
 import EntityFactory from "../../factory/factory";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
-import Logger from "../../services/logger";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;

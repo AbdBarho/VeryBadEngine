@@ -3,7 +3,7 @@ import InputManager from "./core/inputManager";
 import ECS from "./ecs/ecs";
 import Logger from "./services/logger";
 import PeriodicExecuter from "./services/periodicExecuter";
-import MouseFollowerLevel from "./levels/mouseFollowerLevel";
+import MouseFollowerLevel from "./levels/mousefollower/level";
 
 export default class Engine {
   level: ECS;
