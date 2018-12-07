@@ -1,13 +1,13 @@
 import System from "../../ecs/system/system";
 import Vector from "../../math/vector";
 import Entity from "../../ecs/entity";
-import initconfig from "../../config/initconfig";
+import Config from "../../config/config";
 
 interface WrappedEntity extends Entity{
   position: Vector;
   wrapAroundWorld: boolean;
 }
-const WORLD_SIZE = initconfig.WORLD.SIZE;
+const WORLD_SIZE = Config.WORLD.SIZE;
 
 export default class WrapAroundWorld extends System {
   constructor() {

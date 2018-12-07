@@ -1,4 +1,4 @@
-import initconfig from "../../config/initconfig";
+import Config from "../../config/config";
 import InputManager from "../../core/inputManager";
 import { RectangularModel } from "../../ecs/component";
 import ECS from "../../ecs/ecs";
@@ -27,7 +27,7 @@ interface MouseFollowerConfig {
   accelerationScale: number;
 }
 
-const CONFIG = initconfig.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
+const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {
   input: InputManager;
   ecs: ECS;

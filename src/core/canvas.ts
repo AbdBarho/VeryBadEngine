@@ -1,4 +1,4 @@
-import initConfig from "../config/initconfig";
+import Config from "../config/config";
 import Vector from "../math/vector";
 
 export interface CanvasConfig {
@@ -16,8 +16,8 @@ export default class Canvas {
     scale: Vector.create(2),
     shift: Vector.create(2),
     size: Vector.create(2),
-    baseSize: Vector.create(initConfig.CANVAS.BASE_SIZE.slice()),
-    aspectRatio: initConfig.CANVAS.ASPECT_RATIO
+    baseSize: Vector.create(Config.CANVAS.BASE_SIZE.slice()),
+    aspectRatio: Config.CANVAS.ASPECT_RATIO
   };
 
   constructor() {

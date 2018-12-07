@@ -1,7 +1,7 @@
 import Vector from "../math/vector";
 import IDGenerator from "./idGenerator";
 import MathHelper from "../math/math";
-import Initconfig from "../config/initconfig";
+import Config from "../config/config";
 
 (window as any).IDGen = IDGenerator;
 
@@ -9,8 +9,7 @@ export default class EntityFactory {
   static createBasicEntity() {
     return {
       ID: IDGenerator.getId(),
-      hasChanged: false,
-      isFrozen: false,
+      hasChanged: false
     }
   }
   static createRect() {
@@ -32,7 +31,7 @@ export default class EntityFactory {
   static createSideScroller() {
     return {
       ...this.createRect(),
-      position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
+      position: MathHelper.getRandomVector(Config.WORLD.SIZE),
       velocity: Vector.create([.2, 0]),
       wrapAroundWorld: true,
       maxAcceleration: 1,
@@ -52,10 +51,10 @@ export default class EntityFactory {
       wrapAroundWorld: true,
       mouseFollower: true,
       explodes: true,
-      position: MathHelper.getRandomVector(Initconfig.WORLD.SIZE),
+      position: MathHelper.getRandomVector(Config.WORLD.SIZE),
       //FIXME: batched systems
-      maxAcceleration: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
-      maxVelocity: Initconfig.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
+      maxAcceleration: Config.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
+      maxVelocity: Config.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
     }
   }
 
@@ -64,12 +63,12 @@ export default class EntityFactory {
       ...this.createBasicEntity(),
       position: Vector.create(2),
       explosion: true,
-      explosionVelocity: Initconfig.ENTITIES.EXPLOSION.VELOCITY,
-      maxExplosionDistance: Initconfig.ENTITIES.EXPLOSION.DISTANCE,
+      explosionVelocity: Config.ENTITIES.EXPLOSION.VELOCITY,
+      maxExplosionDistance: Config.ENTITIES.EXPLOSION.DISTANCE,
       explosionModel: {
         color: MathHelper.getRandomColor(),
-        radius: Vector.create([500, 500]),
-        lifeTime: 700,
+        radius: 500,
+        lifeTime: 2200,
         progress: 0
       }
     }

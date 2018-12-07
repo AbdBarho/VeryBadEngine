@@ -1,5 +1,5 @@
 import Vector from "../math/vector";
-import { QueuedEventManager } from "../services/eventmanager";
+import { QueuedEventManager } from "../services/eventManager";
 import Canvas from "./canvas";
 
 export default class InputManager extends QueuedEventManager {

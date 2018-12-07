@@ -2,9 +2,9 @@ import System from "../../ecs/system/system";
 import Entity from "../../ecs/entity";
 import Vector from "../../math/vector";
 import { RectangularModel } from "../../ecs/component";
-import initconfig from "../../config/initconfig";
+import Config from "../../config/config";
 
-const WORLD_EDGES = Vector.create(initconfig.WORLD.SIZE.slice());
+const WORLD_EDGES = Vector.create(Config.WORLD.SIZE.slice());
 
 interface KeepInWorldRectangle extends Entity {
   position: Vector;

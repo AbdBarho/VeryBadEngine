@@ -1,5 +1,5 @@
 import Vector from "../math/vector";
-import Config from "../config/initconfig";
+import Config from "../config/config";
 
 const GLOBAL_VERBOSITY = Config.LOGGER.VERBOSITY;
 const LOGGERS = [console.error, console.warn, console.log];
