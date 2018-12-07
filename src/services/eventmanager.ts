@@ -11,7 +11,7 @@ export default class EventManager {
     this.__listeners__[event].push({ callback, context });
   }
   /**
-   * register event listerner. will be called only once, then unregistered.
+   * register event listener. will be called only once, then unregistered.
    * @param event event name
    * @param callback the callback function
    * @param context
@@ -32,7 +32,7 @@ export default class EventManager {
     let callbacks = this.__listeners__[event];
     for (let i = 0; i < callbacks.length; i++)
       if (callbacks[i].callback === callback)
-        callbacks.splice(i, 1);
+        callbacks.splice(i--, 1);
   }
   /**
    * trigger an event
@@ -42,8 +42,7 @@ export default class EventManager {
   trigger(event: string, ...args: any[]) {
     let callbacks = this.__listeners__[event] || [];
     for (let i = 0; i < callbacks.length; i++)
-      if (callbacks[i].callback)
-        callbacks[i].callback.apply(callbacks[i].context, args);
+      callbacks[i].callback.apply(callbacks[i].context, args);
   }
 }
 

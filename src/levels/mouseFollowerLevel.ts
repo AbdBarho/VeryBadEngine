@@ -1,29 +1,29 @@
-import ECS from "../ecs/ecs";
-import InputManager from "../core/inputManager";
 import Canvas from "../core/canvas";
-import MouseFollowerSystem from "./systems/mouseFollowerSystem";
+import InputManager from "../core/inputManager";
+import ECS from "../ecs/ecs";
+import CascadingSystem from "../ecs/system/cascadingSystem";
+import EntityFactory from "../factory/factory";
+import ExplosionOnClick from "../systems/input/explosionOnClick";
 import InputSystem from "../systems/input/input";
 import SlowMotion from "../systems/input/slowMotion";
 import ExplosionSystem from "../systems/movement/explosion";
-import ExplosionOnClick from "../systems/input/explosionOnClick";
-import MouseFollowerController from "./systems/mouseFollowerController";
-import MovementSystem from "../systems/movement/movement";
 import KeepInWorld from "../systems/movement/keepInWorld";
+import MovementSystem from "../systems/movement/movement";
 import WrapAroundWorld from "../systems/movement/wrapAroundWorld";
 import BackgroundColor from "../systems/render/background";
-import RectangleRenderer from "../systems/render/rectangle";
 import ExplosionRender from "../systems/render/explosion";
-import EntityFactory from "../factory/factory";
+import RectangleRenderer from "../systems/render/rectangle";
+import MouseFollowerController from "./systems/mouseFollowerController";
 import MouseFollowerMovementSystem from "./systems/mouseFollowerMovementSystem";
-import CascadingSystem from "../ecs/system/cascadingSystem";
+import MouseFollowerSystem from "./systems/mouseFollowerSystem";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
-  ui: Canvas;
-  constructor(input: InputManager, ui: Canvas) {
+  canvas: Canvas;
+  constructor(input: InputManager, canvas: Canvas) {
     super();
     this.input = input;
-    this.ui = ui;
+    this.canvas = canvas;
     //create systems
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
@@ -38,12 +38,11 @@ export default class MouseFollowerLevel extends ECS {
       MFSys,
 
       new CascadingSystem([MFMovement, new MovementSystem()]),
-      new KeepInWorld(),
-      new WrapAroundWorld(),
+      new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
 
-      new BackgroundColor("#111", this.ui),
-      new RectangleRenderer(this.ui),
-      new ExplosionRender(this.ui, this)
+      new BackgroundColor("#000", this.canvas),
+      new RectangleRenderer(this.canvas),
+      new ExplosionRender(this.canvas, this)
     ];
     //background
     for (let i = 0; i < 100; i++)

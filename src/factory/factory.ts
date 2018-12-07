@@ -39,7 +39,7 @@ export default class EntityFactory {
       rectModel: {
         size: Vector.create([10, 10]),
         centerShift: Vector.create([5, 5]),
-        color: "rgba(255,255,255,0.3)",
+        color: "#ffffff40",
         cachedDimensions: [0, 0, 0, 0]
       }
     }

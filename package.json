@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "webpack --mode=production && inline-source ./index.html ./dist/bundle.html --root ./ --compress",
+    "build": "webpack --mode=production && inline-source ./index.html ./dist/bundle.html --root ./",
     "server": "http-server ./ -p 8001"
   },
   "repository": {

@@ -13,8 +13,8 @@ export default interface ISystem {
   update: (dt: number) => any;
 
   /**
-   * checks wether the given entity is compatible with the system or not
-   * @returns {boolean} true if compatible, false otherwise
+   * checks wether the given entity is compatible with the system and adds it if it is
+   * @returns {boolean} true if compatible and added, false otherwise
    */
   addIfCompatible: (entity: Entity) => boolean;
 
