@@ -18,7 +18,11 @@ export default class ECS {
       this.systems[i].destroy();
   }
 
-  private addEntity(entity: Entity) {
+  /**
+   * WARNING: should only be used before the level starts, it might cause errors
+   * @param entity
+   */
+  addEntity(entity: Entity) {
     for (let i = 0, len = this.systems.length; i < len; i++)
       this.systems[i].addIfCompatible(entity);
     this.entities[entity.ID] = entity;
