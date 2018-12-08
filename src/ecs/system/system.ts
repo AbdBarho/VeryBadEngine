@@ -8,7 +8,7 @@ export default class System implements ISystem {
   /**
    * @param required required components, if nothing given, the system will accept all entities
    */
-  constructor(required: ComponentName[]) {
+  constructor(required: ComponentName[] = []) {
     this.required = required;
   }
 

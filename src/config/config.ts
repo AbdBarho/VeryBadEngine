@@ -12,16 +12,6 @@ export default {
   WORLD: {
     SIZE: [1920, 1080]
   },
-  ENTITIES: {
-    MOUSE_FOLLOWER: {
-      MAX_ACCELERATION: accelerationPerSecond(1000),
-      MAX_VELOCITY: speedPerSecond(500)
-    },
-    EXPLOSION: {
-      VELOCITY: speedPerSecond(500) * 2, // * 2 to counter v0
-      DISTANCE: 1000
-    }
-  },
   SYSTEMS: {
     MOUSE_FOLLOWER_SYSTEM: {
       IS_FROZEN: false,

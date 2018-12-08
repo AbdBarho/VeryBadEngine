@@ -1,6 +1,16 @@
 import Vector from "./vector";
 
 export default class MathHelper {
+  static speedPerSecond(value: number) {
+    return value / 1000;
+  }
+  static accelerationPerSecond(value: number) {
+    return value / 1000000;
+  }
+
+  static degreesPerSec(value: number) {
+    return value * Math.PI / 180000;
+  }
   static atan2(x: number, y: number) {
     // we use -y because the y is positive when we go down the canvas, not up just like in normal math
     return Math.atan2(-y, x);

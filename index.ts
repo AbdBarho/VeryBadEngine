@@ -10,6 +10,10 @@ let run2 = () => {
 }
 */
 import Engine from "./src/engine";
-let run = () => (window as any).game = new Engine();
+let run = () => {
+  let game = new Engine();
+  (window as any).game = game;
+  (window as any).requestIdleCallback(() => game.start());
+}
 
 window.addEventListener("load", run);

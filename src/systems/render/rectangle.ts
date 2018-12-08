@@ -21,9 +21,6 @@ export default class RectangleRenderer extends System {
       this.calculate(entity);
       entity.hasChanged = false;
     }
-    // this.canvas.ctx.fillStyle = entity.rectModel.color;
-    // let dims = entity.rectModel.cachedDimensions;
-    // this.canvas.ctx.fillRect(dims[0], dims[1], dims[2], dims[3]);
     this.canvas.fillRect(entity.rectModel.cachedDimensions, entity.rectModel.color);
   }
 
@@ -32,8 +29,6 @@ export default class RectangleRenderer extends System {
     let size = entity.rectModel.size;
 
     pos.subVec(entity.rectModel.centerShift)
-    // pos.mulVec(this.canvas.config.scale);
-    // size.mulVec(this.canvas.config.scale);
     //prevents GC
     let dims = entity.rectModel.cachedDimensions;
     dims[0] = pos.values[0];

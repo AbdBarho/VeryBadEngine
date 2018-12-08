@@ -1,5 +1,5 @@
 import Vector from "../math/vector";
-import { ExplosionModel, RectangularModel } from "./component";
+import { ExplosionModel, RectangularModel, StarAnimation } from "./component";
 
 export type ComponentName = keyof Entity;
 
@@ -26,6 +26,8 @@ export default interface Entity {
   maxExplosionDistance?: number;
   explosionModel?: ExplosionModel;
   explodes?: boolean;
+  // stars
+  starAnimation?: StarAnimation;
   //debug
   debugCirclePoint?: number[];
 
