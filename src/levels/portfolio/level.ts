@@ -27,6 +27,9 @@ export default class Portfolio extends ECS {
     ];
     //background
     for (let i = 0; i < 100; i++)
-      this.addEntity(EntityFactory.createAnimatedStar());
+      this.queueEntity(EntityFactory.createAnimatedStar());
+
+    //useful for caching some renders
+    this.executeQueue();
   }
 }

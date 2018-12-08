@@ -1,6 +1,8 @@
 import Config from "../config/config";
 import Vector from "../math/vector";
 
+type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap;
+
 export interface CanvasConfig {
   scale: Vector,
   shift: Vector,
@@ -79,7 +81,7 @@ export default class Canvas {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  drawImage(image: HTMLCanvasElement, x: number, y: number, w: number, h: number) {
+  drawImage(image: DrawableImage, x: number, y: number, w: number, h: number) {
     this.ctx.drawImage(image, x * this.xScale, y * this.yScale, w * this.xScale, h * this.yScale);
   }
 

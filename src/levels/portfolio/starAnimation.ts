@@ -16,9 +16,12 @@ export default class StarAnimationRenderer extends System {
     this.canvas = canvas;
   }
 
-  init() {
-    for (let id in this.entities)
-      this.cacheRender(this.entities[id] as StarAnimationEntity);
+  addIfCompatible(entity: Entity) {
+    if (super.addIfCompatible(entity)) {
+      this.cacheRender(entity as StarAnimationEntity);
+      return true;
+    }
+    return false;
   }
 
   updateEntity(entity: StarAnimationEntity, dt: number) {

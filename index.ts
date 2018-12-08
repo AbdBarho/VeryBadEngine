@@ -9,11 +9,12 @@ let run2 = () => {
   console.log("posted");
 }
 */
+let idle = (window as any).requestIdleCallback;
 import Engine from "./src/engine";
 let run = () => {
   let game = new Engine();
-  (window as any).game = game;
-  (window as any).requestIdleCallback(() => game.start());
+  idle(() => requestAnimationFrame(() => idle(() => game.start())));
+
 }
 
 window.addEventListener("load", run);

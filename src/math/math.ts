@@ -54,6 +54,10 @@ export default class MathHelper {
     return -r;
   }
 
+  static getRandomBool() {
+    return Math.random() >= 0.5;
+  }
+
   static limitBetween(num: number, min: number, max: number) {
     return Math.max(Math.min(num, max), min);
   }
