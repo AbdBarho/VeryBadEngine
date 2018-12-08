@@ -70,9 +70,17 @@ export default class Canvas {
     return pos;
   }
 
+  alpha(val: number) {
+    this.ctx.globalAlpha = val;
+  }
+
   backgroundSolidColor(color: string) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  drawImage(image: HTMLCanvasElement, x: number, y: number, w: number, h: number) {
+    this.ctx.drawImage(image, x * this.xScale, y * this.yScale, w * this.xScale, h * this.yScale);
   }
 
   fillRect(dims: number[], color: string) {
@@ -80,11 +88,43 @@ export default class Canvas {
     this.ctx.fillRect(dims[0] * this.xScale, dims[1] * this.yScale, dims[2] * this.xScale, dims[3] * this.yScale);
   }
 
-  fillCircle(cx:number, cy: number, radius: number, color: string) {
+  fillCircle(cx: number, cy: number, radius: number, color: string) {
     this.ctx.fillStyle = color;
     this.ctx.beginPath();
     this.ctx.ellipse(cx * this.xScale, cy * this.yScale, radius * this.xScale, radius * this.yScale, 0, 0, 2 * Math.PI);
     this.ctx.fill();
     this.ctx.closePath();
+  }
+
+  fillStar(cx: number, cy: number, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
+    cx *= this.xScale;
+    cy *= this.yScale;
+    let avg = (this.xScale + this.yScale) / 2;
+    minRadius *= avg;
+    maxRadius *= avg;
+    this.ctx.fillStyle = fillStyle;
+    this.ctx.beginPath();
+    this.ctx.translate(cx, cy);
+    this.ctx.moveTo(0, 0 - minRadius);
+    for (let i = 0; i < numSpikes; i++) {
+      this.ctx.rotate(Math.PI / numSpikes);
+      this.ctx.lineTo(0, 0 - maxRadius);
+      this.ctx.rotate(Math.PI / numSpikes);
+      this.ctx.lineTo(0, 0 - minRadius);
+    }
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+
+  rotate(angle: number, cx = 0, cy = 0) {
+    cx *= this.xScale;
+    cy *= this.yScale;
+    this.ctx.translate(cx, cy);
+    this.ctx.rotate(angle);
+    this.ctx.translate(-cx, -cy);
+  }
+
+  resetRotation() {
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 }
