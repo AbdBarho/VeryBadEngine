@@ -4,7 +4,7 @@ import { RectangularModel } from "../../ecs/component";
 import ECS from "../../ecs/ecs";
 import Entity from "../../ecs/entity";
 import System from "../../ecs/system/system";
-import EntityFactory from "../../factory/factory";
+import EntityFactory from "./factory";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
 

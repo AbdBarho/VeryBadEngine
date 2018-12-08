@@ -1,7 +1,7 @@
-import Vector from "../math/vector";
-import IDGenerator from "./idGenerator";
-import MathHelper from "../math/math";
-import Config from "../config/config";
+import Config from "../../config/config";
+import MathHelper from "../../math/math";
+import Vector from "../../math/vector";
+import IDGenerator from "../../factory/idGenerator";
 
 (window as any).IDGen = IDGenerator;
 
@@ -30,11 +30,13 @@ export default class EntityFactory {
 
   static createSideScroller() {
     return {
-      ...this.createRect(),
+      ...this.createBasicEntity(),
       position: MathHelper.getRandomVector(Config.WORLD.SIZE),
       velocity: Vector.create([.2, 0]),
+      acceleration: Vector.create(2),
+      moves: true,
       wrapAroundWorld: true,
-      maxAcceleration: 1,
+      maxAcceleration: 0,
       maxVelocity: Infinity,
       rectModel: {
         size: Vector.create([10, 10]),
@@ -53,8 +55,8 @@ export default class EntityFactory {
       explodes: true,
       position: MathHelper.getRandomVector(Config.WORLD.SIZE),
       //FIXME: batched systems
-      maxAcceleration: Config.ENTITIES.MOUSE_FOLLOWER.MAX_ACCELERATION,
-      maxVelocity: Config.ENTITIES.MOUSE_FOLLOWER.MAX_VELOCITY
+      maxAcceleration: MathHelper.accelerationPerSecond(1000),
+      maxVelocity: MathHelper.speedPerSecond(500)
     }
   }
 
@@ -63,12 +65,12 @@ export default class EntityFactory {
       ...this.createBasicEntity(),
       position: Vector.create(2),
       explosion: true,
-      explosionVelocity: Config.ENTITIES.EXPLOSION.VELOCITY,
-      maxExplosionDistance: Config.ENTITIES.EXPLOSION.DISTANCE,
+      explosionVelocity: MathHelper.speedPerSecond(500) * 2, // * 2 to counter v0
+      maxExplosionDistance: 1000,
       explosionModel: {
         color: MathHelper.getRandomColor(),
         radius: 500,
-        lifeTime: 2200,
+        lifeTime: 1000,
         progress: 0
       }
     }
