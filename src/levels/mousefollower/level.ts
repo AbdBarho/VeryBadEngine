@@ -16,6 +16,7 @@ import RectangleRenderer from "../../systems/render/rectangle";
 import MouseFollowerSystem from "./system";
 import MouseFollowerMovementSystem from "./movementSystem";
 import MouseFollowerController from "./controller";
+import MotionBlur from "../../systems/render/motionBlur";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -42,7 +43,8 @@ export default class MouseFollowerLevel extends ECS {
 
       new BackgroundColor("#000", this.canvas),
       new RectangleRenderer(this.canvas),
-      new ExplosionRender(this.canvas, this)
+      new ExplosionRender(this.canvas, this),
+      new MotionBlur(this.canvas)
     ];
     //background
     for (let i = 0; i < 100; i++)
