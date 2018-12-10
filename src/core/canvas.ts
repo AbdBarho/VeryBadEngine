@@ -85,6 +85,10 @@ export default class Canvas {
     this.ctx.drawImage(image, x * this.xScale, y * this.yScale, w * this.xScale, h * this.yScale);
   }
 
+  fillImage(image: DrawableImage) {
+    this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+  }
+
   fillRect(dims: number[], color: string) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(dims[0] * this.xScale, dims[1] * this.yScale, dims[2] * this.xScale, dims[3] * this.yScale);
@@ -128,5 +132,9 @@ export default class Canvas {
 
   resetRotation() {
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  getAsDataURL(type?: string) {
+    return this.canvas.toDataURL(type);
   }
 }
