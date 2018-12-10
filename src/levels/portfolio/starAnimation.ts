@@ -1,7 +1,7 @@
-import System from "../../ecs/system/system";
 import Canvas from "../../core/canvas";
 import { StarAnimation } from "../../ecs/component";
 import Entity from "../../ecs/entity";
+import System from "../../ecs/system/system";
 import Vector from "../../math/vector";
 
 interface StarAnimationEntity extends Entity {

@@ -22,12 +22,12 @@ export default class EntityFactory {
       position: MathHelper.getRandomVector(Config.WORLD.SIZE),
       velocity: Vector.create([MathHelper.speedPerSecond(MathHelper.getRandomInt(50, 1)), 0]),
       starAnimation: {
-        progress: 0,
+        progress: MathHelper.getRandomInt(1000),
         lifeTime: lifeTimeInSeconds * 1000,
-        numSpikes,
-        rotationSpeed,
         minRadius: MathHelper.getRandomInt(20, 10),
         maxRadius: MathHelper.getRandomInt(100, 50),
+        numSpikes,
+        rotationSpeed,
         color: "#fff"
       }
     }

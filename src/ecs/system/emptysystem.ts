@@ -3,7 +3,7 @@ import ISystem from "./iSystem";
 
 export default class EmptySystem implements ISystem {
   init() { }
-  update() { }
+  update(dt: number) { }
   addIfCompatible(entity: Entity) {
     // do not accept any entity, it should be empty
     return false;
