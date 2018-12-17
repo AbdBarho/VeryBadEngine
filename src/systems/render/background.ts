@@ -10,7 +10,15 @@ export default class BackgroundColor extends EmptySystem {
     this.canvas = canvas;
   }
 
+  init() {
+    document.body.style.backgroundColor = this.color;
+  }
+
   update() {
     this.canvas.backgroundSolidColor(this.color);
+  }
+
+  destroy() {
+    document.body.style.backgroundColor = "";
   }
 }
