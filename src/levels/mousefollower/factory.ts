@@ -1,7 +1,7 @@
 import Config from "../../config/config";
+import IDGenerator from "../../factory/idGenerator";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
-import IDGenerator from "../../factory/idGenerator";
 
 (window as any).IDGen = IDGenerator;
 
@@ -13,15 +13,17 @@ export default class EntityFactory {
     }
   }
   static createRect() {
+    let size = MathHelper.getRandomInt(12, 6);
+    size += size % 2;
+    let center = size / 2;
     return {
       ...this.createBasicEntity(),
       position: Vector.create(2),
       velocity: Vector.create(2),
       acceleration: Vector.create(2),
-      moves: true,
       rectModel: {
-        size: Vector.create([10, 10]),
-        centerShift: Vector.create([5, 5]),
+        size: Vector.create([size, size]),
+        centerShift: Vector.create([center, center]),
         color: MathHelper.getRandomColor(),
         cachedDimensions: [0, 0, 0, 0]
       }
@@ -29,19 +31,18 @@ export default class EntityFactory {
   }
 
   static createSideScroller() {
+    let size = MathHelper.getRandomInt(16, 6);
+    size += size % 2;
+    let center = size / 2;
     return {
       ...this.createBasicEntity(),
       position: MathHelper.getRandomVector(Config.WORLD.SIZE),
-      velocity: Vector.create([.2, 0]),
-      acceleration: Vector.create(2),
-      moves: true,
+      velocity: Vector.create([Math.random() / 5, 0]),
       wrapAroundWorld: true,
-      maxAcceleration: 0,
-      maxVelocity: Infinity,
       rectModel: {
-        size: Vector.create([10, 10]),
-        centerShift: Vector.create([5, 5]),
-        color: "#ffffff40",
+        size: Vector.create([size, size]),
+        centerShift: Vector.create([center, center]),
+        color: "#ffffff20",
         cachedDimensions: [0, 0, 0, 0]
       }
     }
@@ -72,6 +73,29 @@ export default class EntityFactory {
         radius: 500,
         lifeTime: 1000,
         progress: 0
+      }
+    }
+  }
+
+  static createAnimatedStar() {
+    let numSpikes = MathHelper.getRandomInt(10, 4);
+    let lifeTimeInSeconds = MathHelper.getRandomInt(15, 5);
+    let rotationDirection = MathHelper.getRandomBool() ? 1 : -1;
+    let rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
+    let rotationSpeed = rotationDirection * MathHelper.degreesPerSec(rotationAngle);
+    return {
+      ...this.createBasicEntity(),
+      wrapAroundWorld: true,
+      position: MathHelper.getRandomVector(Config.WORLD.SIZE),
+      velocity: Vector.create([MathHelper.speedPerSecond(MathHelper.getRandomInt(50, 1)), 0]),
+      starAnimation: {
+        progress: MathHelper.getRandomInt(1000),
+        lifeTime: lifeTimeInSeconds * 1000,
+        minRadius: MathHelper.getRandomInt(20, 10),
+        maxRadius: MathHelper.getRandomInt(100, 50),
+        numSpikes,
+        rotationSpeed,
+        color: "#fff"
       }
     }
   }

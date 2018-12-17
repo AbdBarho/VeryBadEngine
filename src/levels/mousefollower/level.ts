@@ -2,21 +2,22 @@ import Canvas from "../../core/canvas";
 import InputManager from "../../core/inputManager";
 import ECS from "../../ecs/ecs";
 import CascadingSystem from "../../ecs/system/cascadingSystem";
-import EntityFactory from "./factory";
-import ExplosionOnClick from "./explosionOnClick";
 import InputSystem from "../../systems/input/input";
 import SlowMotion from "../../systems/input/slowMotion";
 import ExplosionSystem from "../../systems/movement/explosion";
 import KeepInWorld from "../../systems/movement/keepInWorld";
-import MovementSystem from "../../systems/movement/movement";
+import VelocitySystem from "../../systems/movement/velocity";
 import WrapAroundWorld from "../../systems/movement/wrapAroundWorld";
 import BackgroundColor from "../../systems/render/background";
 import ExplosionRender from "../../systems/render/explosion";
-import RectangleRenderer from "../../systems/render/rectangle";
-import MouseFollowerSystem from "./system";
-import MouseFollowerMovementSystem from "./movementSystem";
-import MouseFollowerController from "./controller";
 import MotionBlur from "../../systems/render/motionBlur";
+import RectangleRenderer from "../../systems/render/rectangle";
+import MouseFollowerController from "./controller";
+import ExplosionOnClick from "./explosionOnClick";
+import EntityFactory from "./factory";
+import MouseFollowerMovementSystem from "./movementSystem";
+import StarAnimationRenderer from "./starAnimation";
+import MouseFollowerSystem from "./system";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -38,20 +39,24 @@ export default class MouseFollowerLevel extends ECS {
       new MouseFollowerController(this.input, this, MFSys, MFMovement),
       MFSys,
 
-      new CascadingSystem([MFMovement, new MovementSystem()]),
+      new CascadingSystem([MFMovement, new VelocitySystem()]),
       new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
 
       new BackgroundColor("#000", this.canvas),
+      new StarAnimationRenderer(this.canvas),
       new RectangleRenderer(this.canvas),
       new ExplosionRender(this.canvas, this),
-      new MotionBlur(this.canvas)
+      new MotionBlur(this.canvas, 0.65)
     ];
     //background
     for (let i = 0; i < 100; i++)
       this.queueEntity(EntityFactory.createSideScroller());
 
+    for (let i = 0; i < 100; i++)
+      this.queueEntity(EntityFactory.createAnimatedStar());
+
     //in game followers
-    for (let i = 0; i < 500; i++)
+    for (let i = 0; i < 400; i++)
       this.queueEntity(EntityFactory.createMouseFollower());
   }
 }

@@ -1,30 +1,21 @@
 import Config from "../config/config";
 import Vector from "../math/vector";
+import EventManager from "../services/eventManager";
 
 type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap;
 
-export interface CanvasConfig {
-  scale: Vector,
-  shift: Vector,
-  size: Vector,
-  baseSize: Vector,
-  aspectRatio: number,
-}
-
-export default class Canvas {
+export default class Canvas extends EventManager {
   canvas = document.createElement("canvas");
   ctx: CanvasRenderingContext2D;
-  config: CanvasConfig = {
-    scale: Vector.create(2),
-    shift: Vector.create(2),
-    size: Vector.create(2),
-    baseSize: Vector.create(Config.CANVAS.BASE_SIZE.slice()),
-    aspectRatio: Config.CANVAS.ASPECT_RATIO
-  };
+  scale = Vector.create(2);
+  shift = Vector.create(2);
+  size = Vector.create(2);
+  baseSize = Vector.create([Config.CANVAS.WIDTH, Config.CANVAS.HEIGHT]);
   xScale = 0;
   yScale = 0;
 
   constructor() {
+    super();
     let ctx = this.canvas.getContext("2d");
     if (ctx === null) {
       throw "No context could be created for the canvas";
@@ -38,10 +29,11 @@ export default class Canvas {
   fitToScreen() {
     this.resize();
     this.calculateParameters();
+    this.trigger("resize", this.size);
   }
 
   resize() {
-    let aspectRatio = this.config.aspectRatio;
+    let aspectRatio = Config.CANVAS.WIDTH / Config.CANVAS.HEIGHT;
     let width = window.innerWidth;
     let height = window.innerHeight;
     let min = Math.min(width, height);
@@ -54,22 +46,30 @@ export default class Canvas {
     }
     this.canvas.width = width;
     this.canvas.height = height;
-    this.config.size.setArr([width, height]);
+    this.size.setArr([width, height]);
   }
 
   calculateParameters() {
-    this.config.scale = this.config.size.copy().divVec(this.config.baseSize);
-    this.xScale = this.config.scale.get(0);
-    this.yScale = this.config.scale.get(1);
+    this.scale = this.size.copy().divVec(this.baseSize);
+    this.xScale = this.scale.get(0);
+    this.yScale = this.scale.get(1);
     let rect = this.canvas.getBoundingClientRect();
-    this.config.shift.setArr([rect.left, rect.top]);
+    this.shift.setArr([rect.left, rect.top]);
 
   }
 
   pixelToUnit(x: number, y: number) {
     let pos = Vector.create([x, y]);
-    pos.subVec(this.config.shift).divVec(this.config.scale).floor();
+    pos.subVec(this.shift).divVec(this.scale).floor();
     return pos;
+  }
+
+  onResize(callback: (...args: any[]) => any, context: any) {
+    this.on("resize", callback, context);
+  }
+  
+  offResize(callback: (...args: any[]) => any) {
+    this.off("resize", callback);
   }
 
   alpha(val: number) {

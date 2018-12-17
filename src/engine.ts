@@ -16,8 +16,8 @@ export default class Engine {
   constructor() {
     this.canvas = new Canvas();
     this.input = new InputManager(this.canvas);
-    // this.level = new MouseFollowerLevel(this.input, this.canvas);
-    this.level = new Portfolio(this.input, this.canvas);
+    this.level = new MouseFollowerLevel(this.input, this.canvas);
+    // this.level = new Portfolio(this.input, this.canvas);
     this.executer = new PeriodicExecuter((dt: number) => this.level.update(dt));
 
     window.addEventListener("keydown", (e) => {

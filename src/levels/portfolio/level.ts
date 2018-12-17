@@ -5,8 +5,8 @@ import InputSystem from "../../systems/input/input";
 import VelocitySystem from "../../systems/movement/velocity";
 import WrapAroundWorld from "../../systems/movement/wrapAroundWorld";
 import BackgroundColor from "../../systems/render/background";
-import EntityFactory from "./factory";
-import StarAnimationRenderer from "./starAnimation";
+import StarAnimationRenderer from "../mouseFollower/starAnimation";
+import EntityFactory from "../mouseFollower/factory";
 
 export default class Portfolio extends ECS {
   input: InputManager;

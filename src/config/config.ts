@@ -6,8 +6,8 @@ export default {
     VERBOSITY: 0
   },
   CANVAS: {
-    BASE_SIZE: [1920, 1080],
-    ASPECT_RATIO: 16 / 9,
+    WIDTH: 1920,
+    HEIGHT: 1080
   },
   WORLD: {
     SIZE: [1920, 1080]

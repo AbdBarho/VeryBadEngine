@@ -5,17 +5,26 @@ export default class MotionBlur extends EmptySystem {
   canvas: Canvas;
   cache: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  alpha = 0.7;
-  constructor(canvas: Canvas) {
+  alpha: number;
+  constructor(canvas: Canvas, alpha: number) {
     super();
     this.canvas = canvas;
+    this.alpha = alpha;
     this.cache = document.createElement("canvas");
-    this.cache.width = this.canvas.canvas.width;
-    this.cache.height = this.canvas.canvas.height;
+    this.setSize();
     let ctx = this.cache.getContext("2d");
     if (ctx === null)
       throw "Could not create 2D context for the cached canvas of Motion Blur"
     this.ctx = ctx;
+  }
+
+  init() {
+    this.canvas.onResize(this.setSize, this);
+  }
+
+  setSize() {
+    this.cache.width = this.canvas.canvas.width;
+    this.cache.height = this.canvas.canvas.height;
   }
 
   update() {
@@ -40,6 +49,10 @@ export default class MotionBlur extends EmptySystem {
 
   enable() {
     this.update = this.drawFrame;
+  }
+
+  destroy() {
+    this.canvas.offResize(this.setSize);
   }
 
 }

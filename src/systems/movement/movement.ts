@@ -13,7 +13,7 @@ interface MovementSystemObject extends Entity {
 
 export default class MovementSystem extends System {
   constructor() {
-    super(["moves", "position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
+    super(["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
   }
 
   updateEntity(entity: MovementSystemObject, dt: number) {
