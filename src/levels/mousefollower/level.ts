@@ -10,7 +10,6 @@ import VelocitySystem from "../../systems/movement/velocity";
 import WrapAroundWorld from "../../systems/movement/wrapAroundWorld";
 import BackgroundColor from "../../systems/render/background";
 import ExplosionRender from "../../systems/render/explosion";
-import MotionBlur from "../../systems/render/motionBlur";
 import RectangleRenderer from "../../systems/render/rectangle";
 import MouseFollowerController from "./controller";
 import ExplosionOnClick from "./explosionOnClick";
@@ -42,11 +41,11 @@ export default class MouseFollowerLevel extends ECS {
       new CascadingSystem([MFMovement, new VelocitySystem()]),
       new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
 
+
       new BackgroundColor("#000", this.canvas),
       new StarAnimationRenderer(this.canvas),
       new RectangleRenderer(this.canvas),
       new ExplosionRender(this.canvas, this),
-      new MotionBlur(this.canvas, 0.65)
     ];
     //background
     for (let i = 0; i < 100; i++)
@@ -56,7 +55,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(EntityFactory.createAnimatedStar());
 
     //in game followers
-    for (let i = 0; i < 400; i++)
+    for (let i = 0; i < 600; i++)
       this.queueEntity(EntityFactory.createMouseFollower());
   }
 }

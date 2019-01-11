@@ -1,58 +1,21 @@
 import EmptySystem from "../../ecs/system/emptySystem";
 import Canvas from "../../core/canvas";
+import LastFrameCache from "./frameCache";
 
-export default class MotionBlur extends EmptySystem {
-  canvas: Canvas;
+export default class MotionBlurRenderer extends EmptySystem {
   cache: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
+  canvas : Canvas;
   alpha: number;
-  constructor(canvas: Canvas, alpha: number) {
+  constructor(canvas: Canvas, frameCache: LastFrameCache, alpha: number) {
     super();
+    this.cache = frameCache.getCachedFrame();
     this.canvas = canvas;
     this.alpha = alpha;
-    this.cache = document.createElement("canvas");
-    this.setSize();
-    let ctx = this.cache.getContext("2d");
-    if (ctx === null)
-      throw "Could not create 2D context for the cached canvas of Motion Blur"
-    this.ctx = ctx;
-  }
-
-  init() {
-    this.canvas.onResize(this.setSize, this);
-  }
-
-  setSize() {
-    this.cache.width = this.canvas.canvas.width;
-    this.cache.height = this.canvas.canvas.height;
   }
 
   update() {
-    this.drawFrame();
-  }
-
-  drawFrame() {
     this.canvas.alpha(this.alpha);
     this.canvas.fillImage(this.cache);
     this.canvas.alpha(1);
-    this.ctx.drawImage(this.canvas.canvas, 0, 0);
   }
-
-  doNothing(){
-    //doNothing
-  }
-
-  disable() {
-    this.update = this.doNothing;
-    this.ctx.clearRect(0, 0, this.cache.width, this.cache.height);
-  }
-
-  enable() {
-    this.update = this.drawFrame;
-  }
-
-  destroy() {
-    this.canvas.offResize(this.setSize);
-  }
-
 }
