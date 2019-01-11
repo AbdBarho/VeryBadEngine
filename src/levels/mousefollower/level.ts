@@ -41,7 +41,6 @@ export default class MouseFollowerLevel extends ECS {
       new CascadingSystem([MFMovement, new VelocitySystem()]),
       new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
 
-
       new BackgroundColor("#000", this.canvas),
       new StarAnimationRenderer(this.canvas),
       new RectangleRenderer(this.canvas),

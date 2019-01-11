@@ -1,5 +1,5 @@
 import Config from "../../config/config";
-import IDGenerator from "../../factory/idGenerator";
+import IDGenerator from "../../services/idGenerator";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
 

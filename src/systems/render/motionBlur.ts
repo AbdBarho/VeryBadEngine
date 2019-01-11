@@ -4,7 +4,7 @@ import LastFrameCache from "./frameCache";
 
 export default class MotionBlurRenderer extends EmptySystem {
   cache: HTMLCanvasElement;
-  canvas : Canvas;
+  canvas: Canvas;
   alpha: number;
   constructor(canvas: Canvas, frameCache: LastFrameCache, alpha: number) {
     super();
