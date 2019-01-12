@@ -2,6 +2,7 @@ import MathHelper from "./math";
 
 interface MapFunction { (val: number, index: number, arr: number[]): number }
 
+export type VectorInitializer = number | number[];
 
 export default class Vector {
   // caching to save memory and improve performance
@@ -9,7 +10,8 @@ export default class Vector {
   static store(...vectors: Vector[]) {
     Vector.cachedInstances.push.apply(Vector.cachedInstances, vectors);
   }
-  static create(values: number | number[]) {
+
+  static create(values: VectorInitializer) {
     if (typeof values === "number")
       values = Array(values).fill(0);
     let cached = Vector.cachedInstances.pop();

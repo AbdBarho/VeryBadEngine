@@ -1,61 +1,41 @@
-import Config from "../../config/config";
-import IDGenerator from "../../services/idGenerator";
+import EntityFactory from "../../ecs/factory";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
 
-(window as any).IDGen = IDGenerator;
-
-export default class EntityFactory {
-  static createBasicEntity() {
+export default class MouseFollowerFactory {
+  static createRectModel(sideLength: number, color: string) {
+    let half = sideLength / 2;
     return {
-      ID: IDGenerator.getId(),
-      hasChanged: false
-    }
-  }
-  static createRect() {
-    let size = MathHelper.getRandomInt(12, 6);
-    size += size % 2;
-    let center = size / 2;
-    return {
-      ...this.createBasicEntity(),
-      position: Vector.create(2),
-      velocity: Vector.create(2),
-      acceleration: Vector.create(2),
       rectModel: {
-        size: Vector.create([size, size]),
-        centerShift: Vector.create([center, center]),
-        color: MathHelper.getRandomColor(),
+        color,
+        size: Vector.create([sideLength, sideLength]),
+        centerShift: Vector.create([half, half]),
         cachedDimensions: [0, 0, 0, 0]
       }
     }
   }
 
   static createSideScroller() {
-    let size = MathHelper.getRandomInt(16, 6);
+    let size = MathHelper.getRandomInt(20, 6);
     size += size % 2;
-    let center = size / 2;
     return {
-      ...this.createBasicEntity(),
-      position: MathHelper.getRandomVector(Config.WORLD.SIZE),
-      velocity: Vector.create([Math.random() / 5, 0]),
-      wrapAroundWorld: true,
-      rectModel: {
-        size: Vector.create([size, size]),
-        centerShift: Vector.create([center, center]),
-        color: "#ffffff20",
-        cachedDimensions: [0, 0, 0, 0]
-      }
+      ...EntityFactory.createMovingEntity(2, [Math.random() / 5, 0]),
+      ...this.createRectModel(size, "#ffffff20"),
+      position: EntityFactory.getVectorInWorld(),
+      wrapAroundWorld: true
     }
   }
 
   static createMouseFollower() {
+    let size = MathHelper.getRandomInt(12, 6);
     return {
-      ...this.createRect(),
+      ...EntityFactory.createAcceleratingEntity(2, 2, 2),
+      position: EntityFactory.getVectorInWorld(),
+      ...this.createRectModel(size, MathHelper.getRandomColor()),
       wrapAroundWorld: true,
       mouseFollower: true,
       explodes: true,
-      position: MathHelper.getRandomVector(Config.WORLD.SIZE),
-      //FIXME: batched systems
+      //FIXME: better physics
       maxAcceleration: MathHelper.accelerationPerSecond(1000),
       maxVelocity: MathHelper.speedPerSecond(500)
     }
@@ -63,7 +43,7 @@ export default class EntityFactory {
 
   static createExplosion() {
     return {
-      ...this.createBasicEntity(),
+      ...EntityFactory.createBasicEntity(),
       position: Vector.create(2),
       explosion: true,
       explosionVelocity: MathHelper.speedPerSecond(500) * 2, // * 2 to counter v0
@@ -84,10 +64,9 @@ export default class EntityFactory {
     let rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
     let rotationSpeed = rotationDirection * MathHelper.degreesPerSec(rotationAngle);
     return {
-      ...this.createBasicEntity(),
+      ...EntityFactory.createMovingEntity(2,[MathHelper.speedPerSecond(MathHelper.getRandomInt(50, 1)), 0]),
+      position: EntityFactory.getVectorInWorld(),
       wrapAroundWorld: true,
-      position: MathHelper.getRandomVector(Config.WORLD.SIZE),
-      velocity: Vector.create([MathHelper.speedPerSecond(MathHelper.getRandomInt(50, 1)), 0]),
       starAnimation: {
         progress: MathHelper.getRandomInt(1000),
         lifeTime: lifeTimeInSeconds * 1000,
