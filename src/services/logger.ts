@@ -8,6 +8,7 @@ let debugState: any = {};
 const FPS_UPDATE_INTERVAL = 1000; //in ms
 let numUpdates = 0;
 let time = 0;
+let fps: number[] = [];
 
 export default class Logger {
   private prefix: string;
@@ -40,11 +41,23 @@ export default class Logger {
   static fps(dt: number) {
     numUpdates++;
     time += dt;
-    if (time < FPS_UPDATE_INTERVAL)
+    fps.push(dt);
+    if (time < FPS_UPDATE_INTERVAL) {
+      if (fps.length > 300)
+        this.showFPSDebug();
       return;
+    }
     this.debugInfo("FPS", (numUpdates * 1000 / time).toFixed(2));
     time = 0;
     numUpdates = 0;
+  }
+
+  static showFPSDebug() {
+    let avg = (fps.reduce((acc, curr) => acc + curr, 0) / fps.length);
+    let avgStr = (1000 / avg).toFixed(2);
+    Logger.debugInfo("AVG FPS", avgStr );
+    fps = [];
+
   }
 
   static debugInfo(name: any, val?: any) {
