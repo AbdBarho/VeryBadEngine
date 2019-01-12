@@ -4,9 +4,9 @@ import { RectangularModel } from "../../ecs/component";
 import ECS from "../../ecs/ecs";
 import Entity from "../../ecs/entity";
 import System from "../../ecs/system/system";
-import EntityFactory from "./factory";
 import MathHelper from "../../math/math";
 import Vector from "../../math/vector";
+import EntityFactory from "./factory";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
@@ -16,35 +16,25 @@ interface MouseFollowerEntity extends Entity {
   rectModel: RectangularModel;
 }
 
-interface MouseFollowerConfig {
-  isFrozen: boolean;
-  stopOnReach: boolean;
-  destroyOnReach: boolean;
-  respawnOnDestroy: boolean;
-  lookAheadSteps: number;
-  randomFactorScale: number;
-  accelerationScale: number;
-}
-
 const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {
   input: InputManager;
   ecs: ECS;
-  config: MouseFollowerConfig = {
-    isFrozen: CONFIG.IS_FROZEN,
-    stopOnReach: CONFIG.STOP_ON_REACH,
-    destroyOnReach: CONFIG.DESTROY_ON_REACH,
-    respawnOnDestroy: CONFIG.RESPAWN_ON_DESTROY,
-    lookAheadSteps: CONFIG.LOOK_AHEAD_STEPS,
-    randomFactorScale: CONFIG.RANDOM_FACTOR_SCALE,
-    accelerationScale: CONFIG.ACCELERATION_SCALE
-  }
+  isFrozen = CONFIG.IS_FROZEN;
+  stopOnReach = CONFIG.STOP_ON_REACH;
+  destroyOnReach = CONFIG.DESTROY_ON_REACH;
+  respawnOnDestroy = CONFIG.RESPAWN_ON_DESTROY;
+  lookAheadSteps = CONFIG.LOOK_AHEAD_STEPS;
+  randomFactorScale = CONFIG.RANDOM_FACTOR_SCALE;
+  accelerationScale = CONFIG.ACCELERATION_SCALE;
   target = Vector.create([1000, 500]);
+
 
   constructor(inputManager: InputManager, ecs: ECS) {
     super(["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
+    this.updateSubRoutines();
   }
 
   init() {
@@ -56,49 +46,40 @@ export default class MouseFollowerSystem extends System {
   }
 
   changeFreezeState() {
-    this.config.isFrozen = !this.config.isFrozen;
+    this.isFrozen = !this.isFrozen;
+  }
+
+  updateSubRoutines() {
+    this.getDirection = this.lookAheadSteps ? this.getDirectionWithLookAhead : this.getDirectionNoLookAhead;
+    this.scaleIfNeeded = this.randomFactorScale ? this.scaleByRandom : () => { };
   }
 
   update(dt: number) {
-    if (this.config.isFrozen)
+    if (this.isFrozen)
       return;
     return super.update(dt);
   }
 
   updateEntity(entity: MouseFollowerEntity, dt: number) {
-    if (this.config.destroyOnReach || this.config.stopOnReach) {
+    if (this.destroyOnReach || this.stopOnReach) {
       if (this.targetReached(entity)) {
-        if (this.config.stopOnReach) {
+        if (this.stopOnReach) {
           entity.velocity.clear();
           entity.acceleration.clear();
         }
 
-        if (this.config.destroyOnReach && this.config.respawnOnDestroy) {
+        if (this.destroyOnReach && this.respawnOnDestroy) {
           //simulate respawn
           Object.assign(entity, EntityFactory.createMouseFollower(), { ID: entity.ID });
-        } else if (this.config.destroyOnReach) {
+        } else if (this.destroyOnReach) {
           this.ecs.removeEntity(entity.ID);
         }
         return;
       }
     }
 
-    let dir;
-    let { lookAheadSteps, randomFactorScale, accelerationScale } = this.config;
-
-    if (lookAheadSteps !== 0) {
-      let pos = entity.position.copy();
-      let vel = entity.velocity.copy();
-      pos.addVec(vel.mulNum(lookAheadSteps));
-      dir = MathHelper.direction2d(pos, this.target).mulNum(accelerationScale);
-      Vector.store(pos, vel);
-    } else {
-      dir = MathHelper.direction2d(entity.position, this.target).mulNum(accelerationScale);
-    }
-
-    if (randomFactorScale !== 0)
-      dir.addNum(MathHelper.getSignedRandom() * randomFactorScale * accelerationScale);
-
+    let dir = this.getDirection(entity);
+    this.scaleIfNeeded(dir);
     entity.acceleration.setVec(dir);
     entity.hasChanged = true;
 
@@ -112,6 +93,34 @@ export default class MouseFollowerSystem extends System {
     let reached = target.smallerThan(entity.rectModel.centerShift);
     Vector.store(target);
     return reached;
+  }
+
+  //Dummy function, should never be called
+  getDirection(entity: MouseFollowerEntity) {
+    console.error("called a dummy function");
+    return entity.acceleration;
+  }
+
+  getDirectionWithLookAhead(entity: MouseFollowerEntity) {
+    let pos = entity.position.copy();
+    let vel = entity.velocity.copy();
+    pos.addVec(vel.mulNum(this.lookAheadSteps));
+    let dir = MathHelper.direction2d(pos, this.target).mulNum(this.accelerationScale);
+    Vector.store(pos, vel);
+    return dir;
+  }
+
+  getDirectionNoLookAhead(entity: MouseFollowerEntity) {
+    return MathHelper.direction2d(entity.position, this.target).mulNum(this.accelerationScale);
+  }
+
+  //Dummy function, should never be called
+  scaleIfNeeded(dir: Vector) {
+    console.error("called a dummy function");
+  }
+
+  scaleByRandom(dir: Vector){
+    dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale);
   }
 
   destroy() {

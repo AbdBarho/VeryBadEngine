@@ -205,8 +205,7 @@ function getMaxLength(vectors: Vector[]) {
   let max = -Infinity;
   for (let i = 0, len = vectors.length; i < len; i++){
     const vecLen = vectors[i].getLength();
-    if (vecLen > max)
-      max = vecLen;
+    max = vecLen > max ? vecLen: max;
   }
   return max;
 }

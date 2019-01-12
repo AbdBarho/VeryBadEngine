@@ -37,38 +37,38 @@ export default class MouseFollowerController extends EmptySystem {
       case "Digit1":
         // normal
         newBehavior = "normal";
-        this.system.config.stopOnReach = false;
-        this.system.config.destroyOnReach = false;
-        this.system.config.respawnOnDestroy = true;
-        this.system.config.lookAheadSteps = 0;
-        this.system.config.randomFactorScale = 0;
+        this.system.stopOnReach = false;
+        this.system.destroyOnReach = false;
+        this.system.respawnOnDestroy = true;
+        this.system.lookAheadSteps = 0;
+        this.system.randomFactorScale = 0;
         break;
       case "Digit2":
         // go to mouse
         newBehavior = "go to mouse";
-        this.system.config.stopOnReach = true;
-        this.system.config.destroyOnReach = false;
-        this.system.config.respawnOnDestroy = true;
-        this.system.config.lookAheadSteps = 200;
-        this.system.config.randomFactorScale = 0;
+        this.system.stopOnReach = true;
+        this.system.destroyOnReach = false;
+        this.system.respawnOnDestroy = true;
+        this.system.lookAheadSteps = 200;
+        this.system.randomFactorScale = 0;
         break;
       case "Digit3":
         // black hole
         newBehavior = "black hole";
-        this.system.config.stopOnReach = false;
-        this.system.config.destroyOnReach = true;
-        this.system.config.respawnOnDestroy = true;
-        this.system.config.lookAheadSteps = 200;
-        this.system.config.randomFactorScale = 0;
+        this.system.stopOnReach = false;
+        this.system.destroyOnReach = true;
+        this.system.respawnOnDestroy = true;
+        this.system.lookAheadSteps = 200;
+        this.system.randomFactorScale = 0;
         break;
       case "Digit4":
         //random
         newBehavior = "random";
-        this.system.config.stopOnReach = false;
-        this.system.config.destroyOnReach = false;
-        this.system.config.respawnOnDestroy = true;
-        this.system.config.lookAheadSteps = 0;
-        this.system.config.randomFactorScale = 1;
+        this.system.stopOnReach = false;
+        this.system.destroyOnReach = false;
+        this.system.respawnOnDestroy = true;
+        this.system.lookAheadSteps = 0;
+        this.system.randomFactorScale = 1;
         break;
       case "Digit5":
         // freeze/unfreeze
@@ -78,6 +78,7 @@ export default class MouseFollowerController extends EmptySystem {
       default:
         break;
     }
+    this.system.updateSubRoutines();
     if(newBehavior)
       Logger.debugInfo("Current Behavior", newBehavior);
   }

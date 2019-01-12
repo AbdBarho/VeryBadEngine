@@ -58,7 +58,7 @@ export default class MouseFollowerFactory {
   }
 
   static createAnimatedStar() {
-    let numSpikes = MathHelper.getRandomInt(10, 4);
+    let numSpikes = MathHelper.getRandomInt(8, 4);
     let lifeTimeInSeconds = MathHelper.getRandomInt(15, 5);
     let rotationDirection = MathHelper.getRandomBool() ? 1 : -1;
     let rotationAngle = 360 / numSpikes / lifeTimeInSeconds;

@@ -39,9 +39,11 @@ export default class MouseFollowerLevel extends ECS {
       MFSys,
 
       new CascadingSystem([MFMovement, new VelocitySystem()]),
-      new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
 
-      new BackgroundColor("#000", this.canvas),
+      new KeepInWorld(),
+      new WrapAroundWorld(),
+
+      new BackgroundColor("#113", this.canvas),
       new StarAnimationRenderer(this.canvas),
       new RectangleRenderer(this.canvas),
       new ExplosionRender(this.canvas, this),
@@ -54,7 +56,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(EntityFactory.createAnimatedStar());
 
     //in game followers
-    for (let i = 0; i < 600; i++)
+    for (let i = 0; i < 1000; i++)
       this.queueEntity(EntityFactory.createMouseFollower());
   }
 }

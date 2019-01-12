@@ -46,7 +46,7 @@ export default class StarAnimationRenderer extends System {
     // rotations
     let angle = rotationSpeed * progress;
     this.canvas.rotate(angle, cx, cy);
-    this.canvas.alpha(scale / 4);
+    this.canvas.alpha(scale / 2);
     this.canvas.drawImage(cachedDrawing, cx - size / 2, cy - size / 2, size, size);
     this.canvas.resetRotation();
     this.canvas.alpha(1);
