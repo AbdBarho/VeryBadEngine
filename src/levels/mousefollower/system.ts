@@ -27,7 +27,7 @@ export default class MouseFollowerSystem extends System {
   lookAheadSteps = CONFIG.LOOK_AHEAD_STEPS;
   randomFactorScale = CONFIG.RANDOM_FACTOR_SCALE;
   accelerationScale = CONFIG.ACCELERATION_SCALE;
-  target = Vector.create([1000, 500]);
+  target = Vector.create([Config.WORLD.SIZE[0] / 2, Config.WORLD.SIZE[1] / 2]);
 
 
   constructor(inputManager: InputManager, ecs: ECS) {
