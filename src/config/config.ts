@@ -1,7 +1,7 @@
 const speedPerSecond = (val: number) => val / 1000;
 const accelerationPerSecond = (val: number) => val / (1000 ** 2);
 
-export default {
+let config = {
   LOGGER: {
     VERBOSITY: 0
   },
@@ -22,5 +22,13 @@ export default {
       RANDOM_FACTOR_SCALE: 0,
       ACCELERATION_SCALE: accelerationPerSecond(1500)
     }
-  }
+  },
 };
+
+function fitToScreen() {
+  config.CANVAS.WIDTH = window.innerWidth;
+  config.CANVAS.HEIGHT = window.innerHeight;
+  config.WORLD.SIZE = [window.innerWidth, window.innerHeight];
+}
+// fitToScreen();
+export default config;

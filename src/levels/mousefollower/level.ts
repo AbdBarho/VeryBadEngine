@@ -10,6 +10,7 @@ import VelocitySystem from "../../systems/movement/velocity";
 import WrapAroundWorld from "../../systems/movement/wrapAroundWorld";
 import BackgroundColor from "../../systems/render/background";
 import ExplosionRender from "../../systems/render/explosion";
+import LayerClearer from "../../systems/render/LayerClearer";
 import RectangleRenderer from "../../systems/render/rectangle";
 import MouseFollowerController from "./controller";
 import ExplosionOnClick from "./explosionOnClick";
@@ -28,6 +29,8 @@ export default class MouseFollowerLevel extends ECS {
     //create systems
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
+    // let layer1 = this.canvas.getLayer(1);
+    // let layer2 = this.canvas.getLayer(2);
     this.systems = [
       new InputSystem(this.input),
       new SlowMotion(this, this.input),
@@ -39,14 +42,13 @@ export default class MouseFollowerLevel extends ECS {
       MFSys,
 
       new CascadingSystem([MFMovement, new VelocitySystem()]),
+      new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
 
-      new KeepInWorld(),
-      new WrapAroundWorld(),
+      new BackgroundColor(0, "#002", this.canvas, false),
+      new StarAnimationRenderer(0, this.canvas),
+      new RectangleRenderer(0, this.canvas),
+      new ExplosionRender(0, this.canvas, this),
 
-      new BackgroundColor("#113", this.canvas),
-      new StarAnimationRenderer(this.canvas),
-      new RectangleRenderer(this.canvas),
-      new ExplosionRender(this.canvas, this),
     ];
     //background
     for (let i = 0; i < 100; i++)
@@ -56,7 +58,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(EntityFactory.createAnimatedStar());
 
     //in game followers
-    for (let i = 0; i < 1000; i++)
+    for (let i = 0; i < 800; i++)
       this.queueEntity(EntityFactory.createMouseFollower());
   }
 }

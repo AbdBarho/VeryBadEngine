@@ -3,6 +3,7 @@ import Entity from "../../ecs/entity";
 import { RectangularModel } from "../../ecs/component";
 import Canvas from "../../core/canvas";
 import Vector from "../../math/vector";
+import Layer from "../../core/layer";
 
 interface RectangleModelObject extends Entity {
   position: Vector;
@@ -10,10 +11,10 @@ interface RectangleModelObject extends Entity {
 }
 
 export default class RectangleRenderer extends System {
-  canvas: Canvas;
-  constructor(canvas: Canvas) {
+  layer: Layer;
+  constructor(layerNumber: number, canvas: Canvas) {
     super(["position", "rectModel"]);
-    this.canvas = canvas;
+    this.layer = canvas.getLayer(layerNumber);
   }
 
   updateEntity(entity: RectangleModelObject, dt: number) {
@@ -21,7 +22,7 @@ export default class RectangleRenderer extends System {
       this.calculate(entity);
       entity.hasChanged = false;
     }
-    this.canvas.fillRect(entity.rectModel.cachedDimensions, entity.rectModel.color);
+    this.layer.fillRect(entity.rectModel.cachedDimensions, entity.rectModel.color);
   }
 
   private calculate(entity: RectangleModelObject) {

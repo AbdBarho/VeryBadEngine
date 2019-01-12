@@ -3,6 +3,7 @@ import { StarAnimation } from "../../ecs/component";
 import Entity from "../../ecs/entity";
 import System from "../../ecs/system/system";
 import Vector from "../../math/vector";
+import Layer from "../../core/layer";
 
 interface StarAnimationEntity extends Entity {
   position: Vector;
@@ -10,10 +11,10 @@ interface StarAnimationEntity extends Entity {
 }
 
 export default class StarAnimationRenderer extends System {
-  canvas: Canvas;
-  constructor(canvas: Canvas) {
+  layer: Layer;
+  constructor(layerNumber: number, canvas: Canvas) {
     super(["starAnimation", "position"]);
-    this.canvas = canvas;
+    this.layer = canvas.getLayer(layerNumber);
   }
 
   addIfCompatible(entity: Entity) {
@@ -31,9 +32,7 @@ export default class StarAnimationRenderer extends System {
 
 
     let [cx, cy] = position.values;
-    progress += dt;
-    if (progress > lifeTime)
-      progress = 0;
+    progress = (progress + dt) % lifeTime;
 
     if (!cachedDrawing)
       cachedDrawing = this.cacheRender(entity);
@@ -41,15 +40,15 @@ export default class StarAnimationRenderer extends System {
     let half = lifeTime / 2;
     let scale = Math.abs(progress - half) / lifeTime;
     // at least half the scale
-    let size = Math.floor(maxRadius * (scale + 0.5));
+    let size = Math.trunc(maxRadius * (scale + 0.5));
 
     // rotations
     let angle = rotationSpeed * progress;
-    this.canvas.rotate(angle, cx, cy);
-    this.canvas.alpha(scale / 2);
-    this.canvas.drawImage(cachedDrawing, cx - size / 2, cy - size / 2, size, size);
-    this.canvas.resetRotation();
-    this.canvas.alpha(1);
+    this.layer.rotate(angle, cx, cy);
+    this.layer.alpha(scale / 2);
+    this.layer.drawImage(cachedDrawing, cx - size / 2, cy - size / 2, size, size);
+    this.layer.resetRotation();
+    this.layer.alpha(1);
 
     starAnimation.progress = progress;
   }

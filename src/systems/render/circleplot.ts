@@ -1,5 +1,6 @@
 import Canvas from "../../core/canvas";
 import System from "../../ecs/system/system";
+import Layer from "../../core/layer";
 
 //always bottom right
 const radius = 100;
@@ -7,14 +8,16 @@ const diameter = radius * 2;
 
 export default class CirclePlot extends System {
   canvas: Canvas;
+  layer: Layer;
   constructor(canvas: Canvas) {
     super(["debugCirclePoint"]);
     this.canvas = canvas;
+    this.layer = canvas.getLayer(5);
   }
 
   updateEntity(entity: any) {
     let startY = this.canvas.size.get(1) - diameter;
-    let ctx = this.canvas.ctx;
+    let ctx = this.layer.ctx;
     ctx.fillStyle = "white";
     ctx.fillRect(0, startY, diameter, diameter);
     ctx.beginPath();
