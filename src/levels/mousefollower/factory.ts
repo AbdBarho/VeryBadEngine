@@ -1,6 +1,6 @@
-import EntityFactory from "../../ecs/factory";
-import MathHelper from "../../math/math";
-import Vector from "../../math/vector";
+import EntityFactory from "../../ecs/Factory";
+import MathHelper from "../../math/Math";
+import Vector from "../../math/Vector";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {

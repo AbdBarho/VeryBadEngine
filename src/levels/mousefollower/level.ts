@@ -1,23 +1,24 @@
-import Canvas from "../../core/canvas";
-import InputManager from "../../core/inputManager";
-import ECS from "../../ecs/ecs";
-import CascadingSystem from "../../ecs/system/cascadingSystem";
-import InputSystem from "../../systems/input/input";
-import SlowMotion from "../../systems/input/slowMotion";
-import ExplosionSystem from "../../systems/movement/explosion";
-import KeepInWorld from "../../systems/movement/keepInWorld";
-import VelocitySystem from "../../systems/movement/velocity";
-import WrapAroundWorld from "../../systems/movement/wrapAroundWorld";
-import BackgroundColor from "../../systems/render/background";
-import ExplosionRender from "../../systems/render/explosion";
+import Canvas from "../../core/Canvas";
+import InputManager from "../../core/InputManager";
+import ECS from "../../ecs/ECS";
+import CascadingSystem from "../../ecs/system/CascadingSystem";
+import InputSystem from "../../systems/input/InputSystem";
+import SlowMotion from "../../systems/input/SlowMotion";
+import ExplosionDetection from "../../systems/movement/ExplosionDetection";
+import KeepInWorld from "../../systems/movement/KeepInWorld";
+import VelocitySystem from "../../systems/movement/Velocity";
+import WrapAroundWorld from "../../systems/movement/WrapAroundWorld";
+import BackgroundColor from "../../systems/render/Background";
+import ExplosionRender from "../../systems/render/ExplosionRender";
 import LayerClearer from "../../systems/render/LayerClearer";
-import RectangleRenderer from "../../systems/render/rectangle";
-import MouseFollowerController from "./controller";
-import ExplosionOnClick from "./explosionOnClick";
-import EntityFactory from "./factory";
-import MouseFollowerMovementSystem from "./movementSystem";
-import StarAnimationRenderer from "./starAnimation";
-import MouseFollowerSystem from "./system";
+import RectangleRenderer from "../../systems/render/RectangleRender";
+import MouseFollowerController from "./MouseFollowerController";
+import ExplosionOnClick from "./ExplosionOnClick";
+import EntityFactory from "./Factory";
+import MouseFollowerMovementSystem from "./MovementSystem";
+import StarAnimationRenderer from "./StarAnimationRender";
+import MouseFollowerSystem from "./MouseFollowerSystem";
+import Update from "../../ecs/system/Update";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -35,14 +36,14 @@ export default class MouseFollowerLevel extends ECS {
       new InputSystem(this.input),
       new SlowMotion(this, this.input),
 
-      new ExplosionSystem(),
+      new ExplosionDetection(),
       new ExplosionOnClick(this.input, this),
 
       new MouseFollowerController(this.input, this, MFSys, MFMovement),
       MFSys,
 
-      new CascadingSystem([MFMovement, new VelocitySystem()]),
-      new CascadingSystem([new KeepInWorld(), new WrapAroundWorld()]),
+      new CascadingSystem("CascadingMovement", Update.every, [MFMovement, new VelocitySystem()]),
+      new CascadingSystem("CascadingBounding", Update.every, [new KeepInWorld(), new WrapAroundWorld()]),
 
       new BackgroundColor(0, "#002", this.canvas, false),
       new StarAnimationRenderer(0, this.canvas),

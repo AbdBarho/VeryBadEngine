@@ -1,9 +1,10 @@
-import System from "../../ecs/system/system";
-import Entity from "../../ecs/entity";
-import { RectangularModel } from "../../ecs/component";
-import Canvas from "../../core/canvas";
-import Vector from "../../math/vector";
-import Layer from "../../core/layer";
+import Canvas from "../../core/Canvas";
+import Layer from "../../core/Layer";
+import { RectangularModel } from "../../ecs/Component";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
+import Vector from "../../math/Vector";
 
 interface RectangleModelObject extends Entity {
   position: Vector;
@@ -13,7 +14,7 @@ interface RectangleModelObject extends Entity {
 export default class RectangleRenderer extends System {
   layer: Layer;
   constructor(layerNumber: number, canvas: Canvas) {
-    super(["position", "rectModel"]);
+    super("RectangleRender", Update.every, ["position", "rectModel"]);
     this.layer = canvas.getLayer(layerNumber);
   }
 

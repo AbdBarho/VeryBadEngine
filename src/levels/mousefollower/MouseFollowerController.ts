@@ -1,10 +1,11 @@
-import InputManager from "../../core/inputManager";
-import ECS from "../../ecs/ecs";
-import EmptySystem from "../../ecs/system/emptySystem";
-import EntityFactory from "./factory";
-import Logger from "../../services/logger";
-import MouseFollowerSystem from "./system";
-import MouseFollowerMovementSystem from "./movementSystem";
+import InputManager from "../../core/InputManager";
+import ECS from "../../ecs/ECS";
+import EmptySystem from "../../ecs/system/EmptySystem";
+import Update from "../../ecs/system/Update";
+import Logger from "../../services/Logger";
+import EntityFactory from "./Factory";
+import MouseFollowerMovementSystem from "./MovementSystem";
+import MouseFollowerSystem from "./MouseFollowerSystem";
 
 export default class MouseFollowerController extends EmptySystem {
   input: InputManager;
@@ -13,7 +14,7 @@ export default class MouseFollowerController extends EmptySystem {
   movement: MouseFollowerMovementSystem;
 
   constructor(input: InputManager, ecs: ECS, system: MouseFollowerSystem, movement: MouseFollowerMovementSystem) {
-    super();
+    super("MouseFollowerController", Update.every);
     this.input = input;
     this.ecs = ecs;
     this.system = system;

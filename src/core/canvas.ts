@@ -1,20 +1,20 @@
-import Config from "../config/config";
-import Vector from "../math/vector";
-import EventManager from "../services/eventManager";
-import Layer from "./layer";
+import Vector from "../math/Vector";
+import EventManager from "../services/EventManager";
+import Layer from "./Layer";
 
 export default class Canvas extends EventManager {
   layers: Layer[] = [];
   scale = Vector.create(2);
   shift = Vector.create(2);
   size = Vector.create(2);
-  baseSize = Vector.create([Config.CANVAS.WIDTH, Config.CANVAS.HEIGHT]);
-  xScale = 0;
-  yScale = 0;
+  baseSize: Vector;
+  aspectRatio: number;
 
-  constructor() {
+  constructor(width: number, height: number) {
     super();
-    window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToScreen()));
+    this.baseSize = Vector.create([width, height]);
+    this.aspectRatio = width / height;
+    window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent()));
   }
 
   getLayer(index: number) {
@@ -22,59 +22,48 @@ export default class Canvas extends EventManager {
   }
 
   private createLayer(index: number) {
-    let layer = new Layer();
-    while (index > this.layers.length)
-      this.layers.push(new Layer());
+    let layer = new Layer(index);
+    let len = this.layers.length;
+    if (index > len) {
+      let i = len;
+      while (index > len) {
+        this.layers.push(new Layer(i));
+      }
+    }
     this.layers.splice(index, 0, layer);
-    this.fitToScreen();
+    this.fitToParent();
     return layer;
   }
 
-  fitToScreen() {
+  private fitToParent() {
     if (!this.layers.length)
       return;
-    this.orderLayers();
-    this.calculateParameters();
-    this.setValues();
+
+    let parentWidth = window.innerWidth;
+    let parentHeight = window.innerHeight;
+    let width, height;
+    if (Math.min(parentWidth, parentHeight) === parentWidth) {
+      height = Math.trunc(Math.min(parentHeight, parentWidth / this.aspectRatio));
+      width = Math.trunc(height * this.aspectRatio);
+    } else {
+      width = Math.trunc(Math.min(parentWidth, parentHeight * this.aspectRatio));
+      height = Math.trunc(width / this.aspectRatio);
+    }
+    this.size.set(width, height);
+    this.scale = this.size.copy().divVec(this.baseSize);
+    let [xScale, yScale] = this.scale.values;
+    let leftShift = (parentWidth - width) / 2;
+    let topShift = (parentHeight - height) / 2;
+    this.shift.set(leftShift, topShift);
+    for (let layer of this.layers) {
+      document.body.appendChild(layer.getCanvas());
+      layer.setDimensions(width, height, leftShift, topShift, xScale, yScale);
+    }
     this.trigger("resize", this.size);
   }
 
-  private calculateParameters() {
-    let aspectRatio = Config.CANVAS.WIDTH / Config.CANVAS.HEIGHT;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    if (Math.min(width, height) === width) {
-      height = Math.min(height, Math.floor(width / aspectRatio));
-      width = Math.floor(height * aspectRatio);
-    } else {
-      width = Math.min(width, Math.floor(height * aspectRatio));
-      height = Math.floor(width / aspectRatio);
-    }
-    this.size.setArr([width, height]);
-    this.scale = this.size.copy().divVec(this.baseSize);
-    this.xScale = this.scale.get(0);
-    this.yScale = this.scale.get(1);
-    this.shift.setArr([(window.innerWidth - width) / 2, (window.innerHeight - height) / 2]);
-  }
-
-  private setValues() {
-    let w = this.size.get(0),
-      h = this.size.get(1),
-      left = this.shift.get(0),
-      top = this.shift.get(1);
-    for (let layer of this.layers)
-      layer.setDimensions(w, h, top, left, this.xScale, this.yScale);
-  }
-
-  private orderLayers() {
-    for (let layer of this.layers)
-      document.body.appendChild(layer.getCanvas());
-  }
-
-  pixelToUnit(x: number, y: number) {
-    let pos = Vector.create([x, y]);
-    pos.subVec(this.shift).divVec(this.scale).floor();
-    return pos;
+  pixelToUnit(x: number, y: number, target: Vector) {
+    target.set(x, y).subVec(this.shift).divVec(this.scale).floor();
   }
 
   onResize(callback: (...args: any[]) => any, context: any) {

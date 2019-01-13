@@ -1,8 +1,9 @@
-import MultiSystem from "../../ecs/system/multiSystem";
-import Vector from "../../math/vector";
-import ObjectUtils from "../../util/objectUtils";
-import StepFunctions from "../../math/step";
-import MathHelper from "../../math/math";
+import MultiSystem from "../../ecs/system/MultiSystem";
+import Update from "../../ecs/system/Update";
+import MathHelper from "../../math/Math";
+import StepFunctions from "../../math/Step";
+import Vector from "../../math/Vector";
+import ObjectUtils from "../../util/ObjectUtils";
 
 interface ExplosionEntity {
   position: Vector;
@@ -17,9 +18,9 @@ interface ExplodableEntity {
   position: Vector;
 }
 
-export default class ExplosionSystem extends MultiSystem {
+export default class ExplosionDetection extends MultiSystem {
   constructor() {
-    super([
+    super("ExplosionDetection", Update.every, [
       { name: "sources", components: ["explosion", "explosionVelocity", "maxExplosionDistance", "position"] },
       { name: "targets", components: ["explodes", "velocity", "position"] }
     ]);

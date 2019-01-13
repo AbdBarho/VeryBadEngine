@@ -1,13 +1,19 @@
-import Entity from "../entity";
-import ISystem from "./iSystem";
+import Entity from "../Entity";
+import ISystem from "./ISystem";
+import Update from "./Update";
 
 export default class EmptySystem implements ISystem {
+  updateType: Update;
+  name: string;
+  constructor(name: string, update: Update) {
+    this.name = name;
+    this.updateType = update;
+  }
+  getName() { return this.name }
+  getUpdateFrequency() { return this.updateType }
   init() { }
   update(dt: number) { }
-  addIfCompatible(entity: Entity) {
-    // do not accept any entity, it should be empty
-    return false;
-  }
+  addIfCompatible(entity: Entity) { return false }
   removeEntity(entityId: string) { }
   destroy() { }
 }

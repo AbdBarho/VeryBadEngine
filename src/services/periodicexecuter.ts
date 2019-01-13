@@ -1,4 +1,4 @@
-import Logger from "./logger";
+import Logger from "./Logger";
 
 export default class PeriodicExecuter {
   executeAfterTimeout: () => void;

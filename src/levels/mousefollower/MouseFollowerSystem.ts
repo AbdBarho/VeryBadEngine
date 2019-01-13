@@ -1,12 +1,13 @@
-import Config from "../../config/config";
-import InputManager from "../../core/inputManager";
-import { RectangularModel } from "../../ecs/component";
-import ECS from "../../ecs/ecs";
-import Entity from "../../ecs/entity";
-import System from "../../ecs/system/system";
-import MathHelper from "../../math/math";
-import Vector from "../../math/vector";
-import EntityFactory from "./factory";
+import Config from "../../config/Config";
+import InputManager from "../../core/InputManager";
+import { RectangularModel } from "../../ecs/Component";
+import ECS from "../../ecs/ECS";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import MathHelper from "../../math/Math";
+import Vector from "../../math/Vector";
+import EntityFactory from "./Factory";
+import Update from "../../ecs/system/Update";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
@@ -31,7 +32,7 @@ export default class MouseFollowerSystem extends System {
 
 
   constructor(inputManager: InputManager, ecs: ECS) {
-    super(["acceleration", "position", "velocity", "mouseFollower"]);
+    super("MouseFollowerSystem", Update.every, ["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
     this.updateSubRoutines();

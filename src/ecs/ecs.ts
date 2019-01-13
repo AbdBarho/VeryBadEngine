@@ -1,5 +1,5 @@
-import Entity from "./entity";
-import ISystem from "./system/iSystem";
+import Entity from "./Entity";
+import ISystem from "./system/ISystem";
 
 
 export default class ECS {

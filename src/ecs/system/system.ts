@@ -1,19 +1,16 @@
-import Entity, { ComponentName } from "../entity";
-import ISystem from "./iSystem";
+import Entity, { ComponentName } from "../Entity";
+import EmptySystem from "./EmptySystem";
+import Update from "./Update";
 
-export default class System implements ISystem {
+export default class System extends EmptySystem {
   required: ComponentName[];
   entities: { [ID: string]: Entity } = {};
-
   /**
    * @param required required components, if nothing given, the system will accept all entities
    */
-  constructor(required: ComponentName[] = []) {
+  constructor(name: string, updateType: Update, required: ComponentName[] = []) {
+    super(name, updateType);
     this.required = required;
-  }
-
-  init() {
-    //nothing
   }
 
   protected isCompatible(entity: Entity) {
@@ -43,10 +40,6 @@ export default class System implements ISystem {
   }
 
   updateEntity(entity: Entity, dt: number) {
-    //nothing
-  }
-
-  destroy() {
     //nothing
   }
 }

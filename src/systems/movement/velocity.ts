@@ -1,6 +1,7 @@
-import System from "../../ecs/system/system";
-import Vector from "../../math/vector";
-import Entity from "../../ecs/entity";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
+import Vector from "../../math/Vector";
 
 interface VelocityEntity extends Entity {
   position: Vector;
@@ -9,7 +10,7 @@ interface VelocityEntity extends Entity {
 
 export default class VelocitySystem extends System {
   constructor() {
-    super(["velocity", "position"]);
+    super("Velocity", Update.every, ["velocity", "position"]);
   }
 
   updateEntity(entity: VelocityEntity, dt: number) {

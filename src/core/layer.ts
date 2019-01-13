@@ -4,11 +4,13 @@ const FULL_CIRCLE = Math.PI * 2;
 export default class Layer {
   canvas = document.createElement("canvas");
   ctx: CanvasRenderingContext2D;
+  index: number;
   xScale = 0;
   yScale = 0;
   width = 0;
   height = 0;
-  constructor() {
+  constructor(index: number) {
+    this.index = index;
     let ctx = this.canvas.getContext("2d");
     if (ctx === null)
       throw "No context could be created for the canvas";
@@ -23,7 +25,11 @@ export default class Layer {
     return this.ctx;
   }
 
-  setDimensions(w: number, h: number, top: number, left: number, xScale: number, yScale: number) {
+  getIndex() {
+    return this.index;
+  }
+
+  setDimensions(w: number, h: number, left: number, top: number, xScale: number, yScale: number) {
     this.canvas.width = w;
     this.canvas.height = h;
     this.width = w;

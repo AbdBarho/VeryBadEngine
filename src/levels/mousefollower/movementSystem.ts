@@ -1,9 +1,10 @@
-import MovementSystem from "../../systems/movement/movement";
+import MovementSystem from "../../systems/movement/Movement";
 
 export default class MouseFollowerMovementSystem extends MovementSystem {
   isFrozen = false;
   constructor() {
     super();
+    this.name = "MouseFollowerMovementSystem";
     this.required.push("mouseFollower");
   }
 

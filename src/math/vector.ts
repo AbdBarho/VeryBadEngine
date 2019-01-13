@@ -1,4 +1,4 @@
-import MathHelper from "./math";
+import MathHelper from "./Math";
 
 interface MapFunction { (val: number, index: number, arr: number[]): number }
 
@@ -7,15 +7,16 @@ export type VectorInitializer = number | number[];
 export default class Vector {
   // caching to save memory and improve performance
   private static cachedInstances: Vector[] = [];
-  static store(...vectors: Vector[]) {
-    Vector.cachedInstances.push.apply(Vector.cachedInstances, vectors);
-  }
 
   static create(values: VectorInitializer) {
     if (typeof values === "number")
       values = Array(values).fill(0);
     let cached = Vector.cachedInstances.pop();
     return cached ? cached.assignValues(values) : new Vector(values);
+  }
+
+  static store(...vectors: Vector[]) {
+    Vector.cachedInstances.push(...vectors);
   }
   static copy(vec: Vector) {
     let cached = Vector.cachedInstances.pop();
@@ -47,6 +48,10 @@ export default class Vector {
 
   getLength() {
     return this.values.length;
+  }
+
+  set(...values: number[]) {
+    return this.setArr(values);
   }
 
   setVec(vector: Vector) {

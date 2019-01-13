@@ -1,6 +1,7 @@
-import InputManager from "../../core/inputManager";
-import ECS from "../../ecs/ecs";
-import EmptySystem from "../../ecs/system/emptySystem";
+import InputManager from "../../core/InputManager";
+import ECS from "../../ecs/ECS";
+import EmptySystem from "../../ecs/system/EmptySystem";
+import Update from "../../ecs/system/Update";
 
 export default class SlowMotion extends EmptySystem {
   ecs: ECS;
@@ -8,7 +9,7 @@ export default class SlowMotion extends EmptySystem {
   currentScale: number;
   targetScale: number;
   constructor(ecs: ECS, inputManager: InputManager) {
-    super();
+    super("SlowMotion", Update.every);
     this.ecs = ecs;
     this.inputManager = inputManager;
     this.currentScale = this.ecs.timeScale;
@@ -21,15 +22,13 @@ export default class SlowMotion extends EmptySystem {
   }
 
   slow(key: string) {
-    if (key === "Mouse3") {
+    if (key === "Mouse3")
       this.ecs.timeScale = 0.25;
-    }
   }
 
   restore(key: string) {
-    if (key === "Mouse3") {
+    if (key === "Mouse3")
       this.ecs.timeScale = 1;
-    }
   }
 
   destroy() {

@@ -1,9 +1,10 @@
-import Canvas from "./core/canvas";
-import InputManager from "./core/inputManager";
-import ECS from "./ecs/ecs";
-import MouseFollowerLevel from "./levels/mousefollower/level";
-import Logger from "./services/logger";
-import PeriodicExecuter from "./services/periodicExecuter";
+import Canvas from "./core/Canvas";
+import InputManager from "./core/InputManager";
+import ECS from "./ecs/ECS";
+import MouseFollowerLevel from "./levels/mouseFollower/Level";
+import Logger from "./services/Logger";
+import PeriodicExecuter from "./services/PeriodicExecuter";
+import CONFIG from "./config/Config";
 
 export default class Engine {
   level: ECS;
@@ -13,7 +14,7 @@ export default class Engine {
   isRunning = false;
 
   constructor() {
-    this.canvas = new Canvas();
+    this.canvas = new Canvas(CONFIG.CANVAS.WIDTH, CONFIG.CANVAS.HEIGHT);
     this.input = new InputManager(this.canvas);
     this.level = new MouseFollowerLevel(this.input, this.canvas);
     this.executer = new PeriodicExecuter((dt: number) => this.level.update(dt));

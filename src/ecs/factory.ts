@@ -1,10 +1,7 @@
-import Config from "../config/config";
-import IDGenerator from "../services/idGenerator";
-import MathHelper from "../math/math";
-import Vector, { VectorInitializer } from "../math/vector";
-
-
-(window as any).IDGen = IDGenerator;
+import Config from "../config/Config";
+import MathHelper from "../math/Math";
+import Vector, { VectorInitializer } from "../math/Vector";
+import IDGenerator from "../services/IDGenerator";
 
 export default class EntityFactory {
   static createBasicEntity() {

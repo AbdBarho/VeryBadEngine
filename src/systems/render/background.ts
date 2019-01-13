@@ -1,12 +1,13 @@
-import Canvas from "../../core/canvas";
-import EmptySystem from "../../ecs/system/emptySystem";
-import Layer from "../../core/layer";
+import Canvas from "../../core/Canvas";
+import Layer from "../../core/Layer";
+import EmptySystem from "../../ecs/system/EmptySystem";
+import Update from "../../ecs/system/Update";
 
 export default class BackgroundColor extends EmptySystem {
   layer: Layer;
   color: string;
   constructor(layerNumber: number, color: string, canvas: Canvas, hasOwnFrame: boolean) {
-    super();
+    super("BackgroundColor", Update.every);
     this.color = color;
     this.layer = canvas.getLayer(layerNumber);
     if (hasOwnFrame)

@@ -1,6 +1,7 @@
-import Entity from "../../ecs/entity";
-import System from "../../ecs/system/system";
-import Vector from "../../math/vector";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
+import Vector from "../../math/Vector";
 
 interface MovementSystemObject extends Entity {
   moves: boolean;
@@ -13,7 +14,8 @@ interface MovementSystemObject extends Entity {
 
 export default class MovementSystem extends System {
   constructor() {
-    super(["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
+    super("Movement", Update.every,
+      ["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
   }
 
   updateEntity(entity: MovementSystemObject, dt: number) {

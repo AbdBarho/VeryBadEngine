@@ -1,8 +1,9 @@
-import System from "../../ecs/system/system";
-import Entity from "../../ecs/entity";
-import Vector from "../../math/vector";
-import { RectangularModel } from "../../ecs/component";
-import Config from "../../config/config";
+import Config from "../../config/Config";
+import { RectangularModel } from "../../ecs/Component";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
+import Vector from "../../math/Vector";
 
 const WORLD_EDGES = Vector.create(Config.WORLD.SIZE.slice());
 
@@ -14,7 +15,7 @@ interface KeepInWorldRectangle extends Entity {
 
 export default class KeepInWorld extends System {
   constructor() {
-    super(["position", "keepInWorld", "rectModel"]);
+    super("KeepInWorld", Update.every, ["position", "keepInWorld", "rectModel"]);
   }
 
   updateEntity(entity: KeepInWorldRectangle) {

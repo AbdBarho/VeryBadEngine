@@ -1,15 +1,15 @@
-import Vector from "../math/vector";
-import { QueuedEventManager } from "../services/eventManager";
-import Canvas from "./canvas";
+import Vector from "../math/Vector";
+import { QueuedEventManager } from "../services/EventManager";
+import Canvas from "./Canvas";
 
 export default class InputManager extends QueuedEventManager {
-  ui: Canvas;
+  canvas: Canvas;
   buttonStates: { [key: string]: boolean } = {};
   mousePos = Vector.create(2);
 
-  constructor(ui: Canvas) {
+  constructor(canvas: Canvas) {
     super();
-    this.ui = ui;
+    this.canvas = canvas;
     window.addEventListener("keydown", e => this.updateButtonsState("keydown", e.code, true));
     window.addEventListener("keyup", e => this.updateButtonsState("keyup", e.code, false));
 
@@ -28,9 +28,8 @@ export default class InputManager extends QueuedEventManager {
   }
 
   private mouseStateUpdate(event: string, e: MouseEvent) {
-    Vector.store(this.mousePos);
-    this.mousePos = this.ui.pixelToUnit(e.pageX, e.pageY);
-    this.queueEvent(event, this.getMousePosition());
+    this.canvas.pixelToUnit(e.pageX, e.pageY, this.mousePos);
+    this.queueEvent(event, this.mousePos);
   }
 
   private clearAll() {
@@ -47,9 +46,5 @@ export default class InputManager extends QueuedEventManager {
 
   onMouseMove(callback: (mousePos: Vector) => any, context?: any) {
     return super.on("mousemove", callback, context);
-  }
-
-  getMousePosition() {
-    return this.mousePos.copy();
   }
 }

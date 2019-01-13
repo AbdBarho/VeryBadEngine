@@ -22,3 +22,5 @@ export default class IDGenerator {
       Math.pow(chars.length, ID_LENGTH) + " possibilities");
   }
 }
+
+(window as any).IDGen = IDGenerator;

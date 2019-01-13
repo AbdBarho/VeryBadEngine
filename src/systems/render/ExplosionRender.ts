@@ -1,11 +1,12 @@
-import Canvas from "../../core/canvas";
-import { ExplosionModel } from "../../ecs/component";
-import ECS from "../../ecs/ecs";
-import Entity from "../../ecs/entity";
-import System from "../../ecs/system/system";
-import StepFunctions from "../../math/step";
-import Vector from "../../math/vector";
-import Layer from "../../core/layer";
+import Canvas from "../../core/Canvas";
+import Layer from "../../core/Layer";
+import { ExplosionModel } from "../../ecs/Component";
+import ECS from "../../ecs/ECS";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
+import StepFunctions from "../../math/Step";
+import Vector from "../../math/Vector";
 
 interface Explosion extends Entity {
   position: Vector;
@@ -17,7 +18,7 @@ export default class ExplosionRender extends System {
   layer: Layer;
   ecs: ECS;
   constructor(layerNumber: number, canvas: Canvas, ecs: ECS) {
-    super(["explosion", "explosionModel", "position"]);
+    super("ExplosionRender", Update.every, ["explosion", "explosionModel", "position"]);
     this.layer = canvas.getLayer(layerNumber);
     this.ecs = ecs;
   }

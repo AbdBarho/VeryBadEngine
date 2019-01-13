@@ -1,5 +1,5 @@
-import Vector from "../math/vector";
-import { ExplosionModel, RectangularModel, StarAnimation } from "./component";
+import Vector from "../math/Vector";
+import { ExplosionModel, RectangularModel, StarAnimation } from "./Component";
 
 export type ComponentName = keyof Entity;
 

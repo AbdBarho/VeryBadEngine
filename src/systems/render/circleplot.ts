@@ -1,6 +1,7 @@
-import Canvas from "../../core/canvas";
-import System from "../../ecs/system/system";
-import Layer from "../../core/layer";
+import Canvas from "../../core/Canvas";
+import Layer from "../../core/Layer";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
 
 //always bottom right
 const radius = 100;
@@ -10,7 +11,7 @@ export default class CirclePlot extends System {
   canvas: Canvas;
   layer: Layer;
   constructor(canvas: Canvas) {
-    super(["debugCirclePoint"]);
+    super("CirclePlot", Update.every, ["debugCirclePoint"]);
     this.canvas = canvas;
     this.layer = canvas.getLayer(5);
   }
