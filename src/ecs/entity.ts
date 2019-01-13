@@ -23,7 +23,7 @@ export default interface Entity {
   //explosion
   explosion?: boolean;
   explosionVelocity?: number;
-  maxExplosionDistance?: number;
+  explosionRadius?: number;
   explosionModel?: ExplosionModel;
   explodes?: boolean;
   // stars

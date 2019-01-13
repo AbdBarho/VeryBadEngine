@@ -2,6 +2,7 @@ import Canvas from "../../core/Canvas";
 import InputManager from "../../core/InputManager";
 import ECS from "../../ecs/ECS";
 import CascadingSystem from "../../ecs/system/CascadingSystem";
+import Update from "../../ecs/system/Update";
 import InputSystem from "../../systems/input/InputSystem";
 import SlowMotion from "../../systems/input/SlowMotion";
 import ExplosionDetection from "../../systems/movement/ExplosionDetection";
@@ -10,15 +11,13 @@ import VelocitySystem from "../../systems/movement/Velocity";
 import WrapAroundWorld from "../../systems/movement/WrapAroundWorld";
 import BackgroundColor from "../../systems/render/Background";
 import ExplosionRender from "../../systems/render/ExplosionRender";
-import LayerClearer from "../../systems/render/LayerClearer";
 import RectangleRenderer from "../../systems/render/RectangleRender";
-import MouseFollowerController from "./MouseFollowerController";
 import ExplosionOnClick from "./ExplosionOnClick";
 import EntityFactory from "./Factory";
+import MouseFollowerController from "./MouseFollowerController";
+import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 import StarAnimationRenderer from "./StarAnimationRender";
-import MouseFollowerSystem from "./MouseFollowerSystem";
-import Update from "../../ecs/system/Update";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -43,7 +42,9 @@ export default class MouseFollowerLevel extends ECS {
       MFSys,
 
       new CascadingSystem("CascadingMovement", Update.every, [MFMovement, new VelocitySystem()]),
-      new CascadingSystem("CascadingBounding", Update.every, [new KeepInWorld(), new WrapAroundWorld()]),
+      
+      new KeepInWorld(),
+      new WrapAroundWorld(),
 
       new BackgroundColor(0, "#002", this.canvas, false),
       new StarAnimationRenderer(0, this.canvas),

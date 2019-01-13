@@ -33,6 +33,7 @@ export default class MouseFollowerFactory {
       position: EntityFactory.getVectorInWorld(),
       ...this.createRectModel(size, MathHelper.getRandomColor()),
       wrapAroundWorld: true,
+      // keepInWorld: true,
       mouseFollower: true,
       explodes: true,
       //FIXME: better physics
@@ -47,7 +48,7 @@ export default class MouseFollowerFactory {
       position: Vector.create(2),
       explosion: true,
       explosionVelocity: MathHelper.speedPerSecond(500) * 2, // * 2 to counter v0
-      maxExplosionDistance: 1000,
+      explosionRadius: 1000,
       explosionModel: {
         color: MathHelper.getRandomColor(),
         radius: 500,

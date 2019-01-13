@@ -9,7 +9,7 @@ interface ExplosionEntity {
   position: Vector;
   explosion: boolean;
   explosionVelocity: number;
-  maxExplosionDistance: number;
+  explosionRadius: number;
 }
 
 interface ExplodableEntity {
@@ -21,7 +21,7 @@ interface ExplodableEntity {
 export default class ExplosionDetection extends MultiSystem {
   constructor() {
     super("ExplosionDetection", Update.every, [
-      { name: "sources", components: ["explosion", "explosionVelocity", "maxExplosionDistance", "position"] },
+      { name: "sources", components: ["explosion", "explosionVelocity", "explosionRadius", "position"] },
       { name: "targets", components: ["explodes", "velocity", "position"] }
     ]);
   }
@@ -45,8 +45,8 @@ export default class ExplosionDetection extends MultiSystem {
     //distance
     pos.subVec(source.position);
     let vectorLength = pos.magnitude();
-    // console.log("length:", vectorLength);
-    let distanceScale = vectorLength / source.maxExplosionDistance;
+
+    let distanceScale = vectorLength / source.explosionRadius;
     if (distanceScale < 1) {
       let power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
       let dir = MathHelper.rotation2d(pos);
