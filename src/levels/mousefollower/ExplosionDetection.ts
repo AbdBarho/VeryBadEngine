@@ -51,6 +51,7 @@ export default class ExplosionDetection extends MultiSystem {
       let power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
       let dir = MathHelper.rotation2d(dist);
       target.velocity.addVec(dir.mulNum(power));
+      Vector.store(dir);
     }
 
     Vector.store(dist);

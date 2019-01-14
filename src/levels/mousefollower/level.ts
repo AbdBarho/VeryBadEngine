@@ -5,7 +5,7 @@ import CascadingSystem from "../../ecs/system/CascadingSystem";
 import Update from "../../ecs/system/Update";
 import InputSystem from "../../systems/input/InputSystem";
 import SlowMotion from "../../systems/input/SlowMotion";
-import ExplosionDetection from "../../systems/movement/ExplosionDetection";
+import ExplosionDetection from "./ExplosionDetection";
 import KeepInWorld from "../../systems/movement/KeepInWorld";
 import VelocitySystem from "../../systems/movement/Velocity";
 import WrapAroundWorld from "../../systems/movement/WrapAroundWorld";
@@ -40,7 +40,6 @@ export default class MouseFollowerLevel extends ECS {
 
       new MouseFollowerController(this.input, this, MFSys, MFMovement),
       MFSys,
-      // MFMovement,
 
       new CascadingSystem("CascadingMovement", [MFMovement, new VelocitySystem()]),
 
@@ -61,7 +60,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(Factory.createAnimatedStar());
 
     //in game followers
-    for (let i = 0; i < 10000; i++)
+    for (let i = 0; i < 1000; i++)
       this.queueEntity(Factory.createMouseFollower());
 
     // 10000, Vector, 20.97fps
