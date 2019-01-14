@@ -26,6 +26,7 @@ export default class ECS {
 
   queueEntity(entity: Entity) {
     this.queuedEntities.push(entity);
+    this.update = this.processAndReset;
   }
 
   reCheckEntity(entity: Entity) {
@@ -38,17 +39,24 @@ export default class ECS {
     delete this.entities[entityID];
   }
 
-  executeQueue() {
-    if (this.queuedEntities.length) {
-      for (let i = 0, len = this.queuedEntities.length; i < len; i++)
-        this.addEntity(this.queuedEntities[i]);
-      this.queuedEntities = [];
-    }
+  processQueue() {
+    for (let i = 0, len = this.queuedEntities.length; i < len; i++)
+      this.addEntity(this.queuedEntities[i]);
+    this.queuedEntities = [];
+  }
+
+  updateSystems(dt: number) {
+    for (let i = 0, len = this.systems.length; i < len; i++)
+      this.systems[i].update(dt * this.timeScale);
+  }
+
+  processAndReset(dt: number) {
+    this.processQueue();
+    this.updateSystems(dt);
+    this.update = this.updateSystems;
   }
 
   update(dt: number) {
-    this.executeQueue();
-    for (let i = 0, len = this.systems.length; i < len; i++)
-      this.systems[i].update(dt * this.timeScale);
+    this.updateSystems(dt);
   }
 }

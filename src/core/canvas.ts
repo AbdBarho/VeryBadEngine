@@ -1,18 +1,19 @@
 import Vector from "../math/Vector";
+import Vec2 from "../math/vector/Vec2";
 import EventManager from "../services/EventManager";
 import Layer from "./Layer";
 
 export default class Canvas extends EventManager {
   layers: Layer[] = [];
-  scale = Vector.create(2);
-  shift = Vector.create(2);
-  size = Vector.create(2);
-  baseSize: Vector;
+  scale = Vector.create();
+  shift = Vector.create();
+  size = Vector.create();
+  baseSize: Vec2;
   aspectRatio: number;
 
   constructor(width: number, height: number) {
     super();
-    this.baseSize = Vector.create([width, height]);
+    this.baseSize = Vector.create(width, height);
     this.aspectRatio = width / height;
     window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent()));
   }
@@ -50,8 +51,8 @@ export default class Canvas extends EventManager {
       height = Math.trunc(width / this.aspectRatio);
     }
     this.size.set(width, height);
-    this.scale = this.size.copy().divVec(this.baseSize);
-    let [xScale, yScale] = this.scale.values;
+    this.scale = Vector.copy(this.size).divVec(this.baseSize);
+    let [xScale, yScale] = this.scale.copyValues();
     let leftShift = (parentWidth - width) / 2;
     let topShift = (parentHeight - height) / 2;
     this.shift.set(leftShift, topShift);
@@ -62,8 +63,8 @@ export default class Canvas extends EventManager {
     this.trigger("resize", this.size);
   }
 
-  pixelToUnit(x: number, y: number, target: Vector) {
-    target.set(x, y).subVec(this.shift).divVec(this.scale).floor();
+  pixelToUnit(x: number, y: number, target: Vec2) {
+    target.set(x, y).subVec(this.shift).divVec(this.scale).trunc();
   }
 
   onResize(callback: (...args: any[]) => any, context: any) {

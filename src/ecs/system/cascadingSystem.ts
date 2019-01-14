@@ -1,11 +1,14 @@
 import Entity from "../Entity";
 import ISystem from "./ISystem";
 import System from "./System";
-import Update from "./Update";
 
 export default class CascadingSystem extends System {
   systems: ISystem[];
-  constructor(name: string, updateType: Update, systems: ISystem[]) {
+  constructor(name: string, systems: ISystem[]) {
+    let updateType = systems[0].updateType;
+    for (let system of systems)
+      if (system.updateType !== updateType)
+        throw "cannot create CascadingSystem with different update types";
     super(name, updateType, []);
     this.systems = systems;
   }

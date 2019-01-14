@@ -1,8 +1,8 @@
 import InputManager from "../../core/InputManager";
-import EntityFactory from "./Factory";
 import ECS from "../../ecs/ECS";
 import EmptySystem from "../../ecs/system/EmptySystem";
 import Update from "../../ecs/system/Update";
+import Factory from "./Factory";
 
 export default class ExplosionOnClick extends EmptySystem {
   input: InputManager;
@@ -24,7 +24,7 @@ export default class ExplosionOnClick extends EmptySystem {
   }
 
   createExplosion() {
-    let explosion = EntityFactory.createExplosion();
+    let explosion = Factory.createExplosion();
     explosion.position.setVec(this.input.mousePos);
     this.ecs.queueEntity(explosion);
     //reset

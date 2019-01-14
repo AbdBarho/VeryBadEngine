@@ -2,12 +2,12 @@ import Canvas from "../../core/Canvas";
 import { StarAnimation } from "../../ecs/Component";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import Vector from "../../math/Vector";
 import Layer from "../../core/Layer";
 import Update from "../../ecs/system/Update";
+import Vec2 from "../../math/vector/Vec2";
 
 interface StarAnimationEntity extends Entity {
-  position: Vector;
+  position: Vec2;
   starAnimation: StarAnimation;
 }
 
@@ -31,8 +31,6 @@ export default class StarAnimationRenderer extends System {
     let { position, starAnimation } = entity;
     let { progress, lifeTime, rotationSpeed, maxRadius, cachedDrawing } = starAnimation;
 
-
-    let [cx, cy] = position.values;
     progress = (progress + dt) % lifeTime;
 
     if (!cachedDrawing)
@@ -45,9 +43,9 @@ export default class StarAnimationRenderer extends System {
 
     // rotations
     let angle = rotationSpeed * progress;
-    this.layer.rotate(angle, cx, cy);
+    this.layer.rotate(angle, position.x, position.y);
     this.layer.alpha(scale / 2);
-    this.layer.drawImage(cachedDrawing, cx - size / 2, cy - size / 2, size, size);
+    this.layer.drawImage(cachedDrawing, position.x - size / 2, position.y - size / 2, size, size);
     this.layer.resetRotation();
     this.layer.alpha(1);
 

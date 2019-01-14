@@ -13,7 +13,7 @@ import BackgroundColor from "../../systems/render/Background";
 import ExplosionRender from "../../systems/render/ExplosionRender";
 import RectangleRenderer from "../../systems/render/RectangleRender";
 import ExplosionOnClick from "./ExplosionOnClick";
-import EntityFactory from "./Factory";
+import Factory from "./Factory";
 import MouseFollowerController from "./MouseFollowerController";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
@@ -40,9 +40,10 @@ export default class MouseFollowerLevel extends ECS {
 
       new MouseFollowerController(this.input, this, MFSys, MFMovement),
       MFSys,
+      // MFMovement,
 
-      new CascadingSystem("CascadingMovement", Update.every, [MFMovement, new VelocitySystem()]),
-      
+      new CascadingSystem("CascadingMovement", [MFMovement, new VelocitySystem()]),
+
       new KeepInWorld(),
       new WrapAroundWorld(),
 
@@ -54,13 +55,16 @@ export default class MouseFollowerLevel extends ECS {
     ];
     //background
     for (let i = 0; i < 100; i++)
-      this.queueEntity(EntityFactory.createSideScroller());
+      this.queueEntity(Factory.createSideScroller());
 
     for (let i = 0; i < 100; i++)
-      this.queueEntity(EntityFactory.createAnimatedStar());
+      this.queueEntity(Factory.createAnimatedStar());
 
     //in game followers
-    for (let i = 0; i < 800; i++)
-      this.queueEntity(EntityFactory.createMouseFollower());
+    for (let i = 0; i < 10000; i++)
+      this.queueEntity(Factory.createMouseFollower());
+
+    // 10000, Vector, 20.97fps
+    // 10000, Vec2, 26.58fps
   }
 }

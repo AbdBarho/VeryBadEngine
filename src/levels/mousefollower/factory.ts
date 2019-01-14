@@ -1,6 +1,7 @@
 import EntityFactory from "../../ecs/Factory";
 import MathHelper from "../../math/Math";
 import Vector from "../../math/Vector";
+import config from "../../config/Config";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {
@@ -8,29 +9,32 @@ export default class MouseFollowerFactory {
     return {
       rectModel: {
         color,
-        size: Vector.create([sideLength, sideLength]),
-        centerShift: Vector.create([half, half]),
+        size: Vector.create(sideLength, sideLength),
+        centerShift: Vector.create(half, half),
         cachedDimensions: [0, 0, 0, 0]
       }
     }
   }
+  static getVectorInWorld() {
+    return MathHelper.getRandomVector(config.WORLD.SIZE);
+  }
 
   static createSideScroller() {
+    let pos = this.getVectorInWorld().copyValues();
     let size = MathHelper.getRandomInt(20, 6);
     size += size % 2;
     return {
-      ...EntityFactory.createMovingEntity(2, [Math.random() / 5, 0]),
+      ...EntityFactory.createMovingEntity(pos, [Math.random() / 5, 0]),
       ...this.createRectModel(size, "#ffffff20"),
-      position: EntityFactory.getVectorInWorld(),
       wrapAroundWorld: true
     }
   }
 
   static createMouseFollower() {
+    let pos = this.getVectorInWorld().copyValues();
     let size = MathHelper.getRandomInt(12, 6);
     return {
-      ...EntityFactory.createAcceleratingEntity(2, 2, 2),
-      position: EntityFactory.getVectorInWorld(),
+      ...EntityFactory.createAcceleratingEntity(pos),
       ...this.createRectModel(size, MathHelper.getRandomColor()),
       wrapAroundWorld: true,
       // keepInWorld: true,
@@ -65,8 +69,8 @@ export default class MouseFollowerFactory {
     let rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
     let rotationSpeed = rotationDirection * MathHelper.degreesPerSec(rotationAngle);
     return {
-      ...EntityFactory.createMovingEntity(2,[MathHelper.speedPerSecond(MathHelper.getRandomInt(50, 1)), 0]),
-      position: EntityFactory.getVectorInWorld(),
+      ...EntityFactory.createMovingEntity([],[MathHelper.speedPerSecond(MathHelper.getRandomInt(50, 1)), 0]),
+      position: this.getVectorInWorld(),
       wrapAroundWorld: true,
       starAnimation: {
         progress: MathHelper.getRandomInt(1000),

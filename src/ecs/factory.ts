@@ -1,6 +1,4 @@
-import Config from "../config/Config";
-import MathHelper from "../math/Math";
-import Vector, { VectorInitializer } from "../math/Vector";
+import Vector from "../math/Vector";
 import IDGenerator from "../services/IDGenerator";
 
 export default class EntityFactory {
@@ -11,22 +9,18 @@ export default class EntityFactory {
     }
   }
 
-  static createMovingEntity(pos: VectorInitializer, vel: VectorInitializer) {
+  static createMovingEntity(pos: number[] = [], vel: number[] = []) {
     return {
       ...this.createBasicEntity(),
-      position: Vector.create(pos),
-      velocity: Vector.create(vel)
+      position: Vector.create(...pos),
+      velocity: Vector.create(...vel)
     };
   }
 
-  static createAcceleratingEntity(pos: VectorInitializer, vel: VectorInitializer, acc: VectorInitializer) {
+  static createAcceleratingEntity(pos: number[] = [], vel: number[] = [], acc: number[] = []) {
     return {
       ...this.createMovingEntity(pos, vel),
-      acceleration: Vector.create(acc)
+      acceleration: Vector.create(...acc)
     }
-  }
-
-  static getVectorInWorld() {
-    return MathHelper.getRandomVector(Config.WORLD.SIZE);
   }
 }

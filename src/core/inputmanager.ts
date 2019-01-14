@@ -1,4 +1,5 @@
 import Vector from "../math/Vector";
+import Vec2 from "../math/vector/Vec2";
 import { QueuedEventManager } from "../services/EventManager";
 import Canvas from "./Canvas";
 
@@ -16,7 +17,7 @@ export default class InputManager extends QueuedEventManager {
     window.addEventListener("mousedown", e => this.updateButtonsState("mousedown", "Mouse" + (e.button + 1), true));
     window.addEventListener("mouseup", e => this.updateButtonsState("mouseup", "Mouse" + (e.button + 1), false));
 
-    window.addEventListener("mousemove", e => this.mouseStateUpdate("mousemove", e));
+    window.addEventListener("mousemove", e => this.mousePositionUpdate("mousemove", e));
 
     window.addEventListener("blur", () => this.clearAll());
     window.addEventListener("contextmenu", e => e.preventDefault());
@@ -27,7 +28,7 @@ export default class InputManager extends QueuedEventManager {
     this.queueEvent(event, name);
   }
 
-  private mouseStateUpdate(event: string, e: MouseEvent) {
+  private mousePositionUpdate(event: string, e: MouseEvent) {
     this.canvas.pixelToUnit(e.pageX, e.pageY, this.mousePos);
     this.queueEvent(event, this.mousePos);
   }
@@ -44,7 +45,7 @@ export default class InputManager extends QueuedEventManager {
     return super.on(event, callback, context);
   }
 
-  onMouseMove(callback: (mousePos: Vector) => any, context?: any) {
+  onMouseMove(callback: (mousePos: Vec2) => any, context?: any) {
     return super.on("mousemove", callback, context);
   }
 }

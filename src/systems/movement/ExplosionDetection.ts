@@ -4,9 +4,10 @@ import MathHelper from "../../math/Math";
 import StepFunctions from "../../math/Step";
 import Vector from "../../math/Vector";
 import ObjectUtils from "../../util/ObjectUtils";
+import Vec2 from "../../math/vector/Vec2";
 
 interface ExplosionEntity {
-  position: Vector;
+  position: Vec2;
   explosion: boolean;
   explosionVelocity: number;
   explosionRadius: number;
@@ -14,8 +15,8 @@ interface ExplosionEntity {
 
 interface ExplodableEntity {
   explodes: boolean;
-  velocity: Vector;
-  position: Vector;
+  velocity: Vec2;
+  position: Vec2;
 }
 
 export default class ExplosionDetection extends MultiSystem {
@@ -41,18 +42,17 @@ export default class ExplosionDetection extends MultiSystem {
   }
 
   applyExplosion(source: ExplosionEntity, target: ExplodableEntity) {
-    let pos = target.position.copy();
     //distance
-    pos.subVec(source.position);
-    let vectorLength = pos.magnitude();
+    let dist = Vector.copy(target.position).subVec(source.position);
+    let vectorLengthSq = dist.magnitudeSquared();
 
-    let distanceScale = vectorLength / source.explosionRadius;
+    let distanceScale = vectorLengthSq / (source.explosionRadius * source.explosionRadius);
     if (distanceScale < 1) {
       let power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
-      let dir = MathHelper.rotation2d(pos);
+      let dir = MathHelper.rotation2d(dist);
       target.velocity.addVec(dir.mulNum(power));
     }
 
-    Vector.store(pos);
+    Vector.store(dist);
   }
 }

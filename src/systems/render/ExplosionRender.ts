@@ -6,10 +6,10 @@ import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import Update from "../../ecs/system/Update";
 import StepFunctions from "../../math/Step";
-import Vector from "../../math/Vector";
+import Vec2 from "../../math/vector/Vec2";
 
 interface Explosion extends Entity {
-  position: Vector;
+  position: Vec2;
   explosion: boolean;
   explosionModel: ExplosionModel;
 }
@@ -35,7 +35,7 @@ export default class ExplosionRender extends System {
 
     radius *= StepFunctions.smoothStop(percent, 2);
     color = color.slice(0, -1) + "," + (1 - StepFunctions.smoothStop(percent, 5)) + ")";
-    this.layer.fillCircle(position.values[0], position.values[1], radius, color);
+    this.layer.fillCircle(position.x, position.y, radius, color);
 
     //save updated progress
     entity.explosionModel.progress = progress;

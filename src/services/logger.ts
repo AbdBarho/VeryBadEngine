@@ -1,5 +1,6 @@
 import Config from "../config/Config";
 import Vector from "../math/Vector";
+import Vec2 from "../math/vector/Vec2";
 
 const GLOBAL_VERBOSITY = Config.LOGGER.VERBOSITY;
 const LOGGERS = [console.error, console.warn, console.log];
@@ -67,8 +68,8 @@ export default class Logger {
           delete debugState[key];
         else if (typeof value === "number" && !Number.isInteger(value))
           debugState[key] = value.toFixed(3);
-        else if (value instanceof Vector)
-          debugState[key] = value.getValues().map(val => val.toFixed(3));
+        else if (value instanceof Vec2)
+          debugState[key] = value.copyValues().map(val => val.toFixed(3));
         else if (typeof value === "object" && !Array.isArray(value) || typeof value === "function")
           delete debugState[key];
         else

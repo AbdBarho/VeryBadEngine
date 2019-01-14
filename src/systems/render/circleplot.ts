@@ -17,7 +17,7 @@ export default class CirclePlot extends System {
   }
 
   updateEntity(entity: any) {
-    let startY = this.canvas.size.get(1) - diameter;
+    let startY = this.canvas.size.y - diameter;
     let ctx = this.layer.ctx;
     ctx.fillStyle = "white";
     ctx.fillRect(0, startY, diameter, diameter);

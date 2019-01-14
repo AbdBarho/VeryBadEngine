@@ -3,9 +3,9 @@ import ECS from "../../ecs/ECS";
 import EmptySystem from "../../ecs/system/EmptySystem";
 import Update from "../../ecs/system/Update";
 import Logger from "../../services/Logger";
-import EntityFactory from "./Factory";
-import MouseFollowerMovementSystem from "./MovementSystem";
+import Factory from "./Factory";
 import MouseFollowerSystem from "./MouseFollowerSystem";
+import MouseFollowerMovementSystem from "./MovementSystem";
 
 export default class MouseFollowerController extends EmptySystem {
   input: InputManager;
@@ -86,7 +86,7 @@ export default class MouseFollowerController extends EmptySystem {
 
   spawnMouseFollowers() {
     for (let i = 0; i < 100; i++)
-      this.ecs.queueEntity(EntityFactory.createMouseFollower());
+      this.ecs.queueEntity(Factory.createMouseFollower());
     Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length + 100);
   }
 

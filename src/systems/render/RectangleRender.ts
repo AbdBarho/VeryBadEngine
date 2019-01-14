@@ -5,9 +5,10 @@ import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import Update from "../../ecs/system/Update";
 import Vector from "../../math/Vector";
+import Vec2 from "../../math/vector/Vec2";
 
 interface RectangleModelObject extends Entity {
-  position: Vector;
+  position: Vec2;
   rectModel: RectangularModel;
 }
 
@@ -27,16 +28,16 @@ export default class RectangleRenderer extends System {
   }
 
   private calculate(entity: RectangleModelObject) {
-    let pos = entity.position.copy();
+    let pos = Vector.copy(entity.position)
     let size = entity.rectModel.size;
 
     pos.subVec(entity.rectModel.centerShift)
     //prevents GC
     let dims = entity.rectModel.cachedDimensions;
-    dims[0] = pos.values[0];
-    dims[1] = pos.values[1];
-    dims[2] = size.values[0];
-    dims[3] = size.values[1];
+    dims[0] = pos.x;
+    dims[1] = pos.y;
+    dims[2] = size.x;
+    dims[3] = size.y;
 
     Vector.store(pos);
   }

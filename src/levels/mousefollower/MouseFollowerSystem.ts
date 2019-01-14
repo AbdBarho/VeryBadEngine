@@ -4,16 +4,17 @@ import { RectangularModel } from "../../ecs/Component";
 import ECS from "../../ecs/ECS";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
 import MathHelper from "../../math/Math";
 import Vector from "../../math/Vector";
-import EntityFactory from "./Factory";
-import Update from "../../ecs/system/Update";
+import Vec2 from "../../math/vector/Vec2";
+import Factory from "./Factory";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
-  acceleration: Vector;
-  position: Vector;
-  velocity: Vector;
+  acceleration: Vec2;
+  position: Vec2;
+  velocity: Vec2;
   rectModel: RectangularModel;
 }
 
@@ -28,7 +29,7 @@ export default class MouseFollowerSystem extends System {
   lookAheadSteps = CONFIG.LOOK_AHEAD_STEPS;
   randomFactorScale = CONFIG.RANDOM_FACTOR_SCALE;
   accelerationScale = CONFIG.ACCELERATION_SCALE;
-  target = Vector.create([Config.WORLD.SIZE[0] / 2, Config.WORLD.SIZE[1] / 2]);
+  target = Vector.create(Config.WORLD.SIZE[0] / 2, Config.WORLD.SIZE[1] / 2);
 
 
   constructor(inputManager: InputManager, ecs: ECS) {
@@ -42,7 +43,7 @@ export default class MouseFollowerSystem extends System {
     this.input.onMouseMove(this.mouseMove, this);
   }
 
-  mouseMove(mousePos: Vector) {
+  mouseMove(mousePos: Vec2) {
     this.target = mousePos;
   }
 
@@ -71,7 +72,7 @@ export default class MouseFollowerSystem extends System {
 
         if (this.destroyOnReach && this.respawnOnDestroy) {
           //simulate respawn
-          Object.assign(entity, EntityFactory.createMouseFollower(), { ID: entity.ID });
+          Object.assign(entity, Factory.createMouseFollower(), { ID: entity.ID });
         } else if (this.destroyOnReach) {
           this.ecs.removeEntity(entity.ID);
         }
@@ -88,7 +89,7 @@ export default class MouseFollowerSystem extends System {
   }
 
   targetReached(entity: MouseFollowerEntity) {
-    let target = this.target.copy();
+    let target = Vector.copy(this.target);
     //calculate distance
     target.subVec(entity.position).abs();
     let reached = target.smallerThan(entity.rectModel.centerShift);
@@ -103,8 +104,8 @@ export default class MouseFollowerSystem extends System {
   }
 
   getDirectionWithLookAhead(entity: MouseFollowerEntity) {
-    let pos = entity.position.copy();
-    let vel = entity.velocity.copy();
+    let pos = Vector.copy(entity.position);
+    let vel = Vector.copy(entity.velocity)
     pos.addVec(vel.mulNum(this.lookAheadSteps));
     let dir = MathHelper.direction2d(pos, this.target).mulNum(this.accelerationScale);
     Vector.store(pos, vel);
@@ -116,11 +117,11 @@ export default class MouseFollowerSystem extends System {
   }
 
   //Dummy function, should never be called
-  scaleIfNeeded(dir: Vector) {
+  scaleIfNeeded(dir: Vec2) {
     console.error("called a dummy function");
   }
 
-  scaleByRandom(dir: Vector){
+  scaleByRandom(dir: Vec2){
     dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale);
   }
 

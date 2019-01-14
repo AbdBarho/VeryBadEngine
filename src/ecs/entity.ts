@@ -1,5 +1,5 @@
-import Vector from "../math/Vector";
 import { ExplosionModel, RectangularModel, StarAnimation } from "./Component";
+import Vec2 from "../math/vector/Vec2";
 
 export type ComponentName = keyof Entity;
 
@@ -8,10 +8,10 @@ export default interface Entity {
   hasChanged: boolean;
   //movement
   moves?: boolean;
-  position?: Vector;
-  velocity?: Vector;
+  position?: Vec2;
+  velocity?: Vec2;
   maxVelocity?: number;
-  acceleration?: Vector;
+  acceleration?: Vec2;
   maxAcceleration?: number;
   // world ends
   keepInWorld?: boolean;

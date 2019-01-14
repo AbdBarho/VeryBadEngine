@@ -1,8 +1,8 @@
-import Vector from "../math/Vector";
+import Vec2 from "../math/vector/Vec2";
 
 export type RectangularModel = {
-  size: Vector;
-  centerShift: Vector;
+  size: Vec2;
+  centerShift: Vec2;
   color: string;
   cachedDimensions: number[];
 }
