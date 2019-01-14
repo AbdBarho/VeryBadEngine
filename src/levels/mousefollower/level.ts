@@ -33,7 +33,7 @@ export default class MouseFollowerLevel extends ECS {
     // let layer2 = this.canvas.getLayer(2);
     this.systems = [
       new InputSystem(this.input),
-      new SlowMotion(this, this.input),
+      new SlowMotion(this, this.input, .15),
 
       new ExplosionDetection(),
       new ExplosionOnClick(this.input, this),

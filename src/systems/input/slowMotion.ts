@@ -8,10 +8,12 @@ export default class SlowMotion extends EmptySystem {
   inputManager: InputManager;
   currentScale: number;
   targetScale: number;
-  constructor(ecs: ECS, inputManager: InputManager) {
+  scale: number;
+  constructor(ecs: ECS, inputManager: InputManager, scale: number) {
     super("SlowMotion", Update.every);
     this.ecs = ecs;
     this.inputManager = inputManager;
+    this.scale = scale;
     this.currentScale = this.ecs.timeScale;
     this.targetScale = this.ecs.timeScale;
   }
@@ -23,7 +25,7 @@ export default class SlowMotion extends EmptySystem {
 
   slow(key: string) {
     if (key === "Mouse3")
-      this.ecs.timeScale = 0.25;
+      this.ecs.timeScale = this.scale;
   }
 
   restore(key: string) {
