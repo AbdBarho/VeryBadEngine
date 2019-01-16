@@ -80,6 +80,7 @@ export default class MouseFollowerFactory {
         numSpikes,
         rotationSpeed,
         color: "#fff",
+        opacityFactor: 0.3,
         cachedDrawing: document.createElement("canvas")
       }
     }

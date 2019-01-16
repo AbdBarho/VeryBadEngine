@@ -30,7 +30,7 @@ export default class StarAnimationRenderer extends System {
 
   updateEntity(entity: StarAnimationEntity, dt: number) {
     let { position, starAnimation } = entity;
-    let { progress, lifeTime, cachedDrawing } = starAnimation;
+    let { progress, lifeTime, cachedDrawing, opacityFactor } = starAnimation;
 
     starAnimation.progress = progress = (progress + dt) % lifeTime;
 
@@ -43,7 +43,7 @@ export default class StarAnimationRenderer extends System {
     // rotations
     let angle = starAnimation.rotationSpeed * progress;
     this.layer.rotate(angle, position.x, position.y);
-    this.layer.alpha(scale / 2);
+    this.layer.alpha(scale * opacityFactor);
     this.layer.drawImage(cachedDrawing, position.x - size / 2, position.y - size / 2, size, size);
     this.layer.resetRotation();
     this.layer.alpha(1);

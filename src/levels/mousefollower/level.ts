@@ -27,9 +27,9 @@ export default class MouseFollowerLevel extends ECS {
     this.canvas = canvas;
     //create systems
     let canvasConfig: GradientConfig = { start: 0, speed: 0.01, stops: {
-        0: "#9004",
-        50: "#1014",
-        100: "#0094"
+        0: "#9005",
+        50: "#1015",
+        100: "#0095"
       }
     };
     let MFSys = new MouseFollowerSystem(this.input, this);
