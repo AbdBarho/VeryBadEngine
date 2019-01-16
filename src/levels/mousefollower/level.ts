@@ -2,16 +2,15 @@ import Canvas from "../../core/Canvas";
 import InputManager from "../../core/InputManager";
 import ECS from "../../ecs/ECS";
 import CascadingSystem from "../../ecs/system/CascadingSystem";
-import Update from "../../ecs/system/Update";
 import InputSystem from "../../systems/input/InputSystem";
 import SlowMotion from "../../systems/input/SlowMotion";
-import ExplosionDetection from "./ExplosionDetection";
 import KeepInWorld from "../../systems/movement/KeepInWorld";
 import VelocitySystem from "../../systems/movement/Velocity";
 import WrapAroundWorld from "../../systems/movement/WrapAroundWorld";
-import BackgroundColor from "../../systems/render/Background";
 import ExplosionRender from "../../systems/render/ExplosionRender";
 import RectangleRenderer from "../../systems/render/RectangleRender";
+import RotatingLinearGradient, { GradientConfig } from "../../systems/render/RotatingGradient";
+import ExplosionDetection from "./ExplosionDetection";
 import ExplosionOnClick from "./ExplosionOnClick";
 import Factory from "./Factory";
 import MouseFollowerController from "./MouseFollowerController";
@@ -27,10 +26,15 @@ export default class MouseFollowerLevel extends ECS {
     this.input = input;
     this.canvas = canvas;
     //create systems
+    let canvasConfig: GradientConfig = { start: -90, speed: -0.01, stops: {
+        10: "#500",
+        50: "#101",
+        90: "#005"
+      }
+    };
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
-    // let layer1 = this.canvas.getLayer(1);
-    // let layer2 = this.canvas.getLayer(2);
+    let layer0 = this.canvas.getLayer(0);
     this.systems = [
       new InputSystem(this.input),
       new SlowMotion(this, this.input, .15),
@@ -46,10 +50,10 @@ export default class MouseFollowerLevel extends ECS {
       new KeepInWorld(),
       new WrapAroundWorld(),
 
-      new BackgroundColor(0, "#002", this.canvas, false),
-      new StarAnimationRenderer(0, this.canvas),
-      new RectangleRenderer(0, this.canvas),
-      new ExplosionRender(0, this.canvas, this),
+      new RotatingLinearGradient(layer0, canvasConfig),
+      new StarAnimationRenderer(layer0),
+      new RectangleRenderer(layer0),
+      new ExplosionRender(layer0, this),
 
     ];
     //background
@@ -60,7 +64,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(Factory.createAnimatedStar());
 
     //in game followers
-    for (let i = 0; i < 1000; i++)
+    for (let i = 0; i < 700; i++)
       this.queueEntity(Factory.createMouseFollower());
 
     // 10000, Vector, 20.97fps

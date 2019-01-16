@@ -34,19 +34,16 @@ export default class MathHelper {
   }
 
   static getRandomColor() {
-    let r = this.getRandomInt(256);
-    let g = this.getRandomInt(256);
-    let b = this.getRandomInt(256);
-    return "rgb(" + r + "," + g + "," + b + ")";
+    let r = this.toHexColor(this.getRandomInt(256));
+    let g = this.toHexColor(this.getRandomInt(256));
+    let b = this.toHexColor(this.getRandomInt(256));
+    return "#" + r + g + b;
   }
 
-  static getRandomColorWithAlpha() {
-    let r = this.getRandomInt(256);
-    let g = this.getRandomInt(256);
-    let b = this.getRandomInt(256);
-    let a = Math.random();
-    return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+  static toHexColor(x: number) {
+    return (x < 16 ? "0" : "") + x.toString(16);
   }
+
 
   static getSignedRandom() {
     let r = Math.random();

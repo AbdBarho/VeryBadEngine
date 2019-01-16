@@ -1,24 +1,28 @@
+import Canvas from "./Canvas";
+
 type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap;
 
 const FULL_CIRCLE = Math.PI * 2;
 export default class Layer {
-  canvas = document.createElement("canvas");
+  canvas: Canvas;
+  frame = document.createElement("canvas");
   ctx: CanvasRenderingContext2D;
   index: number;
   xScale = 0;
   yScale = 0;
   width = 0;
   height = 0;
-  constructor(index: number) {
+  constructor(canvas: Canvas, index: number) {
+    this.canvas = canvas;
     this.index = index;
-    let ctx = this.canvas.getContext("2d");
+    let ctx = this.frame.getContext("2d");
     if (ctx === null)
       throw "No context could be created for the canvas";
     this.ctx = ctx;
   }
 
-  getCanvas() {
-    return this.canvas;
+  getFrame() {
+    return this.frame;
   }
 
   getContext() {
@@ -30,31 +34,56 @@ export default class Layer {
   }
 
   setDimensions(w: number, h: number, left: number, top: number, xScale: number, yScale: number) {
-    this.canvas.width = w;
-    this.canvas.height = h;
+    this.frame.width = w;
+    this.frame.height = h;
     this.width = w;
     this.height = h;
-    this.canvas.style.top = top + "px";
-    this.canvas.style.left = left + "px";
+    this.frame.style.top = top + "px";
+    this.frame.style.left = left + "px";
     this.xScale = xScale;
     this.yScale = yScale;
-  }
-
-  alpha(val: number) {
-    this.ctx.globalAlpha = val;
   }
 
   clear() {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
+  alpha(val: number) {
+    this.ctx.globalAlpha = val;
+  }
+
+  line(x1: number, y1: number, x2: number, y2: number) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.stroke();
+    this.ctx.closePath();
+  }
+
+  debugPoint(cx: number, cy: number, radius: number, fill: string) {
+    this.ctx.fillStyle = fill;
+    this.ctx.beginPath();
+    this.ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+    this.ctx.fill();
+    this.ctx.closePath();
+  }
+
+
   backgroundSolidColor(color: string) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(0, 0, this.width, this.height);
   }
 
+  createLinGrad(x1: number, y1: number, x2: number, y2: number) {
+    return this.ctx.createLinearGradient(x1, y1, x2, y2);
+  }
+
   drawImage(image: DrawableImage, x: number, y: number, w: number, h: number) {
     this.ctx.drawImage(image, x * this.xScale, y * this.yScale, w * this.xScale, h * this.yScale);
+  }
+
+  fill() {
+    this.ctx.fillRect(0, 0, this.width, this.height);
   }
 
   fillImage(image: DrawableImage) {
@@ -110,6 +139,6 @@ export default class Layer {
   }
 
   getAsDataURL(type?: string) {
-    return this.canvas.toDataURL(type);
+    return this.frame.toDataURL(type);
   }
 }

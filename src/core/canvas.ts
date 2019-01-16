@@ -1,6 +1,7 @@
 import Vector from "../math/Vector";
 import Vec2 from "../math/vector/Vec2";
 import EventManager from "../services/EventManager";
+import Logger from "../services/Logger";
 import Layer from "./Layer";
 
 export default class Canvas extends EventManager {
@@ -22,13 +23,17 @@ export default class Canvas extends EventManager {
     return this.layers[index] || this.createLayer(index);
   }
 
+  getShift() {
+    return this.shift;
+  }
+
   private createLayer(index: number) {
-    let layer = new Layer(index);
+    let layer = new Layer(this, index);
     let len = this.layers.length;
     if (index > len) {
       let i = len;
       while (index > len) {
-        this.layers.push(new Layer(i));
+        this.layers.push(new Layer(this, i));
       }
     }
     this.layers.splice(index, 0, layer);
@@ -50,6 +55,7 @@ export default class Canvas extends EventManager {
       width = Math.trunc(Math.min(parentWidth, parentHeight * this.aspectRatio));
       height = Math.trunc(width / this.aspectRatio);
     }
+    Logger.debugState({ width, height });
     this.size.set(width, height);
     this.scale = Vector.copy(this.size).divVec(this.baseSize);
     let [xScale, yScale] = this.scale.copyValues();
@@ -57,7 +63,7 @@ export default class Canvas extends EventManager {
     let topShift = (parentHeight - height) / 2;
     this.shift.set(leftShift, topShift);
     for (let layer of this.layers) {
-      document.body.appendChild(layer.getCanvas());
+      document.body.appendChild(layer.getFrame());
       layer.setDimensions(width, height, leftShift, topShift, xScale, yScale);
     }
     this.trigger("resize", this.size);
