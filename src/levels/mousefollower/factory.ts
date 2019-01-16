@@ -79,7 +79,8 @@ export default class MouseFollowerFactory {
         maxRadius: MathHelper.getRandomInt(100, 50),
         numSpikes,
         rotationSpeed,
-        color: "#fff"
+        color: "#fff",
+        cachedDrawing: document.createElement("canvas")
       }
     }
   }

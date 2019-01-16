@@ -14,9 +14,9 @@ interface RectangleModelObject extends Entity {
 
 export default class RectangleRenderer extends System {
   layer: Layer;
-  constructor(layerNumber: number, canvas: Canvas) {
+  constructor(layer: Layer) {
     super("RectangleRender", Update.every, ["position", "rectModel"]);
-    this.layer = canvas.getLayer(layerNumber);
+    this.layer = layer;
   }
 
   updateEntity(entity: RectangleModelObject, dt: number) {

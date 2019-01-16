@@ -6,6 +6,8 @@ import Layer from "../../core/Layer";
 import Update from "../../ecs/system/Update";
 import Vec2 from "../../math/vector/Vec2";
 
+type Context = CanvasRenderingContext2D;
+
 interface StarAnimationEntity extends Entity {
   position: Vec2;
   starAnimation: StarAnimation;
@@ -13,9 +15,9 @@ interface StarAnimationEntity extends Entity {
 
 export default class StarAnimationRenderer extends System {
   layer: Layer;
-  constructor(layerNumber: number, canvas: Canvas) {
+  constructor(layer: Layer) {
     super("StarAnimationRender", Update.every, ["starAnimation", "position"]);
-    this.layer = canvas.getLayer(layerNumber);
+    this.layer = layer;
   }
 
   addIfCompatible(entity: Entity) {
@@ -27,48 +29,38 @@ export default class StarAnimationRenderer extends System {
   }
 
   updateEntity(entity: StarAnimationEntity, dt: number) {
-    // console.log(entity);
     let { position, starAnimation } = entity;
-    let { progress, lifeTime, rotationSpeed, maxRadius, cachedDrawing } = starAnimation;
+    let { progress, lifeTime, cachedDrawing } = starAnimation;
 
-    progress = (progress + dt) % lifeTime;
+    starAnimation.progress = progress = (progress + dt) % lifeTime;
 
-    if (!cachedDrawing)
-      cachedDrawing = this.cacheRender(entity);
 
-    let half = lifeTime / 2;
-    let scale = Math.abs(progress - half) / lifeTime;
+    let half = starAnimation.lifeTime / 2;
+    let scale = Math.abs(progress - half) / starAnimation.lifeTime;
     // at least half the scale
-    let size = Math.trunc(maxRadius * (scale + 0.5));
+    let size = Math.trunc(starAnimation.maxRadius * (scale + 0.5));
 
     // rotations
-    let angle = rotationSpeed * progress;
+    let angle = starAnimation.rotationSpeed * progress;
     this.layer.rotate(angle, position.x, position.y);
     this.layer.alpha(scale / 2);
     this.layer.drawImage(cachedDrawing, position.x - size / 2, position.y - size / 2, size, size);
     this.layer.resetRotation();
     this.layer.alpha(1);
-
-    starAnimation.progress = progress;
   }
 
   cacheRender(entity: StarAnimationEntity) {
-    let cachedDrawing = entity.starAnimation.cachedDrawing;
-    if (!cachedDrawing) {
-      let { numSpikes, color, minRadius, maxRadius } = entity.starAnimation;
-      let canvas = document.createElement("canvas");
-      canvas.width = maxRadius * 2;
-      canvas.height = maxRadius * 2;
-      let ctx = canvas.getContext("2d");
-      drawStar(ctx!, numSpikes, minRadius, maxRadius, color);
-      cachedDrawing = entity.starAnimation.cachedDrawing = canvas;
-    }
-    return cachedDrawing;
+    let canvas = entity.starAnimation.cachedDrawing;
+    let { numSpikes, color, minRadius, maxRadius } = entity.starAnimation;
+    canvas.width = maxRadius * 2;
+    canvas.height = maxRadius * 2;
+    let ctx = canvas.getContext("2d");
+    drawStar(ctx!, numSpikes, minRadius, maxRadius, color);
+    entity.starAnimation.cachedDrawing = canvas;
   }
 }
 
-function drawStar(ctx: CanvasRenderingContext2D, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
-  ctx.save();
+function drawStar(ctx: Context, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
   ctx.beginPath();
   ctx.fillStyle = fillStyle;
   ctx.translate(maxRadius, maxRadius);
@@ -81,5 +73,4 @@ function drawStar(ctx: CanvasRenderingContext2D, numSpikes: number, minRadius: n
   }
   ctx.fill();
   ctx.closePath();
-  ctx.restore();
 }

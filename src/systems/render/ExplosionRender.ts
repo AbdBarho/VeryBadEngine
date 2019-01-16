@@ -7,6 +7,7 @@ import System from "../../ecs/system/System";
 import Update from "../../ecs/system/Update";
 import StepFunctions from "../../math/Step";
 import Vec2 from "../../math/vector/Vec2";
+import MathHelper from "../../math/Math";
 
 interface Explosion extends Entity {
   position: Vec2;
@@ -17,9 +18,9 @@ interface Explosion extends Entity {
 export default class ExplosionRender extends System {
   layer: Layer;
   ecs: ECS;
-  constructor(layerNumber: number, canvas: Canvas, ecs: ECS) {
+  constructor(layer: Layer, ecs: ECS) {
     super("ExplosionRender", Update.every, ["explosion", "explosionModel", "position"]);
-    this.layer = canvas.getLayer(layerNumber);
+    this.layer = layer;
     this.ecs = ecs;
   }
 
@@ -27,18 +28,17 @@ export default class ExplosionRender extends System {
     let { explosionModel, position } = entity;
     let { progress, lifeTime, color, radius } = explosionModel;
     //update animation progress
-    progress = progress + dt;
+    entity.explosionModel.progress = progress = progress + dt;
     if (progress >= lifeTime)
       return this.ecs.removeEntity(entity.ID);
 
     let percent = progress / lifeTime;
 
     radius *= StepFunctions.smoothStop(percent, 2);
-    color = color.slice(0, -1) + "," + (1 - StepFunctions.smoothStop(percent, 5)) + ")";
-    this.layer.fillCircle(position.x, position.y, radius, color);
+    let opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 5)) * 256);
+    color = color + MathHelper.toHexColor(opacity);
 
-    //save updated progress
-    entity.explosionModel.progress = progress;
+    this.layer.fillCircle(position.x, position.y, radius, color);
   }
 
 }

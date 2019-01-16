@@ -22,5 +22,5 @@ export type StarAnimation = {
   maxRadius: number,
   rotationSpeed: number,
   color: string,
-  cachedDrawing?: HTMLCanvasElement;
+  cachedDrawing: HTMLCanvasElement;
 }
