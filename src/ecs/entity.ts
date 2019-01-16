@@ -1,5 +1,6 @@
-import { ExplosionModel, RectangularModel, StarAnimation } from "./Component";
+import { ExplosionModel, RectangularModel, StarAnimation } from "./components/component";
 import Vec2 from "../math/vector/Vec2";
+import IGradient from "./components/gradient/IGradient";
 
 export type ComponentName = keyof Entity;
 
@@ -28,7 +29,7 @@ export default interface Entity {
   explodes?: boolean;
   // stars
   starAnimation?: StarAnimation;
-  //debug
-  debugCirclePoint?: number[];
+  // gradient
+  gradient?: IGradient;
 
 }

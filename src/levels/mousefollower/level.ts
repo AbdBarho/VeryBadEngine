@@ -8,8 +8,8 @@ import KeepInWorld from "../../systems/movement/KeepInWorld";
 import VelocitySystem from "../../systems/movement/Velocity";
 import WrapAroundWorld from "../../systems/movement/WrapAroundWorld";
 import ExplosionRender from "../../systems/render/ExplosionRender";
+import GradientRenderer from "../../systems/render/GradientRender";
 import RectangleRenderer from "../../systems/render/RectangleRender";
-import RotatingLinearGradient, { GradientConfig } from "../../systems/render/RotatingGradient";
 import ExplosionDetection from "./ExplosionDetection";
 import ExplosionOnClick from "./ExplosionOnClick";
 import Factory from "./Factory";
@@ -17,6 +17,8 @@ import MouseFollowerController from "./MouseFollowerController";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 import StarAnimationRenderer from "./StarAnimationRender";
+import BackgroundColor from "../../systems/render/Background";
+import RotatingGradient, { RotatingGradientConfig } from "../../ecs/components/gradient/RotatingGradient";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -26,12 +28,6 @@ export default class MouseFollowerLevel extends ECS {
     this.input = input;
     this.canvas = canvas;
     //create systems
-    let canvasConfig: GradientConfig = { start: 0, speed: 0.01, stops: {
-        0: "#9005",
-        50: "#1015",
-        100: "#0095"
-      }
-    };
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
     let layer0 = this.canvas.getLayer(0);
@@ -50,21 +46,24 @@ export default class MouseFollowerLevel extends ECS {
       new KeepInWorld(),
       new WrapAroundWorld(),
 
-      new RotatingLinearGradient(layer0, canvasConfig),
+      // new BackgroundColor(0, "#000", this.canvas, false),
+      new GradientRenderer(layer0),
       new StarAnimationRenderer(layer0),
       new RectangleRenderer(layer0),
       new ExplosionRender(layer0, this),
 
     ];
     //background
+    this.queueEntity(Factory.createRotatingGradient(-90, 0.008, "center", "center"));
+    
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());
 
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createAnimatedStar());
 
-    //in game followers
-    for (let i = 0; i < 700; i++)
+    // //in game followers
+    for (let i = 0; i < 500; i++)
       this.queueEntity(Factory.createMouseFollower());
 
   }

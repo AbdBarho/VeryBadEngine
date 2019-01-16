@@ -1,8 +1,10 @@
 import Canvas from "./Canvas";
 
-type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap;
+export type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap;
+export type FillStyle = string | CanvasGradient | CanvasPattern;
 
 const FULL_CIRCLE = Math.PI * 2;
+
 export default class Layer {
   canvas: Canvas;
   frame = document.createElement("canvas");
@@ -52,7 +54,7 @@ export default class Layer {
     this.ctx.globalAlpha = val;
   }
 
-  fillStyle(fill: string | CanvasGradient | CanvasPattern) {
+  fillStyle(fill: FillStyle) {
     this.ctx.fillStyle = fill;
   }
 
@@ -78,7 +80,7 @@ export default class Layer {
     this.ctx.drawImage(image, x * this.xScale, y * this.yScale, w * this.xScale, h * this.yScale);
   }
 
-  fill() {
+  fillFrame() {
     this.ctx.fillRect(0, 0, this.width, this.height);
   }
 

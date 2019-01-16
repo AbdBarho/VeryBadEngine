@@ -2,6 +2,8 @@ import EntityFactory from "../../ecs/Factory";
 import MathHelper from "../../math/Math";
 import Vector from "../../math/Vector";
 import config from "../../config/Config";
+import RotatingGradient, { RotatingGradientConfig, GradientShiftX, GradientShiftY } from "../../ecs/components/gradient/RotatingGradient";
+import IGradient from "../../ecs/components/gradient/IGradient";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {
@@ -80,9 +82,23 @@ export default class MouseFollowerFactory {
         numSpikes,
         rotationSpeed,
         color: "#fff",
-        opacityFactor: 0.3,
+        opacityFactor: 0.4,
         cachedDrawing: document.createElement("canvas")
       }
+    }
+  }
+
+  static createRotatingGradient(start: number, speed: number, shiftX: GradientShiftX, shiftY: GradientShiftY) {
+    let conf: RotatingGradientConfig = { start, speed, shiftX, shiftY, stops: {
+        0: "#400",
+        50: "#000",
+        100: "#004"
+      }
+    };
+    let gradient = new RotatingGradient(conf);
+    return {
+      ...EntityFactory.createBasicEntity(),
+      gradient
     }
   }
 }

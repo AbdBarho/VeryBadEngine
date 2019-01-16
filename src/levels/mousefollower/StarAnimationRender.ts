@@ -1,5 +1,5 @@
 import Canvas from "../../core/Canvas";
-import { StarAnimation } from "../../ecs/Component";
+import { StarAnimation } from "../../ecs/components/component";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import Layer from "../../core/Layer";

@@ -1,4 +1,4 @@
-import Vec2 from "../math/vector/Vec2";
+import Vec2 from "../../math/vector/Vec2";
 
 export type RectangularModel = {
   size: Vec2;
