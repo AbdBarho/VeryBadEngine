@@ -52,12 +52,8 @@ export default class Layer {
     this.ctx.globalAlpha = val;
   }
 
-  line(x1: number, y1: number, x2: number, y2: number) {
-    this.ctx.beginPath();
-    this.ctx.moveTo(x1, y1);
-    this.ctx.lineTo(x2, y2);
-    this.ctx.stroke();
-    this.ctx.closePath();
+  fillStyle(fill: string | CanvasGradient | CanvasPattern) {
+    this.ctx.fillStyle = fill;
   }
 
   debugPoint(cx: number, cy: number, radius: number, fill: string) {

@@ -33,8 +33,10 @@ export default class RotatingLinearGradient extends EmptySystem {
     let v = getGradientParameters(this.angle, this.layer.width, this.layer.height);
     let gradient = this.layer.createLinGrad(v[0], v[1], v[2], v[3]);
     this.stops.forEach((x, i) => gradient.addColorStop(x, this.colors[i]));
-    this.layer.ctx.fillStyle = gradient;
+    this.layer.fillStyle(gradient);
     this.layer.fill();
+    // this.layer.debugPoint(v[0], v[1], 20, "orange");
+    // this.layer.debugPoint(v[2], v[3], 20, "green");
   }
 }
 
@@ -59,17 +61,20 @@ function getGradientParameters(angle: number, width: number, height: number) {
   // calculate
   // convert to radians
   let rad = angle * Math.PI / 180;
-  let l = shouldMirror ? height : width;
-  // let l = Math.min(width, height);
-  let x = l / 2;
-  let y = x * Math.sin(rad) / Math.cos(rad);
+
+  // around the canvas borders
+  // let l = shouldMirror ? height : width;
+  // let x = l / 2;
+  // let y = x * Math.sin(rad) / Math.cos(rad);
+
+  // around the center
+  let l = Math.min(width, height) / 2;
+  let x = l * Math.cos(rad);
+  let y = l * Math.sin(rad);
 
   // undo what has been done at the beginning
-  if (shouldMirror) {
-    let temp = x;
-    x = y;
-    y = temp;
-  }
+  if (shouldMirror)
+    [x, y] = [y, x];
 
   x *= shouldInvertX ? -1 : 1;
 
@@ -79,11 +84,11 @@ function getGradientParameters(angle: number, width: number, height: number) {
   y += halfH;
   x += halfW;
 
-  // mirror over w/2, h/2
+  // mirror over w/2, h/2 to get the end point
   let negX = halfW - (x - halfW);
   let negY = halfH - (y - halfH);
 
-  // mirror over y = height /2 because y is positive down not up
+  // mirror y values over height/2 because y is positive down not up in canvas
   y = halfH - (y - halfH);
   negY = halfH - (negY - halfH);
 
