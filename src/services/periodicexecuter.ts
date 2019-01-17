@@ -1,7 +1,6 @@
 import Logger from "./Logger";
 
 export default class PeriodicExecuter {
-  executeAfterTimeout: () => void;
   callback: (dt: number) => any;
   timer = 0;
   lastTime = 0;
@@ -10,7 +9,7 @@ export default class PeriodicExecuter {
 
   constructor(callback: (dt: number) => any) {
     this.callback = callback;
-    this.executeAfterTimeout = () => this.run();
+    this.run = this.run.bind(this);
   }
 
   start(updateInterval = 17) {
@@ -21,7 +20,7 @@ export default class PeriodicExecuter {
     let delay = now - this.lastTime;
     delay = delay < updateInterval ? delay : 0;
     this.lastTime = now - (updateInterval - delay);
-    this.timer = requestAnimationFrame(this.executeAfterTimeout);
+    this.timer = requestAnimationFrame(this.run);
   }
 
   run() {
@@ -30,7 +29,7 @@ export default class PeriodicExecuter {
     Logger.fps(dt);
     this.callback(dt);
     this.lastTime = now;
-    this.timer = requestAnimationFrame(this.executeAfterTimeout);
+    this.timer = requestAnimationFrame(this.run);
   }
 
   stop() {
