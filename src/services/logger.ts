@@ -6,6 +6,7 @@ const GLOBAL_VERBOSITY = Config.LOGGER.VERBOSITY;
 const LOGGERS = [console.error, console.warn, console.log];
 
 let debugState: any = {};
+let div = document.getElementById("state");
 const FPS_UPDATE_INTERVAL = 1000; //in ms
 let numUpdates = 0;
 let time = 0;
@@ -61,31 +62,12 @@ export default class Logger {
 
   }
 
-  static debugInfo(name: any, val?: any) {
-    if (typeof name === "object") {
-      for (let [key, value] of Object.entries(name)) {
-        if (value === false || value === undefined)
-          delete debugState[key];
-        else if (typeof value === "number" && !Number.isInteger(value))
-          debugState[key] = value.toFixed(3);
-        else if (value instanceof Vec2)
-          debugState[key] = value.copyValues().map(val => val.toFixed(3));
-        else if (typeof value === "object" && !Array.isArray(value) || typeof value === "function")
-          delete debugState[key];
-        else
-          debugState[key] = value;
-      }
-    } else if (val === false || val === undefined) {
-      delete debugState[name];
-    } else {
-      debugState[name] = val;
-    }
-
+  static debugInfo(name: string, val: any) {
+    debugState[name] = val;
     this.renderDebug();
   }
 
   static renderDebug() {
-    let div = document.getElementById("state");
     let str = "";
     for (let [key, value] of Object.entries(debugState))
       str += key + ": " + value + "\n";
@@ -96,6 +78,7 @@ export default class Logger {
     obj = Object.assign({}, obj)
     for (let key in obj)
       obj[key] = obj[key].toString();
-    this.debugInfo(obj);
+    for (let [key, val] of Object.entries(obj))
+      this.debugInfo(key, val);
   }
 }
