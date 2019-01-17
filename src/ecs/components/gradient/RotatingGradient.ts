@@ -34,7 +34,7 @@ export default class RotatingGradient implements IGradient {
 
   getFillStyle(layer: Layer) {
     // let v = getBorderGradient(this.angle, layer.width, layer.height);
-    let v = getCircleGradient(this.angle, layer.width, layer.height, ...this.getShiftCoords(layer));
+    let v = getCircleGradient(this.angle, Math.min(layer.width, layer.height), ...this.getShiftCoords(layer));
     let gradient = layer.createLinGrad(...v);
     this.stops.forEach((x, i) => gradient.addColorStop(x, this.colors[i]));
     return gradient;
@@ -97,10 +97,10 @@ function getBorderGradient(angle: number, width: number, height: number): [numbe
   return values;
 }
 
-function getCircleGradient(angle: number, width: number, height: number, xOff: number, yOff: number): [number, number, number, number] {
+function getCircleGradient(angle: number, radius: number, xOff: number, yOff: number): [number, number, number, number] {
   angle = (angle + 360) % 360;
   let rad = angle * Math.PI / 180;
-  let l = (height < width ? height : width) / 2;
+  let l = radius / 2;
   let x = l * Math.cos(rad);
   let y = l * Math.sin(rad);
   return shiftAndMirror(x, y, xOff, yOff);

@@ -90,8 +90,7 @@ export default class MouseFollowerFactory {
 
   static createRotatingGradient(start: number, speed: number, shiftX: GradientShiftX, shiftY: GradientShiftY) {
     let conf: RotatingGradientConfig = { start, speed, shiftX, shiftY, stops: {
-        0: "#400",
-        50: "#000",
+        0: "#000",
         100: "#004"
       }
     };

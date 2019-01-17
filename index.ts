@@ -3,7 +3,8 @@ import Engine from "./src/engine";
 let run = () => {
   let game = new Engine();
   (window as any).game = game;
-  idle(() => requestAnimationFrame(() => game.start()));
+  // idle(() => requestAnimationFrame(() => game.start()));
+  game.start()
 }
 
 window.addEventListener("load", run);

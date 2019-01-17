@@ -54,8 +54,8 @@ export default class MouseFollowerLevel extends ECS {
 
     ];
     //background
-    this.queueEntity(Factory.createRotatingGradient(-90, 0.008, "center", "center"));
-    
+    this.queueEntity(Factory.createRotatingGradient(135, 0.01, "left", "top"));
+
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());
 
