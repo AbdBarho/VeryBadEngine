@@ -3,13 +3,16 @@ import Layer from "../../../core/Layer";
 
 export type GradientShiftX = "center" | "left" | "right";
 export type GradientShiftY = "center" | "top" | "bottom";
+export type GradientRadius = "min" | "max";
+export type GradientStops = { [stop: number]: string };
 
 export type RotatingGradientConfig = {
   speed: number;
   start: number;
   shiftX: GradientShiftX;
   shiftY: GradientShiftY;
-  stops: { [stop: number]: string };
+  radius: GradientRadius;
+  stops: GradientStops;
 }
 export default class RotatingGradient implements IGradient {
   angle: number;
@@ -18,6 +21,7 @@ export default class RotatingGradient implements IGradient {
   colors: string[];
   shiftX: GradientShiftX;
   shiftY: GradientShiftY;
+  radius: GradientRadius;
 
   constructor(config: RotatingGradientConfig) {
     this.angle = config.start;
@@ -26,6 +30,7 @@ export default class RotatingGradient implements IGradient {
     this.colors = Object.values(config.stops);
     this.shiftX = config.shiftX;
     this.shiftY = config.shiftY;
+    this.radius = config.radius;
   }
 
   update(dt: number) {
@@ -34,7 +39,7 @@ export default class RotatingGradient implements IGradient {
 
   getFillStyle(layer: Layer) {
     // let v = getBorderGradient(this.angle, layer.width, layer.height);
-    let v = getCircleGradient(this.angle, Math.min(layer.width, layer.height), ...this.getShiftCoords(layer));
+    let v = getCircleGradient(this.angle, ...this.getCoords(layer));
     let gradient = layer.createLinGrad(...v);
     this.stops.forEach((x, i) => gradient.addColorStop(x, this.colors[i]));
     return gradient;
@@ -44,8 +49,8 @@ export default class RotatingGradient implements IGradient {
     return [0, 0, layer.width, layer.height];
   }
 
-  getShiftCoords(layer: Layer): [number, number] {
-    let x = 0, y = 0;
+  getCoords(layer: Layer): [number, number, number] {
+    let x = 0, y = 0, radius = Math[this.radius](layer.width, layer.height);
     switch (this.shiftX) {
       case "center": x = layer.width / 2; break;
       case "left": x = 0; break;
@@ -56,7 +61,7 @@ export default class RotatingGradient implements IGradient {
       case "top": y = 0; break;
       case "bottom": y = layer.height; break;
     }
-    return [x, y];
+    return [radius, x, y];
   }
 
 

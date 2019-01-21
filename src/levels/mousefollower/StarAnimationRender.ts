@@ -35,10 +35,9 @@ export default class StarAnimationRenderer extends System {
     starAnimation.progress = progress = (progress + dt) % lifeTime;
 
 
-    let half = starAnimation.lifeTime / 2;
-    let scale = Math.abs(progress - half) / starAnimation.lifeTime;
+    let scale = Math.abs(progress - lifeTime / 2) / lifeTime;
     // at least half the scale
-    let size = Math.trunc(starAnimation.maxRadius * (scale + 0.5));
+    let size = starAnimation.maxRadius * (scale + 0.5);
 
     // rotations
     let angle = starAnimation.rotationSpeed * progress;
