@@ -1,5 +1,6 @@
 let path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   entry: './index.ts',
@@ -9,30 +10,35 @@ module.exports = {
     path: path.join(__dirname, './dist'),
     filename: 'bundle.js'
   },
-  plugins: [
-    new CircularDependencyPlugin({
-      exclude: /node_modules/,
-      failOnError: false,
-      cwd: process.cwd(),
-    })
-  ],
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts']
   },
   module: {
     rules: [{
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        use: 'ts-loader'
-      },{
-        test: /\.worker\.(j|t)s$/,
-        use: {
-          loader: 'worker-loader',
-          options: {
-            inline: true
-          }
+      test: /\.ts$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true // disable type checker - use the plugin
         }
       }
-    ]
-  }
+
+    }, {
+      test: /\.worker\.(j|t)s$/,
+      use: {
+        loader: 'worker-loader',
+        options: {
+          inline: true
+        }
+      }
+    }]
+  },
+  plugins: [
+    new CircularDependencyPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      useTypescriptIncrementalApi: true,
+      measureCompilationTime: true
+    })
+  ]
 };
