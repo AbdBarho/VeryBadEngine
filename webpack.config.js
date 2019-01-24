@@ -37,7 +37,6 @@ module.exports = {
   plugins: [
     new CircularDependencyPlugin(),
     new ForkTsCheckerWebpackPlugin({
-      useTypescriptIncrementalApi: true,
       measureCompilationTime: true
     })
   ]
