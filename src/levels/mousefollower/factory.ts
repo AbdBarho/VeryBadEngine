@@ -1,9 +1,8 @@
+import config from "../../config/Config";
+import RotatingGradient, { GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradientConfig } from "../../ecs/components/gradient/RotatingGradient";
 import EntityFactory from "../../ecs/Factory";
 import MathHelper from "../../math/Math";
 import Vector from "../../math/Vector";
-import config from "../../config/Config";
-import RotatingGradient, { RotatingGradientConfig, GradientShiftX, GradientShiftY, GradientRadius, GradientStops } from "../../ecs/components/gradient/RotatingGradient";
-import IGradient from "../../ecs/components/gradient/IGradient";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {
@@ -25,8 +24,9 @@ export default class MouseFollowerFactory {
     let pos = this.getVectorInWorld().copyValues();
     let size = MathHelper.getRandomInt(20, 6);
     size += size % 2;
+    let xVelocity = MathHelper.speedPerSecond(size);
     return {
-      ...EntityFactory.createMovingEntity(pos, [MathHelper.speedPerSecond(size * size / 10), 0]),
+      ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
       ...this.createRectModel(size, "#ffffff20"),
       wrapAroundWorld: true
     }
@@ -68,10 +68,10 @@ export default class MouseFollowerFactory {
   static createAnimatedStar() {
     let pos = this.getVectorInWorld().copyValues();
     let numSpikes = MathHelper.getRandomInt(8, 4);
-    let lifeTimeInSeconds = MathHelper.getRandomInt(15, 5);
-    let rotationDirection = MathHelper.getRandomBool() ? 1 : -1;
+    let lifeTimeInSeconds = MathHelper.getRandomInt(10, 5);
+    let direction = MathHelper.getRandomBool() ? 1 : -1;
     let rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
-    let rotationSpeed = rotationDirection * MathHelper.degreesPerSec(rotationAngle);
+    let rotationSpeed = direction * MathHelper.degreesPerSec(rotationAngle);
     let minRadius = MathHelper.getRandomInt(20, 10);
     let maxRadius = MathHelper.getRandomInt(100, 50);
     let xVelocity = MathHelper.speedPerSecond(minRadius);
@@ -84,7 +84,7 @@ export default class MouseFollowerFactory {
         lifeTime, numSpikes, minRadius, rotationSpeed, maxRadius,
         progress: MathHelper.getRandomInt(lifeTime),
         color: "#fff",
-        opacityFactor: 0.4,
+        opacityFactor: 0.2,
         cachedDrawing: document.createElement("canvas")
       }
     }

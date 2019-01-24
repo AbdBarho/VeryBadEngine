@@ -17,8 +17,7 @@ import MouseFollowerController from "./MouseFollowerController";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 import StarAnimationRenderer from "./StarAnimationRender";
-import BackgroundColor from "../../systems/render/Background";
-import RotatingGradient, { RotatingGradientConfig } from "../../ecs/components/gradient/RotatingGradient";
+import MathHelper from "../../math/Math";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -55,15 +54,14 @@ export default class MouseFollowerLevel extends ECS {
     ];
     //background
 
-    this.queueEntity(Factory.createRotatingGradient(0, 0.01, "min", "center", "center", {
-      0: "#500",
-      // 50: "#0408",
-      100: "#005"
+    this.queueEntity(Factory.createRotatingGradient(MathHelper.getRandomInt(360), 0.01, "min", "center", "center", {
+      0: "#400a",
+      100: "#004a"
     }));
 
-    this.queueEntity(Factory.createRotatingGradient(-90, -0.025, "min", "right", "top", {
-      0: "#0004",
-      100: "#0008"
+    this.queueEntity(Factory.createRotatingGradient(-90, -0.012, "min", "right", "top", {
+      50: "#0000",
+      100: "#0006"
     }));
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());
@@ -72,7 +70,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(Factory.createAnimatedStar());
 
     // //in game followers
-    for (let i = 0; i < 500; i++)
+    for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createMouseFollower());
 
   }
