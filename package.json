@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --config webpack.dev.js --watch",
-    "build": "webpack --config webpack.prod.js && mkdir build && inline-source ./index.html ./build/index.html"
+    "build": "webpack --config webpack.prod.js && inline-source ./index.html ./dist/index.html"
   },
   "repository": {
     "type": "git",
