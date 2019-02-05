@@ -1,6 +1,6 @@
 import Config from "../../config/Config";
-import InputManager from "../../core/InputManager";
-import { RectangularModel } from "../../ecs/components/component";
+import InputManager from "../../core/Inputmanager";
+import { RectangularModel } from "../../ecs/components/Component";
 import ECS from "../../ecs/ECS";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";

@@ -1,9 +1,9 @@
 import Canvas from "./core/Canvas";
-import InputManager from "./core/InputManager";
+import InputManager from "./core/Inputmanager";
 import ECS from "./ecs/ECS";
-import MouseFollowerLevel from "./levels/mouseFollower/Level";
+import MouseFollowerLevel from "./levels/mousefollower/Level";
 import Logger from "./services/Logger";
-import PeriodicExecuter from "./services/PeriodicExecuter";
+import PeriodicExecuter from "./services/Periodicexecuter";
 import CONFIG from "./config/Config";
 
 export default class Engine {

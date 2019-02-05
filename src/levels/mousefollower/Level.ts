@@ -1,5 +1,5 @@
 import Canvas from "../../core/Canvas";
-import InputManager from "../../core/InputManager";
+import InputManager from "../../core/Inputmanager";
 import ECS from "../../ecs/ECS";
 import CascadingSystem from "../../ecs/system/CascadingSystem";
 import InputSystem from "../../systems/input/InputSystem";

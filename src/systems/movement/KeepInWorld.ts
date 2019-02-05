@@ -1,5 +1,5 @@
 import Config from "../../config/Config";
-import { RectangularModel } from "../../ecs/components/component";
+import { RectangularModel } from "../../ecs/components/Component";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import Update from "../../ecs/system/Update";

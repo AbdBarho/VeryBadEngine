@@ -1,6 +1,6 @@
 import Vector from "../math/Vector";
 import Vec2 from "../math/vector/Vec2";
-import { QueuedEventManager } from "../services/EventManager";
+import { QueuedEventManager } from "../services/Eventmanager";
 import Canvas from "./Canvas";
 
 export default class InputManager extends QueuedEventManager {

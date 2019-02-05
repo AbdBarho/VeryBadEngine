@@ -1,5 +1,5 @@
 import Entity, { ComponentName } from "../Entity";
-import EmptySystem from "./EmptySystem";
+import EmptySystem from "./Emptysystem";
 import Update from "./Update";
 
 export default class System extends EmptySystem {

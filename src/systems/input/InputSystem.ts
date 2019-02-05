@@ -1,5 +1,5 @@
-import InputManager from "../../core/InputManager";
-import EmptySystem from "../../ecs/system/EmptySystem";
+import InputManager from "../../core/Inputmanager";
+import EmptySystem from "../../ecs/system/Emptysystem";
 import Update from "../../ecs/system/Update";
 
 export default class InputSystem extends EmptySystem {

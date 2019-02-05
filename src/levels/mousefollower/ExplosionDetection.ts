@@ -1,4 +1,4 @@
-import MultiSystem from "../../ecs/system/MultiSystem";
+import MultiSystem from "../../ecs/system/Multisystem";
 import Update from "../../ecs/system/Update";
 import MathHelper from "../../math/Math";
 import StepFunctions from "../../math/Step";

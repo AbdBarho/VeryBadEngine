@@ -1,6 +1,6 @@
 import Canvas from "../../core/Canvas";
 import Layer from "../../core/Layer";
-import EmptySystem from "../../ecs/system/EmptySystem";
+import EmptySystem from "../../ecs/system/Emptysystem";
 import Update from "../../ecs/system/Update";
 
 export default class BackgroundColor extends EmptySystem {

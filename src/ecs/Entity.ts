@@ -1,4 +1,4 @@
-import { ExplosionModel, RectangularModel, StarAnimation } from "./components/component";
+import { ExplosionModel, RectangularModel, StarAnimation } from "./components/Component";
 import Vec2 from "../math/vector/Vec2";
 import IGradient from "./components/gradient/IGradient";
 

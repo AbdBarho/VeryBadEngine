@@ -1,6 +1,6 @@
 import Canvas from "../../core/Canvas";
 import Layer from "../../core/Layer";
-import { ExplosionModel } from "../../ecs/components/component";
+import { ExplosionModel } from "../../ecs/components/Component";
 import ECS from "../../ecs/ECS";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";

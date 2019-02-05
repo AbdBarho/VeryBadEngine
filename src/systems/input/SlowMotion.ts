@@ -1,6 +1,6 @@
-import InputManager from "../../core/InputManager";
+import InputManager from "../../core/Inputmanager";
 import ECS from "../../ecs/ECS";
-import EmptySystem from "../../ecs/system/EmptySystem";
+import EmptySystem from "../../ecs/system/Emptysystem";
 import Update from "../../ecs/system/Update";
 
 export default class SlowMotion extends EmptySystem {

@@ -1,6 +1,6 @@
 import Vector from "../math/Vector";
 import Vec2 from "../math/vector/Vec2";
-import EventManager from "../services/EventManager";
+import EventManager from "../services/Eventmanager";
 import Logger from "../services/Logger";
 import Layer from "./Layer";
 
