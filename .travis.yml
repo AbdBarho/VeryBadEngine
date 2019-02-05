@@ -1,3 +1,7 @@
+branches:
+  except:
+  - gh-pages
+
 language: node_js
 node_js:
   - "lts/*"
@@ -8,10 +12,9 @@ script:
 deploy:
   provider: pages
   skip-cleanup: true
-  file_glob: true
-  file: ./dist/index.html
+  local-dir: ./build/
   github-token: $GITHUB_TOKEN
-  keep-history: false
+  keep-history: true
   target-branch: gh-pages
   on:
     branch: master
