@@ -6,6 +6,7 @@ module.exports = {
   entry: './index.ts',
   devtool: 'source-map',
   mode: 'development',
+  watch: true,
   output: {
     path: Path.join(__dirname, './dist'),
     filename: 'bundle.js'
@@ -13,7 +14,7 @@ module.exports = {
   stats: {
     colors: true,
     modules: true,
-    reasons: true,
+    reasons: false,
     errorDetails: true
   },
   resolve: {
