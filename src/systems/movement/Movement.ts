@@ -24,13 +24,14 @@ export default class MovementSystem extends System {
     let acc = entity.acceleration;
     let vel = entity.velocity;
     //limit acceleration
-    acc.limitByMaxNumber(entity.maxAcceleration);
+    scaleIfNeeded(acc, entity.maxAcceleration);
+    
     //update speed
     let accCopy = Vector.copy(acc);
     vel.addVec(accCopy.mulNum(dt));
 
     //limit speed
-    vel.limitByMaxNumber(entity.maxVelocity);
+    scaleIfNeeded(vel, entity.maxVelocity);
 
     //update position
     let velCopy = Vector.copy(vel);
@@ -40,5 +41,14 @@ export default class MovementSystem extends System {
 
     //save memory
     Vector.store(accCopy, velCopy);
+  }
+}
+
+function scaleIfNeeded(vec: Vec2, scale: number) {
+  let magSq = vec.magnitudeSquared();
+  if (magSq > scale * scale) {
+    let mag = Math.sqrt(magSq);
+    vec.x = scale * vec.x / mag;
+    vec.y = scale * vec.y / mag;
   }
 }
