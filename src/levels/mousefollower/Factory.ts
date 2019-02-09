@@ -34,8 +34,7 @@ export default class MouseFollowerFactory {
 
   static createMouseFollower() {
     let pos = this.getVectorInWorld().copyValues();
-    // let size = MathHelper.getRandomInt(12, 6);
-    let size = 10;
+    let size = MathHelper.getRandomInt(14, 8);
     return {
       ...EntityFactory.createAcceleratingEntity(pos),
       ...this.createRectModel(size, MathHelper.getRandomColor()),
@@ -43,7 +42,6 @@ export default class MouseFollowerFactory {
       // keepInWorld: true,
       mouseFollower: true,
       explodes: true,
-      //FIXME: better physics
       maxAcceleration: MathHelper.accelerationPerSecond(1000),
       maxVelocity: MathHelper.speedPerSecond(500)
     }
@@ -55,10 +53,10 @@ export default class MouseFollowerFactory {
       position: Vector.create(2),
       explosion: true,
       explosionVelocity: MathHelper.speedPerSecond(500) * 2, // * 2 to counter v0
-      explosionRadius: 1000,
+      explosionRadius: 500,
       explosionModel: {
         color: MathHelper.getRandomColor(),
-        radius: 500,
+        radius: 250,
         lifeTime: 1000,
         progress: 0
       }

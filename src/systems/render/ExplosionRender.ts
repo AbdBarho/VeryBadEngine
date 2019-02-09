@@ -27,6 +27,7 @@ export default class ExplosionRender extends System {
   updateEntity(entity: Explosion, dt: number) {
     let { explosionModel, position } = entity;
     let { progress, lifeTime, color, radius } = explosionModel;
+    
     //update animation progress
     entity.explosionModel.progress = progress = progress + dt;
     if (progress >= lifeTime)
@@ -34,8 +35,8 @@ export default class ExplosionRender extends System {
 
     let percent = progress / lifeTime;
 
-    radius *= StepFunctions.smoothStop(percent, 2);
-    let opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 5)) * 256);
+    radius *= StepFunctions.smoothStop(percent, 5);
+    let opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 10)) * 256);
     color = color + MathHelper.toHexColor(opacity);
 
     this.layer.fillCircle(position.x, position.y, radius, color);
