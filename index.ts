@@ -1,7 +1,10 @@
 import Engine from "./src/engine/Engine";
 
 window.addEventListener("load", () => {
-  if (navigator.userAgent.indexOf("Chrome") === -1) {
+  try {
+    new OffscreenCanvas(100, 100);
+  }
+  catch {
     document.body.innerHTML = "<h1>This page only works on Chrome because OffScreenCanvas is not supported yet<h1>";
     return;
   }

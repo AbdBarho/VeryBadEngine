@@ -6,6 +6,7 @@ import System from "../../ecs/system/System";
 import MathHelper from "../../math/Math";
 import StepFunctions from "../../math/Step";
 import Vec2 from "../../math/vector/Vec2";
+import Frame from "../../core/canvas/layers/Frame";
 
 interface Explosion extends Entity {
   position: Vec2;
@@ -14,11 +15,11 @@ interface Explosion extends Entity {
 }
 
 export default class ExplosionRender extends System {
-  layer: Layer;
+  frame: Frame;
   ecs: ECS;
-  constructor(layer: Layer, ecs: ECS) {
+  constructor(frame: Frame, ecs: ECS) {
     super("ExplosionRender", ["explosion", "explosionModel", "position"]);
-    this.layer = layer;
+    this.frame = frame;
     this.ecs = ecs;
   }
 
@@ -37,7 +38,7 @@ export default class ExplosionRender extends System {
     let opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 10)) * 256);
     color = color + MathHelper.toHexColor(opacity);
 
-    this.layer.fillCircle(position.x, position.y, radius, color);
+    this.frame.fillCircle(position.x, position.y, radius, color);
   }
 
 }

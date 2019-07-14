@@ -6,7 +6,7 @@ import Vector from "../../engine/math/Vector";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {
-    let half = sideLength / 2;
+    const half = sideLength / 2;
     return {
       rectModel: {
         color,
@@ -21,10 +21,10 @@ export default class MouseFollowerFactory {
   }
 
   static createSideScroller() {
-    let pos = this.getVectorInWorld().copyValues();
-    let size = MathHelper.getRandomInt(20, 6);
+    const pos = this.getVectorInWorld().copyValues();
+    let size = MathHelper.getRandomInt(20, 4);
     size += size % 2;
-    let xVelocity = MathHelper.speedPerSecond(size * 3);
+    const xVelocity = MathHelper.speedPerSecond(size);
     return {
       ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
       ...this.createRectModel(size, "#ffffff20"),
@@ -33,8 +33,8 @@ export default class MouseFollowerFactory {
   }
 
   static createMouseFollower() {
-    let pos = this.getVectorInWorld().copyValues();
-    let size = MathHelper.getRandomInt(14, 8);
+    const pos = this.getVectorInWorld().copyValues();
+    const size = MathHelper.getRandomInt(14, 8);
     return {
       ...EntityFactory.createAcceleratingEntity(pos),
       ...this.createRectModel(size, MathHelper.getRandomColor()),
@@ -64,35 +64,61 @@ export default class MouseFollowerFactory {
   }
 
   static createAnimatedStar() {
-    let pos = this.getVectorInWorld().copyValues();
-    let numSpikes = MathHelper.getRandomInt(8, 4);
-    let lifeTimeInSeconds = MathHelper.getRandomInt(10, 5);
-    let direction = MathHelper.getRandomBool() ? 1 : -1;
-    let rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
-    let rotationSpeed = direction * MathHelper.degreesPerSec(rotationAngle);
-    let minRadius = MathHelper.getRandomInt(20, 10);
-    let maxRadius = MathHelper.getRandomInt(100, 50);
-    let xVelocity = MathHelper.speedPerSecond(minRadius * 2);
-    let lifeTime = lifeTimeInSeconds * 1000;
+    const pos = this.getVectorInWorld().copyValues();
+    const numSpikes = MathHelper.getRandomInt(8, 4);
+    const lifeTimeInSeconds = MathHelper.getRandomInt(10, 5);
+    const direction = MathHelper.getRandomBool() ? 1 : -1;
+    const rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
+    const rotationSpeed = direction * MathHelper.degreesPerSec(rotationAngle);
+    const minRadius = MathHelper.getRandomInt(20, 10);
+    const maxRadius = MathHelper.getRandomInt(100, 50);
+    const xVelocity = MathHelper.speedPerSecond(minRadius * 2);
+    const lifeTime = lifeTimeInSeconds * 1000;
+    const color = '#fff';
+
+    const cache = new OffscreenCanvas(maxRadius * 2, maxRadius * 2);
+    drawStar(cache.getContext("2d") as OffscreenCanvasRenderingContext2D, numSpikes, minRadius, maxRadius, color)
+
+
 
     return {
       ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
       wrapAroundWorld: true,
       starAnimation: {
-        lifeTime, numSpikes, minRadius, rotationSpeed, maxRadius,
+        //star
+        numSpikes, minRadius, maxRadius,
+        //animation
         progress: MathHelper.getRandomInt(lifeTime),
-        color: "#fff",
+        lifeTime, rotationSpeed,
         opacityFactor: 0.3,
-        cachedDrawing: document.createElement("canvas")
+        //cache
+        cache
       }
     }
   }
 
   static createRotatingGradient(start: number, speed: number, radius: GradientRadius, shiftX: GradientShiftX, shiftY: GradientShiftY, stops: GradientStops) {
-    let config: RotatingGradientConfig = { start, speed, shiftX, shiftY, radius, stops };
+    const config: RotatingGradientConfig = { start, speed, shiftX, shiftY, radius, stops };
     return {
       ...EntityFactory.createBasicEntity(),
       gradient: new RotatingGradient(config)
     }
   }
+}
+
+
+
+function drawStar(ctx: OffscreenCanvasRenderingContext2D, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
+  ctx.beginPath();
+  ctx.fillStyle = fillStyle;
+  ctx.translate(maxRadius, maxRadius);
+  ctx.moveTo(0, 0 - minRadius);
+  for (let i = 0; i < numSpikes; i++) {
+    ctx.rotate(Math.PI / numSpikes);
+    ctx.lineTo(0, 0 - maxRadius);
+    ctx.rotate(Math.PI / numSpikes);
+    ctx.lineTo(0, 0 - minRadius);
+  }
+  ctx.fill();
+  ctx.closePath();
 }

@@ -17,11 +17,10 @@ export type ExplosionModel = {
 export type StarAnimation = {
   progress: number,
   lifeTime: number,
+  rotationSpeed: number,
+  opacityFactor: number,
   numSpikes: number,
   minRadius: number,
   maxRadius: number,
-  rotationSpeed: number,
-  color: string,
-  opacityFactor: number,
-  cachedDrawing: HTMLCanvasElement;
+  cache: OffscreenCanvas;
 }

@@ -1,8 +1,8 @@
-import Layer from "../../engine/core/canvas/layers/Layer";
 import { StarAnimation } from "../../engine/ecs/components/Component";
 import Entity from "../../engine/ecs/Entity";
 import System from "../../engine/ecs/system/System";
 import Vec2 from "../../engine/math/vector/Vec2";
+import Frame from "../../engine/core/canvas/layers/Frame";
 
 type Context = CanvasRenderingContext2D;
 
@@ -12,62 +12,38 @@ interface StarAnimationEntity extends Entity {
 }
 
 export default class StarAnimationRenderer extends System {
-  layer: Layer;
-  constructor(layer: Layer) {
+  frame: Frame;
+  constructor(frame: Frame) {
     super("StarAnimationRender", ["starAnimation", "position"]);
-    this.layer = layer;
+    this.frame = frame;
   }
 
   addIfCompatible(entity: Entity) {
     if (super.addIfCompatible(entity)) {
-      this.cacheRender(entity as StarAnimationEntity);
       return true;
     }
     return false;
   }
 
   updateEntity(entity: StarAnimationEntity, dt: number) {
-    let { position, starAnimation } = entity;
-    let { progress, lifeTime, cachedDrawing, opacityFactor } = starAnimation;
+    const { position, starAnimation } = entity;
+    const { lifeTime, cache, opacityFactor, rotationSpeed } = starAnimation;
 
-    starAnimation.progress = progress = (progress + dt) % lifeTime;
-
-
-    let scale = Math.abs(progress - lifeTime / 2) / lifeTime;
+    const progress = starAnimation.progress = (starAnimation.progress + dt) % lifeTime;
+    const scale = Math.abs(progress - lifeTime / 2) / lifeTime;
     // at least half the scale
-    let size = starAnimation.maxRadius * (scale + 0.5);
-
+    const size = starAnimation.maxRadius * (scale + 0.5);
     // rotations
-    let angle = starAnimation.rotationSpeed * progress;
-    this.layer.rotate(angle, position.x, position.y);
-    this.layer.alpha(scale * opacityFactor);
-    this.layer.drawImage(cachedDrawing, position.x - size / 2, position.y - size / 2, size, size);
-    this.layer.resetRotation();
-    this.layer.alpha(1);
+
+    const newAlpha = scale * opacityFactor;
+    // don't render almost invisible or invisible stars
+    if (newAlpha < 0.01)
+      return;
+    this.frame.rotate(rotationSpeed * progress, position.x, position.y);
+    this.frame.alpha(scale * opacityFactor);
+    this.frame.drawImage(cache, position.x - size / 2, position.y - size / 2, size, size);
+    this.frame.resetRotation();
+    this.frame.alpha(1);
   }
 
-  cacheRender(entity: StarAnimationEntity) {
-    let canvas = entity.starAnimation.cachedDrawing;
-    let { numSpikes, color, minRadius, maxRadius } = entity.starAnimation;
-    canvas.width = maxRadius * 2;
-    canvas.height = maxRadius * 2;
-    let ctx = canvas.getContext("2d");
-    drawStar(ctx!, numSpikes, minRadius, maxRadius, color);
-    entity.starAnimation.cachedDrawing = canvas;
-  }
-}
-
-function drawStar(ctx: Context, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
-  ctx.beginPath();
-  ctx.fillStyle = fillStyle;
-  ctx.translate(maxRadius, maxRadius);
-  ctx.moveTo(0, 0 - minRadius);
-  for (let i = 0; i < numSpikes; i++) {
-    ctx.rotate(Math.PI / numSpikes);
-    ctx.lineTo(0, 0 - maxRadius);
-    ctx.rotate(Math.PI / numSpikes);
-    ctx.lineTo(0, 0 - minRadius);
-  }
-  ctx.fill();
-  ctx.closePath();
 }

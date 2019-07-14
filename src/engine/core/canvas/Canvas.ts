@@ -3,14 +3,11 @@ import Vec2 from "../../math/vector/Vec2";
 import EventManager from "../../services/Eventmanager";
 import Logger from "../../services/Logger";
 import Layer from "./layers/Layer";
-import GUILayer from "./layers/GUILayer";
 
-type LAYER_TYPES = "Layer" | "GUILayer";
-const LAYERS = { Layer, GUILayer };
 
 export default class Canvas extends EventManager {
   layers: Layer[] = [];
-  guiLayers: GUILayer[] = [];
+
   scale = Vector.create();
   shift = Vector.create();
   size = Vector.create();
@@ -26,33 +23,20 @@ export default class Canvas extends EventManager {
   }
 
   getLayer(index: number) {
-    return this.layers[index] || this.createLayer(index);
-  }
-
-  getGUILayer(index: number) {
-    return this.guiLayers[index] || this.createGUILayer(index);
+    return this.layers[index] || this.create(index);
   }
 
   getShift() {
     return this.shift;
   }
 
-  private createLayer(index: number) {
-    return this.create(index, this.layers, "Layer");
-  }
-
-  private createGUILayer(index: number) {
-    return this.create(index, this.guiLayers, "GUILayer");
-  }
-
-  private create(index: number, layers: Layer[], type: LAYER_TYPES) {
-    let LayerClass = LAYERS[type];
-    let layer = new LayerClass(this, index);
-    let len = layers.length;
+  private create(index: number) {
+    let layer = new Layer(this);
+    let len = this.layers.length;
     while (index > len) {
-      layers.push(new LayerClass(this, len++));
+      this.layers.push(new Layer(this));
     }
-    layers.splice(index, 0, layer);
+    this.layers.splice(index, 0, layer);
     this.fitToParent();
     return layer;
 
@@ -72,19 +56,16 @@ export default class Canvas extends EventManager {
     Logger.debugState({ width, height });
     this.size.set(width, height);
     this.scale = Vector.copy(this.size).divVec(this.baseSize);
-    let [xScale, yScale] = this.scale.copyValues();
+    
     let leftShift = (parentWidth - width) / 2;
     let topShift = (parentHeight - height) / 2;
     this.shift.set(leftShift, topShift);
-    for (let layer of this.layers.concat(this.guiLayers)) {
+
+    for (let layer of this.layers) {
       document.body.appendChild(layer.getFrame());
-      layer.setDimensions(width, height, leftShift, topShift, xScale, yScale);
+      layer.setDimensions(width, height, leftShift, topShift);
     }
     this.trigger("resize", this.size);
-  }
-
-  private addLayerToPage(layer: Layer) {
-
   }
 
   pixelToUnit(x: number, y: number, target: Vec2) {

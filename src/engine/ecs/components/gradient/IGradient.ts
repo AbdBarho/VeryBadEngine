@@ -1,7 +1,7 @@
-import Layer, { FillStyle } from "../../../core/canvas/layers/Layer";
+import Frame, { FillStyle } from "../../../core/canvas/layers/Frame";
 
 export default interface IGradient {
   update: (dt: number) => void;
-  getFillStyle: (layer: Layer) => FillStyle;
-  getFillDimensions: (layer: Layer) => [number, number, number, number];
+  getFillStyle: (frame: Frame) => FillStyle;
+  getFillDimensions: (frame: Frame) => [number, number, number, number];
 }

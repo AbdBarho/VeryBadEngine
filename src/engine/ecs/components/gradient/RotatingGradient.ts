@@ -1,5 +1,5 @@
-import Layer from "../../../core/canvas/layers/Layer";
 import IGradient from "./IGradient";
+import Frame from "../../../core/canvas/layers/Frame";
 
 export type GradientShiftX = "center" | "left" | "right";
 export type GradientShiftY = "center" | "top" | "bottom";
@@ -37,29 +37,29 @@ export default class RotatingGradient implements IGradient {
     this.angle = (this.angle + dt * this.speed + 360) % 360;
   }
 
-  getFillStyle(layer: Layer) {
+  getFillStyle(frame: Frame) {
     // let v = getBorderGradient(this.angle, layer.width, layer.height);
-    let v = getCircleGradient(this.angle, ...this.getCoords(layer));
-    let gradient = layer.createLinGrad(...v);
+    let v = getCircleGradient(this.angle, ...this.getCoords(frame));
+    let gradient = frame.createLinGrad(...v);
     this.stops.forEach((x, i) => gradient.addColorStop(x, this.colors[i]));
     return gradient;
   }
 
-  getFillDimensions(layer: Layer): [number, number, number, number] {
-    return [0, 0, layer.width, layer.height];
+  getFillDimensions(frame: Frame): [number, number, number, number] {
+    return [0, 0, frame.width, frame.height];
   }
 
-  getCoords(layer: Layer): [number, number, number] {
-    let x = 0, y = 0, radius = Math[this.radius](layer.width, layer.height);
+  getCoords(frame: Frame): [number, number, number] {
+    let x = 0, y = 0, radius = Math[this.radius](frame.width, frame.height);
     switch (this.shiftX) {
-      case "center": x = layer.width / 2; break;
+      case "center": x = frame.width / 2; break;
       case "left": x = 0; break;
-      case "right": x = layer.width; break;
+      case "right": x = frame.width; break;
     }
     switch (this.shiftY) {
-      case "center": y = layer.height / 2; break;
+      case "center": y = frame.height / 2; break;
       case "top": y = 0; break;
-      case "bottom": y = layer.height; break;
+      case "bottom": y = frame.height; break;
     }
     return [radius, x, y];
   }
@@ -108,7 +108,7 @@ function getCircleGradient(angle: number, radius: number, xOff: number, yOff: nu
   const l = radius / 2;
   const x = l * Math.cos(rad);
   const y = l * Math.sin(rad);
-  
+
   return shiftAndMirror(x, y, xOff, yOff);
 }
 
