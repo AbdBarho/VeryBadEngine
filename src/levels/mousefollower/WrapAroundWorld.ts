@@ -1,8 +1,7 @@
-import Config from "../../config/Config";
-import Entity from "../../ecs/Entity";
-import System from "../../ecs/system/System";
-import Vector from "../../math/Vector";
-import Vec2 from "../../math/vector/Vec2";
+import Entity from "../../engine/ecs/Entity";
+import System from "../../engine/ecs/system/System";
+import Vec2 from "../../engine/math/vector/Vec2";
+import Config from "./LevelConfig";
 
 interface WrappedEntity extends Entity{
   position: Vec2;
@@ -18,7 +17,7 @@ export default class WrapAroundWorld extends System {
   updateEntity(entity: WrappedEntity) {
     if (!entity.hasChanged)
       return;
-    let pos = entity.position;
+    const pos = entity.position;
     pos.x = (pos.x + WORLD_SIZE[0]) % WORLD_SIZE[0];
     pos.y = (pos.y + WORLD_SIZE[1]) % WORLD_SIZE[1];
   }

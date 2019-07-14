@@ -1,4 +1,4 @@
-import config from "../../engine/config/Config";
+import config from "./LevelConfig";
 import RotatingGradient, { GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradientConfig } from "../../engine/ecs/components/gradient/RotatingGradient";
 import EntityFactory from "../../engine/ecs/Factory";
 import MathHelper from "../../engine/math/Math";
@@ -75,11 +75,7 @@ export default class MouseFollowerFactory {
     const xVelocity = MathHelper.speedPerSecond(minRadius * 2);
     const lifeTime = lifeTimeInSeconds * 1000;
     const color = '#fff';
-
-    const cache = new OffscreenCanvas(maxRadius * 2, maxRadius * 2);
-    drawStar(cache.getContext("2d") as OffscreenCanvasRenderingContext2D, numSpikes, minRadius, maxRadius, color)
-
-
+    const cache = drawStar(numSpikes, minRadius, maxRadius, color)
 
     return {
       ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
@@ -108,7 +104,9 @@ export default class MouseFollowerFactory {
 
 
 
-function drawStar(ctx: OffscreenCanvasRenderingContext2D, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
+function drawStar(numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string): OffscreenCanvas {
+  const cache = new OffscreenCanvas(maxRadius * 2, maxRadius * 2);
+  const ctx = cache.getContext("2d") as OffscreenCanvasRenderingContext2D;
   ctx.beginPath();
   ctx.fillStyle = fillStyle;
   ctx.translate(maxRadius, maxRadius);
@@ -121,4 +119,5 @@ function drawStar(ctx: OffscreenCanvasRenderingContext2D, numSpikes: number, min
   }
   ctx.fill();
   ctx.closePath();
+  return cache;
 }

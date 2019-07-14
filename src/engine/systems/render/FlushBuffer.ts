@@ -1,6 +1,6 @@
-import EmptySystem from "../../engine/ecs/system/Emptysystem";
-import Layer from "../../engine/core/canvas/layers/Layer";
-import Frame from "../../engine/core/canvas/layers/Frame";
+import EmptySystem from "../../ecs/system/Emptysystem";
+import Layer from "../../core/canvas/layers/Layer";
+import Frame from "../../core/canvas/layers/Frame";
 
 export default class FlushBuffer extends EmptySystem {
   layer: Layer;

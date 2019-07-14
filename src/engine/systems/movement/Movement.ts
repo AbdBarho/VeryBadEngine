@@ -2,7 +2,6 @@ import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import Vector from "../../math/Vector";
 import Vec2 from "../../math/vector/Vec2";
-import Logger from "../../services/Logger";
 
 interface MovementSystemObject extends Entity {
   moves: boolean;

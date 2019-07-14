@@ -1,44 +1,16 @@
 import Config from "../config/Config";
-import Vector from "../math/Vector";
-import Vec2 from "../math/vector/Vec2";
 
 const GLOBAL_VERBOSITY = Config.LOGGER.VERBOSITY;
-const LOGGERS = [console.error, console.warn, console.log];
 
 let debugState: any = {};
-let div = document.getElementById("state");
+const div = document.getElementById("state");
 const FPS_UPDATE_INTERVAL = 1000; //in ms
 let numUpdates = 0;
 let time = 0;
 let fps: number[] = [];
 
+
 export default class Logger {
-  private prefix: string;
-  private verbosity = GLOBAL_VERBOSITY;
-
-  constructor(obj: any, prefix: string) {
-    this.prefix = prefix;
-    this.verbosity = GLOBAL_VERBOSITY;
-
-    //completely disable logging for performance reasons
-    if (GLOBAL_VERBOSITY === -1) {
-      this.log = () => { };
-      Logger.debugInfo = () => { };
-    }
-
-  }
-
-  setVerbosity(verbosity: number) {
-    this.verbosity = Math.min(verbosity, GLOBAL_VERBOSITY);
-  }
-
-  log(level: 0 | 1 | 2, ...params: any[]) {
-    if (level > this.verbosity)
-      return;
-
-    let loggingFunc = LOGGERS[level] || console.log;
-    loggingFunc(this.prefix, ":", ...params);
-  }
 
   static fps(dt: number) {
     numUpdates++;
@@ -55,11 +27,10 @@ export default class Logger {
   }
 
   static showFPSDebug() {
-    let avg = (fps.reduce((acc, curr) => acc + curr, 0) / fps.length);
-    let avgStr = (1000 / avg).toFixed(2);
-    Logger.debugInfo("AVG FPS", avgStr );
+    const avg = (fps.reduce((acc, curr) => acc + curr, 0) / fps.length);
+    const avgStr = (1000 / avg).toFixed(2);
     fps = [];
-
+    Logger.debugInfo("AVG FPS", avgStr);
   }
 
   static debugInfo(name: string, val: any) {
@@ -81,4 +52,11 @@ export default class Logger {
     for (let [key, val] of Object.entries(obj))
       this.debugInfo(key, val);
   }
+}
+
+//completely disable logging for performance reasons
+if (GLOBAL_VERBOSITY === -1) {
+  Logger.debugInfo = () => { };
+  Logger.renderDebug = () => { };
+  div!.remove();
 }

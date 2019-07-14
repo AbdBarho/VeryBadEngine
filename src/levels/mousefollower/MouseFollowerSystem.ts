@@ -1,4 +1,4 @@
-import Config from "../../engine/config/Config";
+import Config from "./LevelConfig";
 import InputManager from "../../engine/core/Inputmanager";
 import { RectangularModel } from "../../engine/ecs/components/Component";
 import ECS from "../../engine/ecs/ECS";

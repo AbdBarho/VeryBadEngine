@@ -30,12 +30,11 @@ module.exports = {
           fallback: false
         }
       }
-
     }, {
       test: /\.ts$/,
       exclude: /node_modules/,
       use: 'ts-loader'
-    }, ]
+    }]
   },
   plugins: [
     new CircularDependencyPlugin()

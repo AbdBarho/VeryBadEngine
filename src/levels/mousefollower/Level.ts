@@ -6,16 +6,16 @@ import CascadingSystem from "../../engine/ecs/system/CascadingSystem";
 import MathHelper from "../../engine/math/Math";
 import InputSystem from "../../engine/systems/input/InputSystem";
 import SlowMotion from "../../engine/systems/input/SlowMotion";
-import KeepInWorld from "../../engine/systems/movement/KeepInWorld";
+import KeepInWorld from "./KeepInWorld";
 import VelocitySystem from "../../engine/systems/movement/Velocity";
-import WrapAroundWorld from "../../engine/systems/movement/WrapAroundWorld";
+import WrapAroundWorld from "./WrapAroundWorld";
 import ExplosionRender from "../../engine/systems/render/ExplosionRender";
 import GradientRenderer from "../../engine/systems/render/GradientRender";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
 import ExplosionDetection from "./ExplosionDetection";
 import ExplosionOnClick from "./ExplosionOnClick";
 import Factory from "./Factory";
-import FlushBuffer from "./FlushBuffer";
+import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import MouseFollowerController from "./MouseFollowerController";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
@@ -36,7 +36,7 @@ export default class MouseFollowerLevel extends ECS {
     const frame = new Frame();
     this.systems = [
       new InputSystem(this.input),
-      new SlowMotion(this, this.input, .15),
+      new SlowMotion(this, this.input, .12),
 
       new ExplosionDetection(),
       new ExplosionOnClick(this.input, this),
