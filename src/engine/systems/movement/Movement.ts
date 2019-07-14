@@ -1,6 +1,5 @@
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import Update from "../../ecs/system/Update";
 import Vector from "../../math/Vector";
 import Vec2 from "../../math/vector/Vec2";
 import Logger from "../../services/Logger";
@@ -16,8 +15,7 @@ interface MovementSystemObject extends Entity {
 
 export default class MovementSystem extends System {
   constructor() {
-    super("Movement", Update.every,
-      ["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
+    super("Movement", ["position", "velocity", "acceleration", "maxAcceleration", "maxVelocity"]);
   }
 
   updateEntity(entity: MovementSystemObject, dt: number) {
@@ -25,7 +23,7 @@ export default class MovementSystem extends System {
     let vel = entity.velocity;
     //limit acceleration
     scaleIfNeeded(acc, entity.maxAcceleration);
-    
+
     //update speed
     let accCopy = Vector.copy(acc);
     vel.addVec(accCopy.mulNum(dt));

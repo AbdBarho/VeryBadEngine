@@ -1,11 +1,10 @@
 import InputManager from "../../core/Inputmanager";
 import EmptySystem from "../../ecs/system/Emptysystem";
-import Update from "../../ecs/system/Update";
 
 export default class InputSystem extends EmptySystem {
   inputManager: InputManager;
   constructor(inputManager: InputManager) {
-    super("Input", Update.every);
+    super("Input");
     this.inputManager = inputManager;
   }
 

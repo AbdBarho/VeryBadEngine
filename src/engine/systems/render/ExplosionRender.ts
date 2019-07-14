@@ -3,7 +3,6 @@ import { ExplosionModel } from "../../ecs/components/Component";
 import ECS from "../../ecs/ECS";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import Update from "../../ecs/system/Update";
 import MathHelper from "../../math/Math";
 import StepFunctions from "../../math/Step";
 import Vec2 from "../../math/vector/Vec2";
@@ -18,7 +17,7 @@ export default class ExplosionRender extends System {
   layer: Layer;
   ecs: ECS;
   constructor(layer: Layer, ecs: ECS) {
-    super("ExplosionRender", Update.every, ["explosion", "explosionModel", "position"]);
+    super("ExplosionRender", ["explosion", "explosionModel", "position"]);
     this.layer = layer;
     this.ecs = ecs;
   }

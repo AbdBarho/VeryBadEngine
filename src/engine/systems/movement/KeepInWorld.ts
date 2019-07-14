@@ -2,7 +2,6 @@ import Config from "../../config/Config";
 import { RectangularModel } from "../../ecs/components/Component";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import Update from "../../ecs/system/Update";
 import Vector from "../../math/Vector";
 import Vec2 from "../../math/vector/Vec2";
 
@@ -16,7 +15,7 @@ interface KeepInWorldRectangle extends Entity {
 
 export default class KeepInWorld extends System {
   constructor() {
-    super("KeepInWorld", Update.every, ["position", "keepInWorld", "rectModel"]);
+    super("KeepInWorld", ["position", "keepInWorld", "rectModel"]);
   }
 
   updateEntity(entity: KeepInWorldRectangle) {

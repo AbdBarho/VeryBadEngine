@@ -4,7 +4,6 @@ import { RectangularModel } from "../../engine/ecs/components/Component";
 import ECS from "../../engine/ecs/ECS";
 import Entity from "../../engine/ecs/Entity";
 import System from "../../engine/ecs/system/System";
-import Update from "../../engine/ecs/system/Update";
 import MathHelper from "../../engine/math/Math";
 import Vector from "../../engine/math/Vector";
 import Vec2 from "../../engine/math/vector/Vec2";
@@ -33,7 +32,7 @@ export default class MouseFollowerSystem extends System {
 
 
   constructor(inputManager: InputManager, ecs: ECS) {
-    super("MouseFollowerSystem", Update.every, ["acceleration", "position", "velocity", "mouseFollower"]);
+    super("MouseFollowerSystem", ["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
     this.updateSubRoutines();

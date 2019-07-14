@@ -1,6 +1,5 @@
 import Entity, { ComponentName } from "../Entity";
 import EmptySystem from "./Emptysystem";
-import Update from "./Update";
 
 interface Group {
   name: string;
@@ -11,8 +10,8 @@ export default class MultiSystem extends EmptySystem {
   groups: Group[];
   entities: { [group: string]: { [id: string]: Entity } } = {};
 
-  constructor(name: string, updateType: Update, groups: Group[]) {
-    super(name, updateType);
+  constructor(name: string, groups: Group[]) {
+    super(name);
     if (groups.length < 2)
       throw "Can not create a MultiSystem with less than 2 groups, use System or EmptySystem instead";
 

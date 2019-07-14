@@ -5,11 +5,7 @@ import System from "./System";
 export default class CascadingSystem extends System {
   systems: ISystem[];
   constructor(name: string, systems: ISystem[]) {
-    let updateType = systems[0].updateType;
-    for (let system of systems)
-      if (system.updateType !== updateType)
-        throw "cannot create CascadingSystem with different update types";
-    super(name, updateType, []);
+    super(name, []);
     this.systems = systems;
   }
 

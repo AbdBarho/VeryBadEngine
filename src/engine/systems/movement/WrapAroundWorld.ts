@@ -1,7 +1,6 @@
 import Config from "../../config/Config";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import Update from "../../ecs/system/Update";
 import Vector from "../../math/Vector";
 import Vec2 from "../../math/vector/Vec2";
 
@@ -13,7 +12,7 @@ const WORLD_SIZE = Config.WORLD.SIZE;
 
 export default class WrapAroundWorld extends System {
   constructor() {
-    super("WrapAroundWorld", Update.every, ["wrapAroundWorld", "position"]);
+    super("WrapAroundWorld", ["wrapAroundWorld", "position"]);
   }
 
   updateEntity(entity: WrappedEntity) {

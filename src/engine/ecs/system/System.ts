@@ -1,6 +1,5 @@
 import Entity, { ComponentName } from "../Entity";
 import EmptySystem from "./Emptysystem";
-import Update from "./Update";
 
 export default class System extends EmptySystem {
   required: ComponentName[];
@@ -8,8 +7,8 @@ export default class System extends EmptySystem {
   /**
    * @param required required components, if nothing given, the system will accept all entities
    */
-  constructor(name: string, updateType: Update, required: ComponentName[] = []) {
-    super(name, updateType);
+  constructor(name: string, required: ComponentName[] = []) {
+    super(name);
     this.required = required;
   }
 

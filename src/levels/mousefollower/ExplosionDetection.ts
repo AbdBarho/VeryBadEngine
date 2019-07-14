@@ -1,5 +1,4 @@
 import MultiSystem from "../../engine/ecs/system/Multisystem";
-import Update from "../../engine/ecs/system/Update";
 import MathHelper from "../../engine/math/Math";
 import StepFunctions from "../../engine/math/Step";
 import Vector from "../../engine/math/Vector";
@@ -21,7 +20,7 @@ interface ExplodableEntity {
 
 export default class ExplosionDetection extends MultiSystem {
   constructor() {
-    super("ExplosionDetection", Update.every, [
+    super("ExplosionDetection", [
       { name: "sources", components: ["explosion", "explosionVelocity", "explosionRadius", "position"] },
       { name: "targets", components: ["explodes", "velocity", "position"] }
     ]);

@@ -2,7 +2,6 @@ import Layer from "../../engine/core/canvas/layers/Layer";
 import { StarAnimation } from "../../engine/ecs/components/Component";
 import Entity from "../../engine/ecs/Entity";
 import System from "../../engine/ecs/system/System";
-import Update from "../../engine/ecs/system/Update";
 import Vec2 from "../../engine/math/vector/Vec2";
 
 type Context = CanvasRenderingContext2D;
@@ -15,7 +14,7 @@ interface StarAnimationEntity extends Entity {
 export default class StarAnimationRenderer extends System {
   layer: Layer;
   constructor(layer: Layer) {
-    super("StarAnimationRender", Update.every, ["starAnimation", "position"]);
+    super("StarAnimationRender", ["starAnimation", "position"]);
     this.layer = layer;
   }
 

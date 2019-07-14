@@ -1,5 +1,4 @@
 import Entity from "../Entity";
-import Update from "./Update";
 
 export default interface ISystem {
   /**
@@ -7,10 +6,6 @@ export default interface ISystem {
    */
   name: string;
 
-  /**
-   * @returns name of the system
-   */
-  getName(): string;
   /**
    * initialized the system, binds any event listeners needed, creates entities needed...
    */
@@ -21,11 +16,6 @@ export default interface ISystem {
    * @param {number} dt number of milliseconds since last game update iteration
    */
   update: (dt: number) => any;
-
-  /**
-   * defines how often this system will get updated
-   */
-  updateType: Update
 
   /**
    * checks wether the given entity is compatible with the system and adds it if it is

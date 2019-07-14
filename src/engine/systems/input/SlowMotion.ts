@@ -1,7 +1,6 @@
 import InputManager from "../../core/Inputmanager";
 import ECS from "../../ecs/ECS";
 import EmptySystem from "../../ecs/system/Emptysystem";
-import Update from "../../ecs/system/Update";
 
 export default class SlowMotion extends EmptySystem {
   ecs: ECS;
@@ -10,7 +9,7 @@ export default class SlowMotion extends EmptySystem {
   targetScale: number;
   scale: number;
   constructor(ecs: ECS, inputManager: InputManager, scale: number) {
-    super("SlowMotion", Update.every);
+    super("SlowMotion");
     this.ecs = ecs;
     this.inputManager = inputManager;
     this.scale = scale;

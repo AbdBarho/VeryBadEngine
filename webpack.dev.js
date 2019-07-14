@@ -21,10 +21,21 @@ module.exports = {
   },
   module: {
     rules: [{
+      test: /\.worker\.ts$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'worker-loader',
+        options: {
+          inline: true,
+          fallback: false
+        }
+      }
+
+    }, {
       test: /\.ts$/,
       exclude: /node_modules/,
       use: 'ts-loader'
-    }]
+    }, ]
   },
   plugins: [
     new CircularDependencyPlugin()

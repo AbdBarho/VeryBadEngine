@@ -1,14 +1,13 @@
 import InputManager from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
 import EmptySystem from "../../engine/ecs/system/Emptysystem";
-import Update from "../../engine/ecs/system/Update";
 import Factory from "./Factory";
 
 export default class ExplosionOnClick extends EmptySystem {
   input: InputManager;
   ecs: ECS;
   constructor(input: InputManager, ecs: ECS) {
-    super("ExplosionOnClick", Update.every);
+    super("ExplosionOnClick");
     this.ecs = ecs;
     this.input = input;
     this.update = this.doNothing;
