@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js && mkdir build && inline-source ./index.html ./build/index.html"
+    "build": "webpack --config webpack.prod.js ",
+    "test": "&& mkdir build && inline-source ./index.html ./build/index.html"
   },
   "repository": {
     "type": "git",
@@ -16,18 +17,17 @@
     "browser"
   ],
   "author": "Abdullah Barhoum",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/AbdBarho/VeryBadEngine/issues"
   },
   "homepage": "https://github.com/AbdBarho/VeryBadEngine#readme",
   "devDependencies": {
     "circular-dependency-plugin": "^5.0.2",
-    "fork-ts-checker-webpack-plugin": "^0.5.2",
-    "inline-source-cli": "^1.2.0",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3"
+    "inline-source": "^6.2.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
   }
 }

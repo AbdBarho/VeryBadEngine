@@ -1,4 +1,4 @@
-import Canvas from "./Canvas";
+import Canvas from "../Canvas";
 
 export type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap;
 export type FillStyle = string | CanvasGradient | CanvasPattern;
@@ -17,6 +17,7 @@ export default class Layer {
   constructor(canvas: Canvas, index: number) {
     this.canvas = canvas;
     this.index = index;
+    this.frame.id = "layer_" + index;
     let ctx = this.frame.getContext("2d");
     if (ctx === null)
       throw "No context could be created for the canvas";
@@ -84,11 +85,7 @@ export default class Layer {
     this.ctx.fillRect(0, 0, this.width, this.height);
   }
 
-  fillImage(image: DrawableImage) {
-    this.ctx.drawImage(image, 0, 0, this.width, this.height);
-  }
-
-  fillRect(dims: number[], color: string) {
+  fillRectCompact(dims: number[], color: string) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(dims[0] * this.xScale, dims[1] * this.yScale, dims[2] * this.xScale, dims[3] * this.yScale);
   }

@@ -1,13 +1,13 @@
-import Config from "../../config/Config";
-import InputManager from "../../core/Inputmanager";
-import { RectangularModel } from "../../ecs/components/Component";
-import ECS from "../../ecs/ECS";
-import Entity from "../../ecs/Entity";
-import System from "../../ecs/system/System";
-import Update from "../../ecs/system/Update";
-import MathHelper from "../../math/Math";
-import Vector from "../../math/Vector";
-import Vec2 from "../../math/vector/Vec2";
+import Config from "../../engine/config/Config";
+import InputManager from "../../engine/core/Inputmanager";
+import { RectangularModel } from "../../engine/ecs/components/Component";
+import ECS from "../../engine/ecs/ECS";
+import Entity from "../../engine/ecs/Entity";
+import System from "../../engine/ecs/system/System";
+import Update from "../../engine/ecs/system/Update";
+import MathHelper from "../../engine/math/Math";
+import Vector from "../../engine/math/Vector";
+import Vec2 from "../../engine/math/vector/Vec2";
 import Factory from "./Factory";
 
 interface MouseFollowerEntity extends Entity {

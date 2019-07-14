@@ -1,5 +1,5 @@
+import Layer from "../../../core/canvas/layers/Layer";
 import IGradient from "./IGradient";
-import Layer from "../../../core/Layer";
 
 export type GradientShiftX = "center" | "left" | "right";
 export type GradientShiftY = "center" | "top" | "bottom";
@@ -104,10 +104,11 @@ function getBorderGradient(angle: number, width: number, height: number): [numbe
 
 function getCircleGradient(angle: number, radius: number, xOff: number, yOff: number): [number, number, number, number] {
   angle = (angle + 360) % 360;
-  let rad = angle * Math.PI / 180;
-  let l = radius / 2;
-  let x = l * Math.cos(rad);
-  let y = l * Math.sin(rad);
+  const rad = angle * Math.PI / 180;
+  const l = radius / 2;
+  const x = l * Math.cos(rad);
+  const y = l * Math.sin(rad);
+  
   return shiftAndMirror(x, y, xOff, yOff);
 }
 

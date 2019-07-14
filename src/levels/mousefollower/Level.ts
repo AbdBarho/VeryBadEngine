@@ -1,15 +1,16 @@
-import Canvas from "../../core/Canvas";
-import InputManager from "../../core/Inputmanager";
-import ECS from "../../ecs/ECS";
-import CascadingSystem from "../../ecs/system/CascadingSystem";
-import InputSystem from "../../systems/input/InputSystem";
-import SlowMotion from "../../systems/input/SlowMotion";
-import KeepInWorld from "../../systems/movement/KeepInWorld";
-import VelocitySystem from "../../systems/movement/Velocity";
-import WrapAroundWorld from "../../systems/movement/WrapAroundWorld";
-import ExplosionRender from "../../systems/render/ExplosionRender";
-import GradientRenderer from "../../systems/render/GradientRender";
-import RectangleRenderer from "../../systems/render/RectangleRender";
+import Canvas from "../../engine/core/canvas/Canvas";
+import InputManager from "../../engine/core/Inputmanager";
+import ECS from "../../engine/ecs/ECS";
+import CascadingSystem from "../../engine/ecs/system/CascadingSystem";
+import MathHelper from "../../engine/math/Math";
+import InputSystem from "../../engine/systems/input/InputSystem";
+import SlowMotion from "../../engine/systems/input/SlowMotion";
+import KeepInWorld from "../../engine/systems/movement/KeepInWorld";
+import VelocitySystem from "../../engine/systems/movement/Velocity";
+import WrapAroundWorld from "../../engine/systems/movement/WrapAroundWorld";
+import ExplosionRender from "../../engine/systems/render/ExplosionRender";
+import GradientRenderer from "../../engine/systems/render/GradientRender";
+import RectangleRenderer from "../../engine/systems/render/RectangleRender";
 import ExplosionDetection from "./ExplosionDetection";
 import ExplosionOnClick from "./ExplosionOnClick";
 import Factory from "./Factory";
@@ -17,7 +18,6 @@ import MouseFollowerController from "./MouseFollowerController";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 import StarAnimationRenderer from "./StarAnimationRender";
-import MathHelper from "../../math/Math";
 
 export default class MouseFollowerLevel extends ECS {
   input: InputManager;
@@ -72,6 +72,8 @@ export default class MouseFollowerLevel extends ECS {
     // //in game followers
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createMouseFollower());
+
+    // 1000, 5000 => 30 fps
 
   }
 }

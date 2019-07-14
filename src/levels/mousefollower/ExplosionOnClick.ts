@@ -1,7 +1,7 @@
-import InputManager from "../../core/Inputmanager";
-import ECS from "../../ecs/ECS";
-import EmptySystem from "../../ecs/system/Emptysystem";
-import Update from "../../ecs/system/Update";
+import InputManager from "../../engine/core/Inputmanager";
+import ECS from "../../engine/ecs/ECS";
+import EmptySystem from "../../engine/ecs/system/Emptysystem";
+import Update from "../../engine/ecs/system/Update";
 import Factory from "./Factory";
 
 export default class ExplosionOnClick extends EmptySystem {

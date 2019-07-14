@@ -1,8 +1,8 @@
-import config from "../../config/Config";
-import RotatingGradient, { GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradientConfig } from "../../ecs/components/gradient/RotatingGradient";
-import EntityFactory from "../../ecs/Factory";
-import MathHelper from "../../math/Math";
-import Vector from "../../math/Vector";
+import config from "../../engine/config/Config";
+import RotatingGradient, { GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradientConfig } from "../../engine/ecs/components/gradient/RotatingGradient";
+import EntityFactory from "../../engine/ecs/Factory";
+import MathHelper from "../../engine/math/Math";
+import Vector from "../../engine/math/Vector";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {
@@ -24,7 +24,7 @@ export default class MouseFollowerFactory {
     let pos = this.getVectorInWorld().copyValues();
     let size = MathHelper.getRandomInt(20, 6);
     size += size % 2;
-    let xVelocity = MathHelper.speedPerSecond(size);
+    let xVelocity = MathHelper.speedPerSecond(size * 3);
     return {
       ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
       ...this.createRectModel(size, "#ffffff20"),
@@ -72,7 +72,7 @@ export default class MouseFollowerFactory {
     let rotationSpeed = direction * MathHelper.degreesPerSec(rotationAngle);
     let minRadius = MathHelper.getRandomInt(20, 10);
     let maxRadius = MathHelper.getRandomInt(100, 50);
-    let xVelocity = MathHelper.speedPerSecond(minRadius);
+    let xVelocity = MathHelper.speedPerSecond(minRadius * 2);
     let lifeTime = lifeTimeInSeconds * 1000;
 
     return {
@@ -82,7 +82,7 @@ export default class MouseFollowerFactory {
         lifeTime, numSpikes, minRadius, rotationSpeed, maxRadius,
         progress: MathHelper.getRandomInt(lifeTime),
         color: "#fff",
-        opacityFactor: 0.2,
+        opacityFactor: 0.3,
         cachedDrawing: document.createElement("canvas")
       }
     }

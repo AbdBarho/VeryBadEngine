@@ -1,4 +1,4 @@
-import Layer, { FillStyle } from "../../../core/Layer";
+import Layer, { FillStyle } from "../../../core/canvas/layers/Layer";
 
 export default interface IGradient {
   update: (dt: number) => void;

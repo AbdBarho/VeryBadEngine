@@ -1,5 +1,4 @@
-import Canvas from "../../core/Canvas";
-import Layer from "../../core/Layer";
+import Layer from "../../core/canvas/layers/Layer";
 import { RectangularModel } from "../../ecs/components/Component";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
@@ -24,7 +23,7 @@ export default class RectangleRenderer extends System {
       this.calculate(entity);
       entity.hasChanged = false;
     }
-    this.layer.fillRect(entity.rectModel.cachedDimensions, entity.rectModel.color);
+    this.layer.fillRectCompact(entity.rectModel.cachedDimensions, entity.rectModel.color);
   }
 
   private calculate(entity: RectangleModelObject) {

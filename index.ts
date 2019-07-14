@@ -1,9 +1,6 @@
-let idle = (window as any).requestIdleCallback;
-import Engine from "./src/Engine";
-let run = () => {
+import Engine from "./src/engine/Engine";
+window.addEventListener("load", () => {
   let game = new Engine();
   (window as any).game = game;
-  idle(() => requestAnimationFrame(() => game.start()));
-}
-
-window.addEventListener("load", run);
+  setTimeout(() => game.start(), 50);
+});

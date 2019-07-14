@@ -1,5 +1,5 @@
 const speedPerSecond = (val: number) => val / 1000;
-const accelerationPerSecond = (val: number) => val / (1000 ** 2);
+const accelerationPerSecond = (val: number) => val / (1000000);
 
 let config = {
   LOGGER: {

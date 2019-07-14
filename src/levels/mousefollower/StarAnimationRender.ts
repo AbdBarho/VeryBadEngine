@@ -1,10 +1,9 @@
-import Canvas from "../../core/Canvas";
-import { StarAnimation } from "../../ecs/components/Component";
-import Entity from "../../ecs/Entity";
-import System from "../../ecs/system/System";
-import Layer from "../../core/Layer";
-import Update from "../../ecs/system/Update";
-import Vec2 from "../../math/vector/Vec2";
+import Layer from "../../engine/core/canvas/layers/Layer";
+import { StarAnimation } from "../../engine/ecs/components/Component";
+import Entity from "../../engine/ecs/Entity";
+import System from "../../engine/ecs/system/System";
+import Update from "../../engine/ecs/system/Update";
+import Vec2 from "../../engine/math/vector/Vec2";
 
 type Context = CanvasRenderingContext2D;
 

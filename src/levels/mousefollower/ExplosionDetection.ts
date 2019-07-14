@@ -1,10 +1,10 @@
-import MultiSystem from "../../ecs/system/Multisystem";
-import Update from "../../ecs/system/Update";
-import MathHelper from "../../math/Math";
-import StepFunctions from "../../math/Step";
-import Vector from "../../math/Vector";
-import ObjectUtils from "../../util/ObjectUtils";
-import Vec2 from "../../math/vector/Vec2";
+import MultiSystem from "../../engine/ecs/system/Multisystem";
+import Update from "../../engine/ecs/system/Update";
+import MathHelper from "../../engine/math/Math";
+import StepFunctions from "../../engine/math/Step";
+import Vector from "../../engine/math/Vector";
+import Vec2 from "../../engine/math/vector/Vec2";
+import ObjectUtils from "../../engine/util/ObjectUtils";
 
 interface ExplosionEntity {
   position: Vec2;

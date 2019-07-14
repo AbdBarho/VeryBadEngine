@@ -1,10 +1,10 @@
-import Canvas from "./core/Canvas";
+import MouseFollowerLevel from "../levels/mousefollower/Level";
+import CONFIG from "./config/Config";
+import Canvas from "./core/canvas/Canvas";
 import InputManager from "./core/Inputmanager";
 import ECS from "./ecs/ECS";
-import MouseFollowerLevel from "./levels/mousefollower/Level";
 import Logger from "./services/Logger";
 import PeriodicExecuter from "./services/Periodicexecuter";
-import CONFIG from "./config/Config";
 
 export default class Engine {
   level: ECS;

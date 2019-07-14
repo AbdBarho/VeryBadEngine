@@ -1,8 +1,8 @@
-import Layer from "../../core/Layer";
-import Update from "../../ecs/system/Update";
-import System from "../../ecs/system/System";
-import Entity from "../../ecs/Entity";
+import Layer from "../../core/canvas/layers/Layer";
 import IGradient from "../../ecs/components/gradient/IGradient";
+import Entity from "../../ecs/Entity";
+import System from "../../ecs/system/System";
+import Update from "../../ecs/system/Update";
 
 interface GradientEntity extends Entity {
   gradient: IGradient;

@@ -1,13 +1,12 @@
-import Canvas from "../../core/Canvas";
-import Layer from "../../core/Layer";
+import Layer from "../../core/canvas/layers/Layer";
 import { ExplosionModel } from "../../ecs/components/Component";
 import ECS from "../../ecs/ECS";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import Update from "../../ecs/system/Update";
+import MathHelper from "../../math/Math";
 import StepFunctions from "../../math/Step";
 import Vec2 from "../../math/vector/Vec2";
-import MathHelper from "../../math/Math";
 
 interface Explosion extends Entity {
   position: Vec2;
@@ -27,7 +26,7 @@ export default class ExplosionRender extends System {
   updateEntity(entity: Explosion, dt: number) {
     let { explosionModel, position } = entity;
     let { progress, lifeTime, color, radius } = explosionModel;
-    
+
     //update animation progress
     entity.explosionModel.progress = progress = progress + dt;
     if (progress >= lifeTime)

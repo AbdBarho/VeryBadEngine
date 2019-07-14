@@ -1,4 +1,4 @@
-import Layer from "../../core/Layer";
+import Layer from "../../core/canvas/layers/Layer";
 import EmptySystem from "../../ecs/system/Emptysystem";
 import Update from "../../ecs/system/Update";
 
