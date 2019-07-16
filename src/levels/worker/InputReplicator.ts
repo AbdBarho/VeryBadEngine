@@ -1,23 +1,19 @@
 import { InputProvider } from "../../engine/core/Inputmanager";
-import Vector from "../../engine/math/Vector";
-import Vec2 from "../../engine/math/vector/Vec2";
 import EventManager from "../../engine/services/Eventmanager";
+import { V2 } from "../../engine/math/vector/VectorTypes";
 
 export default class InputReplicator extends EventManager implements InputProvider {
-  mousePos = Vector.create(2);
-
+  mousePos: V2 = { x: 0, y: 0 };
   constructor() {
     super();
-    this.onMouseMove((pos: Vec2) => {
-      this.mousePos = pos
-    })
+    this.onMouseMove((pos: V2) => this.mousePos = pos);
   }
 
   onKey(event: "keydown" | "keyup" | "mousedown" | "mouseup", callback: (key: string) => any, context?: any) {
     return super.on(event, callback, context);
   }
 
-  onMouseMove(callback: (mousePos: Vec2) => any, context?: any) {
+  onMouseMove(callback: (mousePos: V2) => any, context?: any) {
     return super.on("mousemove", callback, context);
   }
 }

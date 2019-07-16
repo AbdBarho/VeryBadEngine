@@ -2,19 +2,19 @@ import Vector from "../../engine/math/Vector";
 import Vec2 from "../../engine/math/vector/Vec2";
 import { QueuedEventManager } from "../services/Eventmanager";
 import Canvas from "./canvas/Canvas";
+import { V2 } from "../math/vector/VectorTypes";
 
 export interface InputProvider {
-  mousePos: Vec2;
+  mousePos: V2;
   onKey: (event: "keydown" | "keyup" | "mousedown" | "mouseup", callback: (key: string) => any, context?: any) => any;
-  onMouseMove: (callback: (mousePos: Vec2) => any, context?: any) => any;
-  on: (...args: any[]) => any;
+  onMouseMove: (callback: (mousePos: V2) => any, context?: any) => any;
   off: (...args: any[]) => any;
 }
 
 export default class InputManager extends QueuedEventManager implements InputProvider {
   canvas: Canvas;
   buttonStates: { [key: string]: boolean } = {};
-  mousePos = Vector.create(2);
+  mousePos: V2 = { x: 0, y: 0 };
 
   constructor(canvas: Canvas) {
     super();
@@ -37,7 +37,7 @@ export default class InputManager extends QueuedEventManager implements InputPro
   }
 
   private mousePositionUpdate(event: string, e: MouseEvent) {
-    this.canvas.pixelToUnit(e.pageX, e.pageY, this.mousePos);
+    this.mousePos = this.canvas.pixelToUnit(e.pageX, e.pageY);
     if (this.queue.length && this.queue[this.queue.length - 1].event === event) {
       this.queue.pop();
     }
@@ -56,7 +56,7 @@ export default class InputManager extends QueuedEventManager implements InputPro
     return super.on(event, callback, context);
   }
 
-  onMouseMove(callback: (mousePos: Vec2) => any, context?: any) {
+  onMouseMove(callback: (mousePos: V2) => any, context?: any) {
     return super.on("mousemove", callback, context);
   }
 }

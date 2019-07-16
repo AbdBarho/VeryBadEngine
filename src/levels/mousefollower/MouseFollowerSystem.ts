@@ -1,4 +1,3 @@
-import Config from "./LevelConfig";
 import { InputProvider } from "../../engine/core/Inputmanager";
 import { RectangularModel } from "../../engine/ecs/components/Component";
 import ECS from "../../engine/ecs/ECS";
@@ -7,7 +6,9 @@ import System from "../../engine/ecs/system/System";
 import MathHelper from "../../engine/math/Math";
 import Vector from "../../engine/math/Vector";
 import Vec2 from "../../engine/math/vector/Vec2";
+import { V2 } from "../../engine/math/vector/VectorTypes";
 import Factory from "./Factory";
+import Config from "./LevelConfig";
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: boolean;
@@ -42,8 +43,8 @@ export default class MouseFollowerSystem extends System {
     this.input.onMouseMove(this.mouseMove, this);
   }
 
-  mouseMove(mousePos: Vec2) {
-    this.target = mousePos;
+  mouseMove(mousePos: V2) {
+    this.target.set(mousePos.x, mousePos.y);
   }
 
   changeFreezeState() {

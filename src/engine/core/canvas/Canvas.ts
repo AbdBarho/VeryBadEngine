@@ -4,6 +4,7 @@ import Vec2 from "../../math/vector/Vec2";
 import EventManager from "../../services/Eventmanager";
 import Logger from "../../services/Logger";
 import Layer from "./layers/Layer";
+import { V2 } from "../../math/vector/VectorTypes";
 
 
 const { WIDTH, HEIGHT } = CONFIG.CANVAS;
@@ -72,8 +73,9 @@ export default class Canvas extends EventManager {
     this.trigger("resize", this.size);
   }
 
-  pixelToUnit(x: number, y: number, target: Vec2) {
-    target.set(x, y).subVec(this.shift).divVec(this.scale).trunc();
+  pixelToUnit(x: number, y: number): V2 {
+    const vec = new Vec2(x, y).subVec(this.shift).divVec(this.scale).trunc();
+    return { x: vec.x, y: vec.y };
   }
 
   onResize(callback: (...args: any[]) => any, context: any) {

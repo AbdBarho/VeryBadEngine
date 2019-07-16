@@ -24,7 +24,8 @@ export default class ExplosionOnClick extends EmptySystem {
 
   createExplosion() {
     let explosion = Factory.createExplosion();
-    explosion.position.setVec(this.input.mousePos);
+    const { x, y } = this.input.mousePos;
+    explosion.position.set(x, y);
     this.ecs.queueEntity(explosion);
     //reset
     this.update = this.doNothing;

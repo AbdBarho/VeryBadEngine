@@ -4,6 +4,7 @@ import InputReplicator from "./InputReplicator";
 import { EngineMessage, WorkerMessage } from "./Messages";
 import Vector from "../../engine/math/Vector";
 import Vec2 from "../../engine/math/vector/Vec2";
+import { V2 } from "../../engine/math/vector/VectorTypes";
 
 export default class LevelWorker {
   ctx: DedicatedWorkerGlobalScope;
@@ -45,9 +46,7 @@ export default class LevelWorker {
 
       case "input": {
         if (message.name === "mousemove") {
-          const pos = message.data[0];
-          const mousePos = new Vec2(pos.x, pos.y);
-          this.eventReplicator.trigger(message.name, mousePos);
+          this.eventReplicator.trigger(message.name, message.data[0] as V2);
         } else {
           this.eventReplicator.trigger(message.name, ...message.data);
         }
