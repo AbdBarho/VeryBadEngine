@@ -46,8 +46,9 @@ export default class ECS {
   }
 
   updateSystems(dt: number) {
+    const newDt = dt * this.timeScale;
     for (let i = 0, len = this.systems.length; i < len; i++)
-      this.systems[i].update(dt * this.timeScale);
+      this.systems[i].update(newDt);
   }
 
   processAndReset(dt: number) {

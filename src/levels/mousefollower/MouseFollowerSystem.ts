@@ -1,5 +1,5 @@
 import Config from "./LevelConfig";
-import InputManager from "../../engine/core/Inputmanager";
+import { InputProvider } from "../../engine/core/Inputmanager";
 import { RectangularModel } from "../../engine/ecs/components/Component";
 import ECS from "../../engine/ecs/ECS";
 import Entity from "../../engine/ecs/Entity";
@@ -19,7 +19,7 @@ interface MouseFollowerEntity extends Entity {
 
 const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {
-  input: InputManager;
+  input: InputProvider;
   ecs: ECS;
   isFrozen = CONFIG.IS_FROZEN;
   stopOnReach = CONFIG.STOP_ON_REACH;
@@ -31,7 +31,7 @@ export default class MouseFollowerSystem extends System {
   target = Vector.create(Config.WORLD.SIZE[0] / 2, Config.WORLD.SIZE[1] / 2);
 
 
-  constructor(inputManager: InputManager, ecs: ECS) {
+  constructor(inputManager: InputProvider, ecs: ECS) {
     super("MouseFollowerSystem", ["acceleration", "position", "velocity", "mouseFollower"]);
     this.input = inputManager;
     this.ecs = ecs;
@@ -120,7 +120,7 @@ export default class MouseFollowerSystem extends System {
     console.error("called a dummy function");
   }
 
-  scaleByRandom(dir: Vec2){
+  scaleByRandom(dir: Vec2) {
     dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale);
   }
 

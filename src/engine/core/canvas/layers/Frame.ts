@@ -8,26 +8,25 @@ const { WIDTH, HEIGHT } = Config.CANVAS;
 
 export default class Frame {
 
-  frame = new OffscreenCanvas(WIDTH, HEIGHT);
+  buffer = new OffscreenCanvas(WIDTH, HEIGHT);
   ctx: OffscreenCanvasRenderingContext2D;
   width = WIDTH;
   height = HEIGHT;
 
   constructor() {
-    let ctx = this.frame.getContext("2d");
+    let ctx = this.buffer.getContext("2d");
     if (ctx === null)
       throw "No context could be created for the off screen canvas";
     this.ctx = ctx as OffscreenCanvasRenderingContext2D;
   }
 
-  getFrame() {
-    return this.frame;
+  getBuffer() {
+    return this.buffer;
   }
 
   getContext() {
     return this.ctx;
   }
-
 
   clear() {
     this.ctx.clearRect(0, 0, WIDTH, HEIGHT);

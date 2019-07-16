@@ -1,41 +1,41 @@
-import Canvas from "../../engine/core/canvas/Canvas";
 import Frame from '../../engine/core/canvas/layers/Frame';
-import InputManager from "../../engine/core/Inputmanager";
+import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
 import CascadingSystem from "../../engine/ecs/system/CascadingSystem";
 import MathHelper from "../../engine/math/Math";
 import InputSystem from "../../engine/systems/input/InputSystem";
 import SlowMotion from "../../engine/systems/input/SlowMotion";
-import KeepInWorld from "./KeepInWorld";
 import VelocitySystem from "../../engine/systems/movement/Velocity";
-import WrapAroundWorld from "./WrapAroundWorld";
 import ExplosionRender from "../../engine/systems/render/ExplosionRender";
+import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import GradientRenderer from "../../engine/systems/render/GradientRender";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
 import ExplosionDetection from "./ExplosionDetection";
 import ExplosionOnClick from "./ExplosionOnClick";
 import Factory from "./Factory";
-import FlushBuffer from "../../engine/systems/render/FlushBuffer";
+import KeepInWorld from "./KeepInWorld";
 import MouseFollowerController from "./MouseFollowerController";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 import StarAnimationRenderer from "./StarAnimationRender";
+import WrapAroundWorld from "./WrapAroundWorld";
+import BackgroundColor from '../../engine/systems/render/BackgroundColor';
 
 export default class MouseFollowerLevel extends ECS {
-  input: InputManager;
-  canvas: Canvas;
-  constructor(input: InputManager, canvas: Canvas) {
+  input: InputProvider;
+  canvas: OffscreenCanvas;
+  constructor(input: InputProvider, canvas: OffscreenCanvas) {
   // constructor(input: InputManager) {
     super();
     this.input = input;
     this.canvas = canvas;
+
     //create systems
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
-    const output = this.canvas.getLayer(0);
     const frame = new Frame();
     this.systems = [
-      new InputSystem(this.input),
+      // new InputSystem(this.input),
       new SlowMotion(this, this.input, .12),
 
       new ExplosionDetection(),
@@ -49,14 +49,14 @@ export default class MouseFollowerLevel extends ECS {
       new KeepInWorld(),
       new WrapAroundWorld(),
 
-      // new BackgroundColor(0, "#000", this.canvas, false),
+      // new BackgroundColor(frame, '#111'),
       new GradientRenderer(frame),
       new StarAnimationRenderer(frame),
       new RectangleRenderer(frame),
       new ExplosionRender(frame, this),
 
       //Flush buffer
-      new FlushBuffer(output, [frame])
+      new FlushBuffer(this.canvas, [frame])
 
     ];
     //background
@@ -70,6 +70,7 @@ export default class MouseFollowerLevel extends ECS {
       50: "#0000",
       100: "#0006"
     }));
+
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());
 
@@ -81,6 +82,7 @@ export default class MouseFollowerLevel extends ECS {
       this.queueEntity(Factory.createMouseFollower());
 
     // 1000, 5000 => 30 fps
+    this.init();
 
   }
 }

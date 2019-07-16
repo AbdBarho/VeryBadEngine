@@ -1,8 +1,4 @@
-import { WorldConfig } from '../World';
 import MathHelper from '../../engine/math/Math';
-
-
-
 
 const MouseFollowerLevelConfig = {
   WORLD: {

@@ -1,8 +1,12 @@
+import CONFIG from "../../config/Config";
 import Vector from "../../math/Vector";
 import Vec2 from "../../math/vector/Vec2";
 import EventManager from "../../services/Eventmanager";
 import Logger from "../../services/Logger";
 import Layer from "./layers/Layer";
+
+
+const { WIDTH, HEIGHT } = CONFIG.CANVAS;
 
 
 export default class Canvas extends EventManager {
@@ -14,10 +18,10 @@ export default class Canvas extends EventManager {
   baseSize: Vec2;
   aspectRatio: number;
 
-  constructor(width: number, height: number) {
+  constructor() {
     super();
-    this.baseSize = Vector.create(width, height);
-    this.aspectRatio = width / height;
+    this.baseSize = Vector.create(WIDTH, HEIGHT);
+    this.aspectRatio = WIDTH / HEIGHT;
     //FIXME: not here
     window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent()));
   }
@@ -56,14 +60,14 @@ export default class Canvas extends EventManager {
     Logger.debugState({ width, height });
     this.size.set(width, height);
     this.scale = Vector.copy(this.size).divVec(this.baseSize);
-    
+
     let leftShift = (parentWidth - width) / 2;
     let topShift = (parentHeight - height) / 2;
     this.shift.set(leftShift, topShift);
 
     for (let layer of this.layers) {
-      document.body.appendChild(layer.getFrame());
       layer.setDimensions(width, height, leftShift, topShift);
+      document.body.appendChild(layer.getFrame());
     }
     this.trigger("resize", this.size);
   }

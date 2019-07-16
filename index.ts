@@ -1,4 +1,4 @@
-import Engine from "./src/engine/Engine";
+import Engine from "./src/Engine";
 
 window.addEventListener("load", () => {
   try {
@@ -12,16 +12,3 @@ window.addEventListener("load", () => {
   (window as any).game = game;
   setTimeout(() => game.start(), 50);
 });
-
-// import Worker from "./test.worker";
-// const canvas = document.createElement('canvas');
-// canvas.width = 1070;
-// canvas.height = 500;
-// document.body.appendChild(canvas);
-// const offscreen = canvas.transferControlToOffscreen();
-// const worker = new Worker();
-
-// worker.postMessage({ canvas: offscreen }, [offscreen]);
-// worker.addEventListener("message", (event: any) => { });
-
-// setTimeout(()=> canvas.width = 233, 2000)

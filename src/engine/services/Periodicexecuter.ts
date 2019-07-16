@@ -7,17 +7,18 @@ export default class PeriodicExecuter {
   maxDelta = 0;
   isRunning = false;
 
-  constructor(callback: (dt: number) => any, maxDelta = 20) {
+  constructor(callback: (dt: number) => any, maxDelta = 100) {
     this.callback = callback;
     this.maxDelta = maxDelta;
     this.run = this.run.bind(this);
+
   }
 
   start() {
     if (this.isRunning)
       return;
     this.isRunning = true;
-    let now = performance.now();
+    const now = performance.now();
     let delay = now - this.lastTime;
     delay = delay < this.maxDelta ? delay : 0;
     this.lastTime = now - (this.maxDelta - delay);
@@ -25,12 +26,15 @@ export default class PeriodicExecuter {
   }
 
   run() {
-    let now = performance.now();
-    let dt = now - this.lastTime;
+    const now = performance.now();
+    const dt = now - this.lastTime;
     Logger.fps(dt);
-    this.callback(dt < this.maxDelta ? dt: this.maxDelta);
-    this.lastTime = now;
-    this.timer = requestAnimationFrame(this.run);
+    this.callback(dt < this.maxDelta ? dt : this.maxDelta).then(() => {
+      if (!this.isRunning)
+        return;
+      this.lastTime = now;
+      this.timer = requestAnimationFrame(this.run);
+    });
   }
 
   stop() {

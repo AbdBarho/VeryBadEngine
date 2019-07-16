@@ -23,4 +23,3 @@ export default class IDGenerator {
   }
 }
 
-(window as any).IDGen = IDGenerator;

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js ",
-    "test": "&& mkdir build && inline-source ./index.html ./build/index.html"
+    "build": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +27,7 @@
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
+    "webpack-cli": "^3.3.6",
     "worker-loader": "^2.0.0"
   }
 }

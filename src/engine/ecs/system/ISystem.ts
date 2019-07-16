@@ -7,17 +7,6 @@ export default interface ISystem {
   name: string;
 
   /**
-   * initialized the system, binds any event listeners needed, creates entities needed...
-   */
-  init: () => void;
-
-  /**
-   * this will be called every time the game updates (which is theoretically every frame)
-   * @param {number} dt number of milliseconds since last game update iteration
-   */
-  update: (dt: number) => any;
-
-  /**
    * checks wether the given entity is compatible with the system and adds it if it is
    * @returns {boolean} true if compatible and added, false otherwise
    */
@@ -29,9 +18,23 @@ export default interface ISystem {
    */
   removeEntity: (entityId: string) => void;
 
+
+  /**
+   * initialized the system, binds any event listeners needed, creates entities needed...
+   */
+  init: () => void;
+
+  /**
+   * this will be called every time the game updates (which is theoretically every frame)
+   * @param {number} dt number of milliseconds since last game update iteration
+   */
+  update: (dt: number) => any;
+
   /**
    * called when the level is changed, should undo most if not all of the operations done in init
    * @see {@link ISystem#init}
    */
   destroy: () => void;
+
+
 }

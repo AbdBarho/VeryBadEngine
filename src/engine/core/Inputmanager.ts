@@ -3,7 +3,18 @@ import Vec2 from "../../engine/math/vector/Vec2";
 import { QueuedEventManager } from "../services/Eventmanager";
 import Canvas from "./canvas/Canvas";
 
-export default class InputManager extends QueuedEventManager {
+export interface InputProvider {
+  mousePos: Vec2;
+  onKey: (event: "keydown" | "keyup" | "mousedown" | "mouseup", callback: (key: string) => any, context?: any) => any;
+  onMouseMove: (callback: (mousePos: Vec2) => any, context?: any) => any;
+  queueEvent: (event: string, ...parameters: any[]) => any;
+  executeQueue: () => any;
+  emptyQueue: () => any;
+  on: (...args: any[]) => any;
+  off: (...args: any[]) => any;
+}
+
+export default class InputManager extends QueuedEventManager implements InputProvider {
   canvas: Canvas;
   buttonStates: { [key: string]: boolean } = {};
   mousePos = Vector.create(2);
@@ -30,6 +41,9 @@ export default class InputManager extends QueuedEventManager {
 
   private mousePositionUpdate(event: string, e: MouseEvent) {
     this.canvas.pixelToUnit(e.pageX, e.pageY, this.mousePos);
+    if (this.queue.length && this.queue[this.queue.length - 1].event === event) {
+      this.queue.pop();
+    }
     this.queueEvent(event, this.mousePos);
   }
 

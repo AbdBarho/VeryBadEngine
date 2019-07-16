@@ -1,24 +1,23 @@
-import InputManager from "../../engine/core/Inputmanager";
+import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
 import EmptySystem from "../../engine/ecs/system/Emptysystem";
-import Logger from "../../engine/services/Logger";
 import Factory from "./Factory";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 
 export default class MouseFollowerController extends EmptySystem {
-  input: InputManager;
+  input: InputProvider;
   ecs: ECS;
   system: MouseFollowerSystem;
   movement: MouseFollowerMovementSystem;
 
-  constructor(input: InputManager, ecs: ECS, system: MouseFollowerSystem, movement: MouseFollowerMovementSystem) {
+  constructor(input: InputProvider, ecs: ECS, system: MouseFollowerSystem, movement: MouseFollowerMovementSystem) {
     super("MouseFollowerController");
     this.input = input;
     this.ecs = ecs;
     this.system = system;
     this.movement = movement;
-    Logger.debugInfo("Current Behavior", "normal");
+    // Logger.debugInfo("Current Behavior", "normal");
   }
 
   init() {
@@ -79,14 +78,14 @@ export default class MouseFollowerController extends EmptySystem {
         break;
     }
     this.system.updateSubRoutines();
-    if(newBehavior)
-      Logger.debugInfo("Current Behavior", newBehavior);
+    // if(newBehavior)
+    //   Logger.debugInfo("Current Behavior", newBehavior);
   }
 
   spawnMouseFollowers() {
     for (let i = 0; i < 100; i++)
       this.ecs.queueEntity(Factory.createMouseFollower());
-    Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length + 100);
+    // Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length + 100);
   }
 
   removeMouseFollowers() {
@@ -96,7 +95,7 @@ export default class MouseFollowerController extends EmptySystem {
       if (--i == 0)
         break;
     }
-    Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length);
+    // Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length);
   }
 
   destroy() {

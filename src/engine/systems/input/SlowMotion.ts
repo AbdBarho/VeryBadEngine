@@ -1,20 +1,16 @@
-import InputManager from "../../core/Inputmanager";
+import { InputProvider } from "../../core/Inputmanager";
 import ECS from "../../ecs/ECS";
 import EmptySystem from "../../ecs/system/Emptysystem";
 
 export default class SlowMotion extends EmptySystem {
   ecs: ECS;
-  inputManager: InputManager;
-  currentScale: number;
-  targetScale: number;
+  inputManager: InputProvider;
   scale: number;
-  constructor(ecs: ECS, inputManager: InputManager, scale: number) {
+  constructor(ecs: ECS, inputManager: InputProvider, scale: number) {
     super("SlowMotion");
     this.ecs = ecs;
     this.inputManager = inputManager;
     this.scale = scale;
-    this.currentScale = this.ecs.timeScale;
-    this.targetScale = this.ecs.timeScale;
   }
 
   init() {
