@@ -121,7 +121,9 @@ export default class MouseFollowerSystem extends System {
   }
 
   scaleByRandom(dir: Vec2) {
-    dir.addNum(MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale);
+    const randX = MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
+    const randY = MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
+    dir.addNums(randX, randY);
   }
 
   destroy() {

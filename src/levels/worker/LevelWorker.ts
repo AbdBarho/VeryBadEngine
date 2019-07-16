@@ -38,7 +38,6 @@ export default class LevelWorker {
       }
       case "frame_start": {
         assert(this.level !== null);
-        this.eventReplicator.executeQueue();
         this.level!.update(message.dt);
         this.send({ type: "frame_end" });
         break;
@@ -48,9 +47,9 @@ export default class LevelWorker {
         if (message.name === "mousemove") {
           const pos = message.data[0];
           const mousePos = new Vec2(pos.x, pos.y);
-          this.eventReplicator.queueEvent(message.name, mousePos);
+          this.eventReplicator.trigger(message.name, mousePos);
         } else {
-          this.eventReplicator.queueEvent(message.name, ...message.data);
+          this.eventReplicator.trigger(message.name, ...message.data);
         }
         break;
       }

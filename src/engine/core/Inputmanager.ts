@@ -7,9 +7,6 @@ export interface InputProvider {
   mousePos: Vec2;
   onKey: (event: "keydown" | "keyup" | "mousedown" | "mouseup", callback: (key: string) => any, context?: any) => any;
   onMouseMove: (callback: (mousePos: Vec2) => any, context?: any) => any;
-  queueEvent: (event: string, ...parameters: any[]) => any;
-  executeQueue: () => any;
-  emptyQueue: () => any;
   on: (...args: any[]) => any;
   off: (...args: any[]) => any;
 }

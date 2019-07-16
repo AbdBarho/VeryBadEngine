@@ -3,7 +3,6 @@ import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
 import CascadingSystem from "../../engine/ecs/system/CascadingSystem";
 import MathHelper from "../../engine/math/Math";
-import InputSystem from "../../engine/systems/input/InputSystem";
 import SlowMotion from "../../engine/systems/input/SlowMotion";
 import VelocitySystem from "../../engine/systems/movement/Velocity";
 import ExplosionRender from "../../engine/systems/render/ExplosionRender";
@@ -19,7 +18,6 @@ import MouseFollowerSystem from "./MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./MovementSystem";
 import StarAnimationRenderer from "./StarAnimationRender";
 import WrapAroundWorld from "./WrapAroundWorld";
-import BackgroundColor from '../../engine/systems/render/BackgroundColor';
 
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;

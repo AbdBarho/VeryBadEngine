@@ -21,7 +21,6 @@ export default class Vec2 implements IVector<Vec2> {
 
   setArr(values: number[]) {
     return this.set(values[0], values[1]);
-    return this;
   }
 
   setVec(vector: Vec2) {
@@ -41,6 +40,12 @@ export default class Vec2 implements IVector<Vec2> {
   addNum(num: number) {
     this.x += num;
     this.y += num;
+    return this;
+  }
+  
+  addNums(x: number, y: number) {
+    this.x += x;
+    this.y += y;
     return this;
   }
 
