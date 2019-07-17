@@ -1,4 +1,5 @@
 import IVector from "./IVector";
+import { V2 } from "./VectorTypes";
 
 export default class Vec2 implements IVector<Vec2> {
   x: number;
@@ -42,7 +43,7 @@ export default class Vec2 implements IVector<Vec2> {
     this.y += num;
     return this;
   }
-  
+
   addNums(x: number, y: number) {
     this.x += x;
     this.y += y;
@@ -117,5 +118,9 @@ export default class Vec2 implements IVector<Vec2> {
 
   copyValues() {
     return [this.x, this.y];
+  }
+
+  toV2(): V2 {
+    return { x: this.x, y: this.y };
   }
 }

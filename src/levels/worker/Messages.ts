@@ -1,3 +1,5 @@
+import { V2 } from "../../engine/math/vector/VectorTypes";
+
 export type CanvasBufferTransmitMessage = {
   type: "canvas_buffer_transmit"
   canvas: OffscreenCanvas
@@ -5,8 +7,7 @@ export type CanvasBufferTransmitMessage = {
 
 export type CanvasResizeMessage = {
   type: "canvas_resize"
-  width: number,
-  height: number
+  size: V2;
 }
 
 export type StartFrameMessage = {

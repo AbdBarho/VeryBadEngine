@@ -21,10 +21,11 @@ export default class LevelWorkerController {
   init() {
     const worker = this.worker = new this.levelWorker();
     worker.onmessage = (e) => this.receive(e.data);
+
     const layer = this.canvas.getLayer(0);
-    const offscreen = layer.getFrame().transferControlToOffscreen();
+    const offscreen = layer.transferToOffscreen();
     this.send({ type: "canvas_buffer_transmit", canvas: offscreen }, [offscreen]);
-    this.send({ type: "canvas_resize", width: this.canvas.size.x, height: this.canvas.size.y });
+    this.send({ type: "canvas_resize", size: layer.getSize() });
     this.canvas.onResize(this.resize, this);
     this.input.onAll(this.transmitInput, this);
   }
@@ -36,13 +37,17 @@ export default class LevelWorkerController {
   }
 
   resize(size: Vec2) {
-    this.send({ type: "canvas_resize", width: size.x, height: size.y });
+    this.send({ type: "canvas_resize", size: size.toV2() });
   }
 
   async update(dt: number) {
+    // note: before each update, all the input events are send to the worker
+    // they are handled there immediately, they are not queued.
     this.input.executeQueue();
     this.send({ type: "frame_start", dt });
-    await this.createFramePromise();
+    await new Promise(resolve => {
+      this.triggerFrameEnded = () => { this.triggerFrameEnded = this.doNothing; resolve(); }
+    });
     return;
   }
 
@@ -50,7 +55,6 @@ export default class LevelWorkerController {
     if (message.type == "frame_end")
       this.triggerFrameEnded();
   }
-  triggerFrameEnded() { }
 
   send(message: EngineMessage, transferrable?: any) {
     this.worker!.postMessage(message, transferrable);
@@ -59,13 +63,8 @@ export default class LevelWorkerController {
     this.send({ type: "input", name: event, data: args });
   }
 
-  createFramePromise() {
-    return new Promise(resolve => {
-      this.triggerFrameEnded = () => {
-        this.triggerFrameEnded = () => { };
-        resolve();
-      }
-    });
-  }
+  triggerFrameEnded() { }
+
+  doNothing() { }
 
 }

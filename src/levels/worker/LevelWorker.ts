@@ -1,10 +1,12 @@
+import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
-import ILevel from "./ILevel";
 import InputReplicator from "./InputReplicator";
 import { EngineMessage, WorkerMessage } from "./Messages";
-import Vector from "../../engine/math/Vector";
-import Vec2 from "../../engine/math/vector/Vec2";
-import { V2 } from "../../engine/math/vector/VectorTypes";
+
+
+export interface ILevel {
+  new(input: InputProvider, canvas: OffscreenCanvas): ECS;
+}
 
 export default class LevelWorker {
   ctx: DedicatedWorkerGlobalScope;
@@ -24,32 +26,28 @@ export default class LevelWorker {
   receive(message: EngineMessage) {
     // console.log(message);
     switch (message.type) {
-      case "canvas_buffer_transmit": {
-        assert(this.canvas === null, "Canvas already transmitted");
 
-        this.canvas = message.canvas;
-        this.level = new this.levelCtor(this.eventReplicator, this.canvas);
-        break;
-      }
-      case "canvas_resize": {
-        assert(this.canvas !== null);
-        this.canvas!.width = message.width;
-        this.canvas!.height = message.height;
-        break;
-      }
       case "frame_start": {
-        assert(this.level !== null);
         this.level!.update(message.dt);
         this.send({ type: "frame_end" });
         break;
       }
 
       case "input": {
-        if (message.name === "mousemove") {
-          this.eventReplicator.trigger(message.name, message.data[0] as V2);
-        } else {
-          this.eventReplicator.trigger(message.name, ...message.data);
-        }
+        this.eventReplicator.trigger(message.name, ...message.data);
+        break;
+      }
+
+      case "canvas_buffer_transmit": {
+        this.canvas = message.canvas;
+        this.level = new this.levelCtor(this.eventReplicator, this.canvas);
+        break;
+      }
+
+      case "canvas_resize": {
+        const size = message.size;
+        this.canvas!.width = size.x;
+        this.canvas!.height = size.y;
         break;
       }
 
@@ -62,13 +60,5 @@ export default class LevelWorker {
 
   send(message: WorkerMessage) {
     this.ctx.postMessage(message);
-  }
-}
-
-
-function assert(condition: boolean, ...args: any[]) {
-  if (!condition) {
-    console.log("ERROR:", ...args);
-    throw "ERROR";
   }
 }

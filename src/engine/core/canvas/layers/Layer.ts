@@ -1,8 +1,12 @@
 import Canvas from "../Canvas";
+import { V2 } from "../../../math/vector/VectorTypes";
 
 export default class Layer {
   canvas: Canvas;
   frame = document.createElement("canvas");
+  private isTransferred = false;
+  private size: V2 = { x: 0, y: 0 };
+
   constructor(canvas: Canvas) {
     this.canvas = canvas;
   }
@@ -11,25 +15,22 @@ export default class Layer {
     return this.frame;
   }
 
-  get width() {
-    return this.frame.width;
+  getSize() {
+    return this.size;
   }
 
-  set width(val) {
-    this.frame.width = val;
-  }
-
-  get height() {
-    return this.frame.height;
-  }
-
-  set height(val) {
-    this.frame.height = val;
+  transferToOffscreen() {
+    this.isTransferred = true;
+    return this.frame.transferControlToOffscreen();
   }
 
   setDimensions(w: number, h: number, left: number, top: number) {
-    // this.width = w;
-    // this.height = h;
+    this.size.x = w;
+    this.size.y = h;
+    if (!this.isTransferred) {
+      this.frame.width = w;
+      this.frame.height = h;
+    }
     this.frame.style.top = top + "px";
     this.frame.style.left = left + "px";
   }
