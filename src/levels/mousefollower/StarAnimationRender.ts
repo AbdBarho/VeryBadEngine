@@ -37,7 +37,8 @@ export default class StarAnimationRenderer extends System {
 
     const newAlpha = scale * opacityFactor;
     // don't render almost invisible or invisible stars
-    if (newAlpha < 0.01)
+    // console.log(newAlpha)
+    if (newAlpha < 0.04)
       return;
     this.frame.rotate(rotationSpeed * progress, position.x, position.y);
     this.frame.alpha(scale * opacityFactor);
