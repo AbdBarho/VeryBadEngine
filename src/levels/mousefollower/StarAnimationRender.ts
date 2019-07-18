@@ -4,7 +4,7 @@ import System from "../../engine/ecs/system/System";
 import Vec2 from "../../engine/math/vector/Vec2";
 import Frame from "../../engine/core/canvas/layers/Frame";
 
-type Context = CanvasRenderingContext2D;
+
 
 interface StarAnimationEntity extends Entity {
   position: Vec2;
@@ -27,24 +27,18 @@ export default class StarAnimationRenderer extends System {
 
   updateEntity(entity: StarAnimationEntity, dt: number) {
     const { position, starAnimation } = entity;
-    const { lifeTime, cache, opacityFactor, rotationSpeed } = starAnimation;
+    const { lifeTime, cache, borderBox, numFrames } = starAnimation;
+
 
     const progress = starAnimation.progress = (starAnimation.progress + dt) % lifeTime;
-    const scale = Math.abs(progress - lifeTime / 2) / lifeTime;
-    // at least half the scale
-    const size = starAnimation.maxRadius * (scale + 0.5);
-    // rotations
+    const currentFrame = Math.floor((progress / lifeTime) * numFrames);
 
-    const newAlpha = scale * opacityFactor;
-    // don't render almost invisible or invisible stars
-    // console.log(newAlpha)
-    if (newAlpha < 0.04)
-      return;
-    this.frame.rotate(rotationSpeed * progress, position.x, position.y);
-    this.frame.alpha(scale * opacityFactor);
-    this.frame.drawImage(cache, position.x - size / 2, position.y - size / 2, size, size);
-    this.frame.resetRotation();
-    this.frame.alpha(1);
+    // all frames are on the x axis
+    const { x: width, y: height } = borderBox;
+    this.frame.ctx.drawImage(cache,
+      width * currentFrame, 0, width, height, //from where to read the image
+      position.x - width / 2, position.y - height / 2, width, height   // where to write the image
+    );
   }
 
 }

@@ -100,6 +100,10 @@ export default class Vec2 implements IVector<Vec2> {
     return this.x < vector.x && this.y < vector.y;
   }
 
+  smallerThanV2(vector: V2) {
+    return this.x < vector.x && this.y < vector.y;
+  }
+
   magnitudeSquared() {
     return this.x * this.x + this.y * this.y;
   }
@@ -111,6 +115,15 @@ export default class Vec2 implements IVector<Vec2> {
   limitByMinMax(min: Vec2, max: Vec2) {
     return this.set(Math.min(Math.max(min.x, this.x), max.x), Math.min(Math.max(min.y, this.y), max.y));
   }
+
+  limitByMinMaxNum2d(minX: number, minY: number, maxX: number, maxY: number) {
+    return this.set(
+      this.x < minX ? minX : this.x > maxX ? maxX : this.x,
+      this.y < minY ? minY : this.y > maxY ? maxY : this.y,
+    );
+  }
+
+
 
   limitByMaxNumber(max: number) {
     return this.limitByMinMaxNum(-max, max);

@@ -3,32 +3,32 @@ import RotatingGradient, { GradientRadius, GradientShiftX, GradientShiftY, Gradi
 import EntityFactory from "../../engine/ecs/Factory";
 import MathHelper from "../../engine/math/Math";
 import Vector from "../../engine/math/Vector";
+import { V2 } from "../../engine/math/vector/VectorTypes";
+import { Color, Flag } from "../../engine/ecs/components/Component";
+import CacheDrawer from "./CacheDrawer";
 
 export default class MouseFollowerFactory {
   static createRectModel(sideLength: number, color: string) {
-    const half = sideLength / 2;
     return {
-      rectModel: {
-        color,
-        size: Vector.create(sideLength, sideLength),
-        centerShift: Vector.create(half, half),
-        cachedDimensions: [0, 0, 0, 0]
-      }
+      rectModel: <Flag>true,
+      borderBox: <V2>{ x: sideLength, y: sideLength },
+      rectColor: <Color>color
     }
   }
+
   static getVectorInWorld() {
     return MathHelper.getRandomVector(config.WORLD.SIZE);
   }
 
   static createSideScroller() {
-    const pos = this.getVectorInWorld().copyValues();
+    const pos = this.getVectorInWorld().toV2();
     let size = MathHelper.getRandomInt(20, 4);
     size += size % 2;
     const xVelocity = MathHelper.speedPerSecond(size);
     return {
-      ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
+      ...EntityFactory.createMovingEntity([pos.x, pos.y], [xVelocity, 0]),
       ...this.createRectModel(size, "#ffffff20"),
-      wrapAroundWorld: true
+      wrapAroundWorld: <Flag>true
     }
   }
 
@@ -38,10 +38,10 @@ export default class MouseFollowerFactory {
     return {
       ...EntityFactory.createAcceleratingEntity(pos),
       ...this.createRectModel(size, MathHelper.getRandomColor()),
-      wrapAroundWorld: true,
+      wrapAroundWorld: <Flag>true,
       // keepInWorld: true,
-      mouseFollower: true,
-      explodes: true,
+      mouseFollower: <Flag>true,
+      explodes: <Flag>true,
       maxAcceleration: MathHelper.accelerationPerSecond(1000),
       maxVelocity: MathHelper.speedPerSecond(500)
     }
@@ -51,11 +51,11 @@ export default class MouseFollowerFactory {
     return {
       ...EntityFactory.createBasicEntity(),
       position: Vector.create(2),
-      explosion: true,
+      explosion: <Flag>true,
       explosionVelocity: MathHelper.speedPerSecond(500) * 2, // * 2 to counter v0
       explosionRadius: 500,
       explosionModel: {
-        color: MathHelper.getRandomColor(),
+        color: <Color>MathHelper.getRandomColor(),
         radius: 250,
         lifeTime: 1000,
         progress: 0
@@ -64,30 +64,36 @@ export default class MouseFollowerFactory {
   }
 
   static createAnimatedStar() {
-    const pos = this.getVectorInWorld().copyValues();
     const numSpikes = MathHelper.getRandomInt(8, 4);
     const lifeTimeInSeconds = MathHelper.getRandomInt(10, 5);
-    const direction = MathHelper.getRandomBool() ? 1 : -1;
-    const rotationAngle = 360 / numSpikes / lifeTimeInSeconds;
-    const rotationSpeed = direction * MathHelper.degreesPerSec(rotationAngle);
-    const minRadius = MathHelper.getRandomInt(20, 10);
-    const maxRadius = MathHelper.getRandomInt(100, 50);
-    const xVelocity = MathHelper.speedPerSecond(minRadius * 2);
+    const minRadius = MathHelper.getRandomInt(10, 2);
+    const maxRadius = MathHelper.getRandomInt(50, 30);
     const lifeTime = lifeTimeInSeconds * 1000;
-    const color = '#fff';
-    const cache = drawStar(numSpikes, minRadius, maxRadius, color)
+    const fillStyle = '#fff';
+    const opacityFactor = 0.4;
+    const numFrames = 60;
+    const rotationDirection = MathHelper.getRandomBool() ? 1 : -1;
+    const cache = CacheDrawer.drawStar({
+      fillStyle,
+      lifeTime,
+      maxRadius,
+      minRadius,
+      numFrames,
+      numSpikes,
+      opacityFactor,
+      rotationDirection
+    })
+    const pos = this.getVectorInWorld().copyValues();
+    const xVelocity = MathHelper.speedPerSecond(MathHelper.getSignedRandom(10, 15));
 
     return {
-      ...EntityFactory.createMovingEntity(pos, [xVelocity, 0]),
+      ...EntityFactory.createMovingEntity(pos, [Math.abs(xVelocity), 0]),
       wrapAroundWorld: true,
       starAnimation: {
-        //star
-        numSpikes, minRadius, maxRadius,
-        //animation
+        borderBox: <V2>{ x: maxRadius * 2, y: maxRadius * 2 },
         progress: MathHelper.getRandomInt(lifeTime),
-        lifeTime, rotationSpeed,
-        opacityFactor: 0.3,
-        //cache
+        lifeTime,
+        numFrames,
         cache
       }
     }
@@ -100,24 +106,4 @@ export default class MouseFollowerFactory {
       gradient: new RotatingGradient(config)
     }
   }
-}
-
-
-
-function drawStar(numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string): OffscreenCanvas {
-  const cache = new OffscreenCanvas(maxRadius * 2, maxRadius * 2);
-  const ctx = cache.getContext("2d") as OffscreenCanvasRenderingContext2D;
-  ctx.beginPath();
-  ctx.fillStyle = fillStyle;
-  ctx.translate(maxRadius, maxRadius);
-  ctx.moveTo(0, 0 - minRadius);
-  for (let i = 0; i < numSpikes; i++) {
-    ctx.rotate(Math.PI / numSpikes);
-    ctx.lineTo(0, 0 - maxRadius);
-    ctx.rotate(Math.PI / numSpikes);
-    ctx.lineTo(0, 0 - minRadius);
-  }
-  ctx.fill();
-  ctx.closePath();
-  return cache;
 }

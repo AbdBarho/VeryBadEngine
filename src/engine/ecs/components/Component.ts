@@ -1,26 +1,21 @@
-import Vec2 from "../../math/vector/Vec2";
+import { V2 } from "../../math/vector/VectorTypes";
 
-export type RectangularModel = {
-  size: Vec2;
-  centerShift: Vec2;
-  color: string;
-  cachedDimensions: number[];
-}
+export type Color = string;
+
+export type Flag = boolean;
+
 
 export type ExplosionModel = {
-  color: string;
-  radius: number;
-  lifeTime: number;
-  progress: number;
+  color: Color
+  radius: number
+  lifeTime: number
+  progress: number
 }
 
 export type StarAnimation = {
-  progress: number,
-  lifeTime: number,
-  rotationSpeed: number,
-  opacityFactor: number,
-  numSpikes: number,
-  minRadius: number,
-  maxRadius: number,
+  progress: number
+  lifeTime: number
+  numFrames: number
+  borderBox: V2
   cache: OffscreenCanvas;
 }

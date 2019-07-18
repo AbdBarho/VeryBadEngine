@@ -42,10 +42,17 @@ export default class MovementSystem extends System {
 }
 
 function scaleIfNeeded(vec: Vec2, scale: number) {
+
+  // smart way
   let magSq = vec.magnitudeSquared();
   if (magSq > scale * scale) {
     let mag = Math.sqrt(magSq);
     vec.x = scale * vec.x / mag;
     vec.y = scale * vec.y / mag;
   }
+
+  //fast way
+  // vec.x = vec.x > scale ? scale : vec.x < -scale ? -scale : vec.x;
+  // vec.y = vec.y > scale ? scale : vec.y < -scale ? -scale : vec.y;
+
 }

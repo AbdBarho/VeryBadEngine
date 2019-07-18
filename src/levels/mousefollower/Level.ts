@@ -59,7 +59,7 @@ export default class MouseFollowerLevel extends ECS {
     ];
     //background
 
-    this.queueEntity(Factory.createRotatingGradient(MathHelper.getRandomInt(360), 0.01, "min", "center", "center", {
+    this.queueEntity(Factory.createRotatingGradient(MathHelper.getRandomInt(360), 0.05, "min", "center", "center", {
       0: "#400a",
       100: "#004a"
     }));
@@ -79,7 +79,7 @@ export default class MouseFollowerLevel extends ECS {
     for (let i = 0; i < 500; i++)
       this.queueEntity(Factory.createMouseFollower());
 
-    // 1000, 5000 => 30 fps
+
     this.init();
 
   }

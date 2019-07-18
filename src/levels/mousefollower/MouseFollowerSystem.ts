@@ -1,5 +1,4 @@
 import { InputProvider } from "../../engine/core/Inputmanager";
-import { RectangularModel } from "../../engine/ecs/components/Component";
 import ECS from "../../engine/ecs/ECS";
 import Entity from "../../engine/ecs/Entity";
 import System from "../../engine/ecs/system/System";
@@ -9,13 +8,14 @@ import Vec2 from "../../engine/math/vector/Vec2";
 import { V2 } from "../../engine/math/vector/VectorTypes";
 import Factory from "./Factory";
 import Config from "./LevelConfig";
+import { Flag } from "../../engine/ecs/components/Component";
 
 interface MouseFollowerEntity extends Entity {
-  mouseFollower: boolean;
-  acceleration: Vec2;
-  position: Vec2;
-  velocity: Vec2;
-  rectModel: RectangularModel;
+  mouseFollower: Flag
+  acceleration: Vec2
+  position: Vec2
+  velocity: Vec2
+  borderBox: V2
 }
 
 const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
@@ -33,7 +33,7 @@ export default class MouseFollowerSystem extends System {
 
 
   constructor(inputManager: InputProvider, ecs: ECS) {
-    super("MouseFollowerSystem", ["acceleration", "position", "velocity", "mouseFollower"]);
+    super("MouseFollowerSystem", ["acceleration", "position", "velocity", "mouseFollower", "borderBox"]);
     this.input = inputManager;
     this.ecs = ecs;
     this.updateSubRoutines();
@@ -91,8 +91,9 @@ export default class MouseFollowerSystem extends System {
   targetReached(entity: MouseFollowerEntity) {
     let target = Vector.copy(this.target);
     //calculate distance
-    target.subVec(entity.position).abs();
-    let reached = target.smallerThan(entity.rectModel.centerShift);
+    const magSq = target.subVec(entity.position).abs().magnitudeSquared();
+    const { x, y } = entity.borderBox;
+    const reached = (x * x) + (y * y) > magSq;
     Vector.store(target);
     return reached;
   }

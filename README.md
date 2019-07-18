@@ -11,6 +11,7 @@ A preview of the current engine capabilities [can be found here](https://abdbarh
 ## Todo:
 - ~~move main loop to a worker~~
 - better implement the input redirection from main thread to worker
+- proper implementation of speed and acceleration limiting
 - change the concept of layers in the main thread
 - improve logger, in worker and main thread
 - remove functions from Vec2 class, make solely a data object

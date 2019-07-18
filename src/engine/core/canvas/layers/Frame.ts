@@ -66,9 +66,13 @@ export default class Frame {
     this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
   }
 
-  fillRectCompact(dims: number[], color: string) {
+  fillRectCompact(dims: [number, number, number, number], color: string) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(dims[0], dims[1], dims[2], dims[3]);
+  }
+  fillRect(x: number, y: number, w: number, h: number, color: string) {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(x, y, w, h);
   }
 
   fillCircle(cx: number, cy: number, radius: number, color: string) {

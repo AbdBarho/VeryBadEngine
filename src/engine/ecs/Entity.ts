@@ -1,6 +1,7 @@
-import { ExplosionModel, RectangularModel, StarAnimation } from "./components/Component";
+import { ExplosionModel, StarAnimation, Flag, Color } from "./components/Component";
 import Vec2 from "../math/vector/Vec2";
 import IGradient from "./components/gradient/IGradient";
+import { V2 } from "../math/vector/VectorTypes";
 
 export type ComponentName = keyof Entity;
 
@@ -15,18 +16,20 @@ export default interface Entity {
   acceleration?: Vec2;
   maxAcceleration?: number;
   // world ends
-  keepInWorld?: boolean;
-  wrapAroundWorld?: boolean;
+  keepInWorld?: Flag;
+  wrapAroundWorld?: Flag;
   //render
-  rectModel?: RectangularModel;
   //mouse follower
-  mouseFollower?: boolean;
+  mouseFollower?: Flag;
+  rectModel?: Flag
+  borderBox?: V2
+  rectColor?: Color
   //explosion
-  explosion?: boolean;
+  explosion?: Flag;
   explosionVelocity?: number;
   explosionRadius?: number;
   explosionModel?: ExplosionModel;
-  explodes?: boolean;
+  explodes?: Flag;
   // stars
   starAnimation?: StarAnimation;
   // gradient

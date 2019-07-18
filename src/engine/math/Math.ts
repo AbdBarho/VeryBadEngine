@@ -45,11 +45,11 @@ export default class MathHelper {
   }
 
 
-  static getSignedRandom() {
+  static getSignedRandom(offset = 0, scale = 1) {
     let r = Math.random();
     if (Math.random() < 0.5)
-      return r;
-    return -r;
+      return offset + r * scale;
+    return -offset + (-r * scale);
   }
 
   static getRandomBool() {

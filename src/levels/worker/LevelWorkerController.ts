@@ -6,6 +6,7 @@ import { EngineMessage, WorkerMessage } from "./Messages";
 export interface WorkerConstructor {
   new(): Worker;
 }
+
 export default class LevelWorkerController {
   canvas: Canvas;
   input: InputManager;
@@ -26,6 +27,7 @@ export default class LevelWorkerController {
     const offscreen = layer.transferToOffscreen();
     this.send({ type: "canvas_buffer_transmit", canvas: offscreen }, [offscreen]);
     this.send({ type: "canvas_resize", size: layer.getSize() });
+
     this.canvas.onResize(this.resize, this);
     this.input.onAll(this.transmitInput, this);
   }
@@ -59,6 +61,7 @@ export default class LevelWorkerController {
   send(message: EngineMessage, transferrable?: any) {
     this.worker!.postMessage(message, transferrable);
   }
+  
   transmitInput(event: string, ...args: any[]) {
     this.send({ type: "input", name: event, data: args });
   }
