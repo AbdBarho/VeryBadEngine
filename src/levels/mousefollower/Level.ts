@@ -22,6 +22,8 @@ import WrapAroundWorld from "./WrapAroundWorld";
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;
   canvas: OffscreenCanvas;
+  frames: Frame[] = [new Frame()];
+
   constructor(input: InputProvider, canvas: OffscreenCanvas) {
   // constructor(input: InputManager) {
     super();
@@ -31,7 +33,7 @@ export default class MouseFollowerLevel extends ECS {
     //create systems
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
-    const frame = new Frame();
+    const frame = this.frames[0];
     this.systems = [
       // new InputSystem(this.input),
       new SlowMotion(this, this.input, .12),
@@ -75,12 +77,16 @@ export default class MouseFollowerLevel extends ECS {
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createAnimatedStar());
 
-    // //in game followers
     for (let i = 0; i < 500; i++)
       this.queueEntity(Factory.createMouseFollower());
 
 
     this.init();
 
+  }
+
+  drawLastFrame() {
+    const context = this.canvas.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    this.frames.forEach(frame => context.drawImage(frame.getBuffer(), 0, 0, this.canvas.width, this.canvas.height));
   }
 }
