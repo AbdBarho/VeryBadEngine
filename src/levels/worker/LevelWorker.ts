@@ -2,7 +2,9 @@ import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
 import InputReplicator from "./InputReplicator";
 import { EngineMessage, WorkerMessage } from "./Messages";
+import DedicatedWorkerGlobalScope from './WorkerTypes';
 
+export type LevelWorkerScope = DedicatedWorkerGlobalScope;
 export interface Level extends ECS {
   drawLastFrame: () => void;
 }
@@ -12,14 +14,14 @@ export interface ILevel {
 }
 
 export default class LevelWorker {
-  ctx: DedicatedWorkerGlobalScope;
+  ctx: LevelWorkerScope;
   eventReplicator: InputReplicator;
   levelCtor: ILevel;
 
   level: Level | null = null;
   canvas: OffscreenCanvas | null = null;
 
-  constructor(workerContext: DedicatedWorkerGlobalScope, LevelClass: ILevel) {
+  constructor(workerContext: LevelWorkerScope, LevelClass: ILevel) {
     this.ctx = workerContext;
     this.eventReplicator = new InputReplicator();
     this.levelCtor = LevelClass;

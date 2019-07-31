@@ -1,9 +1,10 @@
 const Path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   entry: './index.ts',
-  devtool: 'source-map',
+  // devtool: 'source-map',
   mode: 'development',
   watch: true,
   output: {
@@ -21,22 +22,32 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.worker\.ts$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'worker-loader',
-        options: {
-          inline: true,
-          fallback: false
+        test: /\.worker\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            inline: true,
+            fallback: false
+          }
+        }
+      },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
         }
       }
-    }, {
-      test: /\.ts$/,
-      exclude: /node_modules/,
-      use: 'ts-loader'
-    }]
+    ]
   },
   plugins: [
-    new CircularDependencyPlugin()
+    new CircularDependencyPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      measureCompilationTime: true
+    })
   ]
 };

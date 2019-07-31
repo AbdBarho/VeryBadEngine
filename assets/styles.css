@@ -14,6 +14,10 @@ canvas {
   /* cursor: none; */
 }
 
+h1 {
+  color: white;
+}
+
 #state {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: fixed;

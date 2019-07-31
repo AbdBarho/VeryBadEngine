@@ -15,26 +15,33 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.worker\.ts$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'worker-loader',
-        options: {
-          inline: true,
-          fallback: false
+        test: /\.worker\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            inline: true,
+            fallback: false
+          }
+        }
+      },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
         }
       }
-    }, {
-      test: /\.ts$/,
-      exclude: /node_modules/,
-      use: 'ts-loader'
-    }]
+    ]
   },
   plugins: [{
     apply: function(compiler) {
       compiler.hooks.done.tap('Inline source', async function() {
         const html = await InlineSource.inlineSource(Path.resolve('./index.html'), {
-          compress: false // compressing actually breaks the code
+          compress: false // compressing actually breaks the code, probably cause it is not es5
         });
         if (!FS.existsSync('./build')) {
           FS.mkdirSync('./build');
