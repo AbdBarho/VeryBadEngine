@@ -1,7 +1,6 @@
 import { ExplosionModel, StarAnimation, Flag, Color } from "./components/Component";
-import Vec2 from "../math/vector/Vec2";
 import IGradient from "./components/gradient/IGradient";
-import { V2 } from "../math/vector/VectorTypes";
+import { V2 } from "../math/VectorTypes";
 
 export type ComponentName = keyof Entity;
 
@@ -10,10 +9,10 @@ export default interface Entity {
   hasChanged: boolean;
   //movement
   moves?: boolean;
-  position?: Vec2;
-  velocity?: Vec2;
+  position?: V2;
+  velocity?: V2;
   maxVelocity?: number;
-  acceleration?: Vec2;
+  acceleration?: V2;
   maxAcceleration?: number;
   // world ends
   keepInWorld?: Flag;

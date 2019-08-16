@@ -1,18 +1,17 @@
 import Canvas from "../engine/core/canvas/Canvas";
 import InputManager from "../engine/core/Inputmanager";
-import LevelWorkerController from "./worker/LevelWorkerController";
-import MouseFollowerLevel from "./mousefollower/Level.worker";
-import InputReplicator from "./worker/InputReplicator";
+import LevelWorkerController from "./mousefollower/LevelWorkerController";
 
 export default class WorldManager {
   canvas: Canvas;
+  input: InputManager;
   activeLevel: LevelWorkerController;
 
   isPaused = false; //TODO: we have 'isRunning' variable in the engine level, maybe get rid of that?
   constructor(canvas: Canvas, inputManager: InputManager) {
     this.canvas = canvas;
-    // const inputReplicator = new InputReplicator();
-    this.activeLevel = new LevelWorkerController(canvas, inputManager, MouseFollowerLevel);
+    this.input = inputManager;
+    this.activeLevel = new LevelWorkerController(this);
   }
 
   init() {

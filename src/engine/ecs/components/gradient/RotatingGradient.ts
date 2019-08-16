@@ -1,5 +1,6 @@
+import { GradientData } from "../../../core/canvas/layers/Frame";
+import { V2 } from "../../../math/VectorTypes";
 import IGradient from "./IGradient";
-import Frame from "../../../core/canvas/layers/Frame";
 
 export type GradientShiftX = "center" | "left" | "right";
 export type GradientShiftY = "center" | "top" | "bottom";
@@ -7,6 +8,7 @@ export type GradientRadius = "min" | "max";
 export type GradientStops = { [stop: number]: string };
 
 export type RotatingGradientConfig = {
+  size: V2;
   speed: number;
   start: number;
   shiftX: GradientShiftX;
@@ -14,11 +16,14 @@ export type RotatingGradientConfig = {
   radius: GradientRadius;
   stops: GradientStops;
 }
+
+
 export default class RotatingGradient implements IGradient {
   angle: number;
   speed: number;
   stops: number[];
   colors: string[];
+  size: V2;
   shiftX: GradientShiftX;
   shiftY: GradientShiftY;
   radius: GradientRadius;
@@ -28,6 +33,7 @@ export default class RotatingGradient implements IGradient {
     this.speed = config.speed;
     this.stops = Object.keys(config.stops).map(x => parseFloat(x) / 100);
     this.colors = Object.values(config.stops);
+    this.size = config.size;
     this.shiftX = config.shiftX;
     this.shiftY = config.shiftY;
     this.radius = config.radius;
@@ -37,29 +43,25 @@ export default class RotatingGradient implements IGradient {
     this.angle = (this.angle + dt * this.speed + 360) % 360;
   }
 
-  getFillStyle(frame: Frame) {
-    // let v = getBorderGradient(this.angle, layer.width, layer.height);
-    let v = getCircleGradient(this.angle, ...this.getCoords(frame));
-    let gradient = frame.createLinGrad(...v);
-    this.stops.forEach((x, i) => gradient.addColorStop(x, this.colors[i]));
-    return gradient;
+  getFillStyle(): GradientData {
+    return {
+      points: getCircleGradient(this.angle, ...this.getCoords()),
+      colors: this.colors,
+      stops: this.stops
+    };
   }
 
-  getFillDimensions(frame: Frame): [number, number, number, number] {
-    return [0, 0, frame.width, frame.height];
-  }
-
-  getCoords(frame: Frame): [number, number, number] {
-    let x = 0, y = 0, radius = Math[this.radius](frame.width, frame.height);
+  getCoords(): [number, number, number] {
+    let x = 0, y = 0, radius = Math[this.radius](this.size.x, this.size.y);
     switch (this.shiftX) {
-      case "center": x = frame.width / 2; break;
+      case "center": x = this.size.x / 2; break;
       case "left": x = 0; break;
-      case "right": x = frame.width; break;
+      case "right": x = this.size.x; break;
     }
     switch (this.shiftY) {
-      case "center": y = frame.height / 2; break;
+      case "center": y = this.size.y / 2; break;
       case "top": y = 0; break;
-      case "bottom": y = frame.height; break;
+      case "bottom": y = this.size.y; break;
     }
     return [radius, x, y];
   }
@@ -102,7 +104,8 @@ function getBorderGradient(angle: number, width: number, height: number): [numbe
   return values;
 }
 
-function getCircleGradient(angle: number, radius: number, xOff: number, yOff: number): [number, number, number, number] {
+function getCircleGradient(angle: number, radius: number, xOff: number, yOff: number):
+  [number, number, number, number] {
   angle = (angle + 360) % 360;
   const rad = angle * Math.PI / 180;
   const l = radius / 2;

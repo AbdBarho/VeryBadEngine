@@ -1,20 +1,19 @@
-import { InputProvider } from "../../engine/core/Inputmanager";
-import ECS from "../../engine/ecs/ECS";
-import Entity from "../../engine/ecs/Entity";
-import System from "../../engine/ecs/system/System";
-import MathHelper from "../../engine/math/Math";
-import Vector from "../../engine/math/Vector";
-import Vec2 from "../../engine/math/vector/Vec2";
-import { V2 } from "../../engine/math/vector/VectorTypes";
-import Factory from "./Factory";
-import Config from "./LevelConfig";
-import { Flag } from "../../engine/ecs/components/Component";
+import { InputProvider } from "../../../engine/core/Inputmanager";
+import { Flag } from "../../../engine/ecs/components/Component";
+import ECS from "../../../engine/ecs/ECS";
+import Entity from "../../../engine/ecs/Entity";
+import System from "../../../engine/ecs/system/System";
+import MathHelper from "../../../engine/math/Math";
+import { V2 } from "../../../engine/math/VectorTypes";
+import Config from "../Config";
+import Factory from "../services/Factory";
+const WORLD_SIZE = Config.WORLD.SIZE;
 
 interface MouseFollowerEntity extends Entity {
   mouseFollower: Flag
-  acceleration: Vec2
-  position: Vec2
-  velocity: Vec2
+  acceleration: V2
+  position: V2
+  velocity: V2
   borderBox: V2
 }
 
@@ -29,8 +28,7 @@ export default class MouseFollowerSystem extends System {
   lookAheadSteps = CONFIG.LOOK_AHEAD_STEPS;
   randomFactorScale = CONFIG.RANDOM_FACTOR_SCALE;
   accelerationScale = CONFIG.ACCELERATION_SCALE;
-  target = Vector.create(Config.WORLD.SIZE[0] / 2, Config.WORLD.SIZE[1] / 2);
-
+  target = { x: WORLD_SIZE.x / 2, y: WORLD_SIZE.y / 2 };
 
   constructor(inputManager: InputProvider, ecs: ECS) {
     super("MouseFollowerSystem", ["acceleration", "position", "velocity", "mouseFollower", "borderBox"]);
@@ -44,7 +42,8 @@ export default class MouseFollowerSystem extends System {
   }
 
   mouseMove(mousePos: V2) {
-    this.target.set(mousePos.x, mousePos.y);
+    this.target.x = mousePos.x;
+    this.target.y = mousePos.y;
   }
 
   changeFreezeState() {
@@ -66,8 +65,10 @@ export default class MouseFollowerSystem extends System {
     if (this.destroyOnReach || this.stopOnReach) {
       if (this.targetReached(entity)) {
         if (this.stopOnReach) {
-          entity.velocity.clear();
-          entity.acceleration.clear();
+          entity.velocity.x = 0;
+          entity.velocity.y = 0;
+          entity.acceleration.x = 0;
+          entity.acceleration.y = 0;
         }
 
         if (this.destroyOnReach && this.respawnOnDestroy) {
@@ -82,20 +83,19 @@ export default class MouseFollowerSystem extends System {
 
     let dir = this.getDirection(entity);
     this.scaleIfNeeded(dir);
-    entity.acceleration.setVec(dir);
+    entity.acceleration.x = dir.x;
+    entity.acceleration.y = dir.y;
     entity.hasChanged = true;
 
-    Vector.store(dir);
   }
 
   targetReached(entity: MouseFollowerEntity) {
-    let target = Vector.copy(this.target);
+    let x = this.target.x - entity.position.x;
+    let y = this.target.y - entity.position.y;
     //calculate distance
-    const magSq = target.subVec(entity.position).abs().magnitudeSquared();
-    const { x, y } = entity.borderBox;
-    const reached = (x * x) + (y * y) > magSq;
-    Vector.store(target);
-    return reached;
+    const magSq = (x * x) + (y * y);
+    const box = entity.borderBox;
+    return (box.x * box.x) + (box.y * box.y) > magSq;
   }
 
   //Dummy function, should never be called
@@ -105,27 +105,33 @@ export default class MouseFollowerSystem extends System {
   }
 
   getDirectionWithLookAhead(entity: MouseFollowerEntity) {
-    let pos = Vector.copy(entity.position);
-    let vel = Vector.copy(entity.velocity)
-    pos.addVec(vel.mulNum(this.lookAheadSteps));
-    let dir = MathHelper.direction2d(pos, this.target).mulNum(this.accelerationScale);
-    Vector.store(pos, vel);
+    const vel = entity.velocity;
+    const pos = entity.position;
+    const newPos = {
+      x: pos.x + vel.x * this.lookAheadSteps,
+      y: pos.y + vel.y * this.lookAheadSteps
+    }
+    let dir = MathHelper.direction2d(newPos, this.target);
+    dir.x *= this.accelerationScale;
+    dir.y *= this.accelerationScale;
     return dir;
   }
 
   getDirectionNoLookAhead(entity: MouseFollowerEntity) {
-    return MathHelper.direction2d(entity.position, this.target).mulNum(this.accelerationScale);
+    const dir = MathHelper.direction2d(entity.position, this.target)
+    dir.x *= this.accelerationScale;
+    dir.y *= this.accelerationScale;
+    return dir;
   }
 
   //Dummy function, should never be called
-  scaleIfNeeded(dir: Vec2) {
+  scaleIfNeeded(dir: V2) {
     console.error("called a dummy function");
   }
 
-  scaleByRandom(dir: Vec2) {
-    const randX = MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
-    const randY = MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
-    dir.addNums(randX, randY);
+  scaleByRandom(dir: V2) {
+    dir.x += MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
+    dir.y += MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
   }
 
   destroy() {

@@ -1,56 +1,57 @@
 import Frame from '../../engine/core/canvas/layers/Frame';
 import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
-import CascadingSystem from "../../engine/ecs/system/CascadingSystem";
 import MathHelper from "../../engine/math/Math";
-import SlowMotion from "../../engine/systems/input/SlowMotion";
 import VelocitySystem from "../../engine/systems/movement/Velocity";
 import ExplosionRender from "../../engine/systems/render/ExplosionRender";
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
-import GradientRenderer from "../../engine/systems/render/GradientRender";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
-import ExplosionDetection from "./ExplosionDetection";
-import ExplosionOnClick from "./ExplosionOnClick";
-import Factory from "./Factory";
-import KeepInWorld from "./KeepInWorld";
-import MouseFollowerController from "./MouseFollowerController";
-import MouseFollowerSystem from "./MouseFollowerSystem";
-import MouseFollowerMovementSystem from "./MovementSystem";
-import StarAnimationRenderer from "./StarAnimationRender";
-import WrapAroundWorld from "./WrapAroundWorld";
+import MouseFollowerWorker from "./LevelWorker";
+import Factory from "./services/Factory";
+import ExplosionDetection from "./systems/ExplosionDetection";
+import GradientRenderer from "./systems/GradientRender";
+import InputSystem from "./systems/InputSystem";
+import MouseFollowerSystem from "./systems/MouseFollowerSystem";
+import MouseFollowerMovementSystem from "./systems/MovementSystem";
+import StarAnimationRenderer from "./systems/StarAnimationRender";
+import WrapAroundWorld from "./systems/WrapAroundWorld";
+import Config from './Config';
 
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;
   canvas: OffscreenCanvas;
+  worker: MouseFollowerWorker;
   frames: Frame[] = [new Frame()];
 
-  constructor(input: InputProvider, canvas: OffscreenCanvas) {
+  constructor(worker: MouseFollowerWorker) {
   // constructor(input: InputManager) {
     super();
-    this.input = input;
-    this.canvas = canvas;
+    this.worker = worker;
+    this.input = worker.input;
+    this.canvas = worker.canvas!;
 
     //create systems
     let MFSys = new MouseFollowerSystem(this.input, this);
     let MFMovement = new MouseFollowerMovementSystem();
     const frame = this.frames[0];
     this.systems = [
-      // new InputSystem(this.input),
-      new SlowMotion(this, this.input, .12),
+      new InputSystem(this.input, this, MFSys, MFMovement),
 
-      new ExplosionDetection(),
-      new ExplosionOnClick(this.input, this),
-
-      new MouseFollowerController(this.input, this, MFSys, MFMovement),
-      MFSys,
-
-      new CascadingSystem("CascadingMovement", [MFMovement, new VelocitySystem()]),
-
-      new KeepInWorld(),
-      new WrapAroundWorld(),
-
+      //background elements can be updated and rendered directly
       // new BackgroundColor(frame, '#111'),
       new GradientRenderer(frame),
+
+      new ExplosionDetection(),
+
+      new VelocitySystem(),
+
+
+      MFSys,
+      MFMovement,
+      new WrapAroundWorld(),
+
+      // new KeepInWorld(),
+
       new StarAnimationRenderer(frame),
       new RectangleRenderer(frame),
       new ExplosionRender(frame, this),
@@ -59,17 +60,21 @@ export default class MouseFollowerLevel extends ECS {
       new FlushBuffer(this.canvas, [frame])
 
     ];
+
     //background
+    this.queueEntity(Factory.createRotatingGradient(Config.WORLD.SIZE,
+      MathHelper.getRandomInt(360), 0.05, "min", "center", "center", {
+        0: "#400a",
+        100: "#004a"
+      })
+    );
 
-    this.queueEntity(Factory.createRotatingGradient(MathHelper.getRandomInt(360), 0.05, "min", "center", "center", {
-      0: "#400a",
-      100: "#004a"
-    }));
-
-    this.queueEntity(Factory.createRotatingGradient(-90, -0.012, "min", "right", "top", {
-      50: "#0000",
-      100: "#0006"
-    }));
+    this.queueEntity(Factory.createRotatingGradient(Config.WORLD.SIZE,
+      -90, -0.012, "min", "right", "top", {
+        50: "#0000",
+        100: "#0006"
+      })
+    );
 
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());

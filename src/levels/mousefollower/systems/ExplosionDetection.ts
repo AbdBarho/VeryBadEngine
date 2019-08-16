@@ -1,12 +1,11 @@
-import MultiSystem from "../../engine/ecs/system/Multisystem";
-import MathHelper from "../../engine/math/Math";
-import StepFunctions from "../../engine/math/Step";
-import Vector from "../../engine/math/Vector";
-import Vec2 from "../../engine/math/vector/Vec2";
-import ObjectUtils from "../../engine/util/ObjectUtils";
+import MultiSystem from "../../../engine/ecs/system/Multisystem";
+import MathHelper from "../../../engine/math/Math";
+import StepFunctions from "../../../engine/math/Step";
+import ObjectUtils from "../../../engine/util/ObjectUtils";
+import { V2 } from "../../../engine/math/VectorTypes";
 
 interface ExplosionEntity {
-  position: Vec2;
+  position: V2;
   explosion: boolean;
   explosionVelocity: number;
   explosionRadius: number;
@@ -14,8 +13,8 @@ interface ExplosionEntity {
 
 interface ExplodableEntity {
   explodes: boolean;
-  velocity: Vec2;
-  position: Vec2;
+  velocity: V2;
+  position: V2;
 }
 
 export default class ExplosionDetection extends MultiSystem {
@@ -41,18 +40,18 @@ export default class ExplosionDetection extends MultiSystem {
   }
 
   applyExplosion(source: ExplosionEntity, target: ExplodableEntity) {
-    //distance
-    let dist = Vector.copy(target.position).subVec(source.position);
-    let vectorLengthSq = dist.magnitudeSquared();
+    const dist = {
+      x: target.position.x - source.position.x,
+      y: target.position.y - source.position.y
+    };
+    const vectorLengthSq = dist.x * dist.x + dist.y * dist.y;
 
-    let distanceScale = vectorLengthSq / (source.explosionRadius * source.explosionRadius);
+    const distanceScale = vectorLengthSq / (source.explosionRadius * source.explosionRadius);
     if (distanceScale < 1) {
-      let power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
+      const power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
       let dir = MathHelper.rotation2d(dist);
-      target.velocity.addVec(dir.mulNum(power));
-      Vector.store(dir);
+      target.velocity.x += dir.x * power;
+      target.velocity.y += dir.y * power;
     }
-
-    Vector.store(dist);
   }
 }

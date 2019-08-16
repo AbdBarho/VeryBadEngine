@@ -1,8 +1,6 @@
-import Vector from "../../engine/math/Vector";
-import Vec2 from "../../engine/math/vector/Vec2";
 import { QueuedEventManager } from "../services/Eventmanager";
 import Canvas from "./canvas/Canvas";
-import { V2 } from "../math/vector/VectorTypes";
+import { V2 } from "../math/VectorTypes";
 
 export interface InputProvider {
   mousePos: V2;

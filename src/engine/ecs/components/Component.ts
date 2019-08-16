@@ -1,4 +1,4 @@
-import { V2 } from "../../math/vector/VectorTypes";
+import { V2 } from "../../math/VectorTypes";
 
 export type Color = string;
 

@@ -1,7 +1,7 @@
 let global_id_hash: { [id: string]: number } = {};
 
 const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-const ID_LENGTH = 8;
+const ID_LENGTH = 5;
 
 export default class IDGenerator {
   static getId(): string {
@@ -22,4 +22,3 @@ export default class IDGenerator {
       Math.pow(chars.length, ID_LENGTH) + " possibilities");
   }
 }
-

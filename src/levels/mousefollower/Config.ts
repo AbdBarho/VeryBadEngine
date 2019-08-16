@@ -1,8 +1,8 @@
 import MathHelper from '../../engine/math/Math';
 
-const MouseFollowerLevelConfig = {
+export default {
   WORLD: {
-    SIZE: [1920, 1080]
+    SIZE: { x: 1920, y: 1080 }
   },
   SYSTEMS: {
     MOUSE_FOLLOWER_SYSTEM: {
@@ -15,6 +15,4 @@ const MouseFollowerLevelConfig = {
       ACCELERATION_SCALE: MathHelper.accelerationPerSecond(1500)
     }
   }
-}
-
-export default MouseFollowerLevelConfig;
+};

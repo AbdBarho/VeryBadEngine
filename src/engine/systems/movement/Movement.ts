@@ -1,13 +1,12 @@
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import Vector from "../../math/Vector";
-import Vec2 from "../../math/vector/Vec2";
+import { V2 } from "../../math/VectorTypes";
 
 interface MovementSystemObject extends Entity {
   moves: boolean;
-  acceleration: Vec2;
-  velocity: Vec2;
-  position: Vec2;
+  acceleration: V2;
+  velocity: V2;
+  position: V2;
   maxVelocity: number;
   maxAcceleration: number;
 }
@@ -20,35 +19,33 @@ export default class MovementSystem extends System {
   updateEntity(entity: MovementSystemObject, dt: number) {
     let acc = entity.acceleration;
     let vel = entity.velocity;
+    let pos = entity.position;
     //limit acceleration
     scaleIfNeeded(acc, entity.maxAcceleration);
 
     //update speed
-    let accCopy = Vector.copy(acc);
-    vel.addVec(accCopy.mulNum(dt));
+    vel.x += acc.x * dt;
+    vel.y += acc.y * dt;
 
     //limit speed
     scaleIfNeeded(vel, entity.maxVelocity);
 
     //update position
-    let velCopy = Vector.copy(vel);
-    entity.position.addVec(velCopy.mulNum(dt));
+    pos.x += vel.x * dt;
+    pos.y += vel.y * dt;
 
     entity.hasChanged = true;
-
-    //save memory
-    Vector.store(accCopy, velCopy);
   }
 }
 
-function scaleIfNeeded(vec: Vec2, scale: number) {
+function scaleIfNeeded(v: V2, scale: number) {
 
   // smart way
-  let magSq = vec.magnitudeSquared();
+  let magSq = v.x * v.x + v.y * v.y;
   if (magSq > scale * scale) {
     let mag = Math.sqrt(magSq);
-    vec.x = scale * vec.x / mag;
-    vec.y = scale * vec.y / mag;
+    v.x = scale * v.x / mag;
+    v.y = scale * v.y / mag;
   }
 
   //fast way

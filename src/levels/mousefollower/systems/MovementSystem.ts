@@ -1,4 +1,4 @@
-import MovementSystem from "../../engine/systems/movement/Movement";
+import MovementSystem from "../../../engine/systems/movement/Movement";
 
 export default class MouseFollowerMovementSystem extends MovementSystem {
   isFrozen = false;

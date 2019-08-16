@@ -1,5 +1,5 @@
-import Vector from "../math/Vector";
 import IDGenerator from "../services/IDGenerator";
+import { getV2 } from "../math/VectorTypes";
 
 export default class EntityFactory {
   static createBasicEntity() {
@@ -9,18 +9,18 @@ export default class EntityFactory {
     }
   }
 
-  static createMovingEntity(pos: number[] = [], vel: number[] = []) {
+  static createMovingEntity(pos = getV2(), vel = getV2()) {
     return {
       ...this.createBasicEntity(),
-      position: Vector.create(...pos),
-      velocity: Vector.create(...vel)
+      position: pos,
+      velocity: vel
     };
   }
 
-  static createAcceleratingEntity(pos: number[] = [], vel: number[] = [], acc: number[] = []) {
+  static createAcceleratingEntity(pos = getV2(), vel = getV2(), acc = getV2()) {
     return {
       ...this.createMovingEntity(pos, vel),
-      acceleration: Vector.create(...acc)
+      acceleration: acc
     }
   }
 }

@@ -3,6 +3,12 @@ import Config from "../../../config/Config";
 export type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap | OffscreenCanvas;
 export type FillStyle = string | CanvasGradient | CanvasPattern;
 
+export type GradientData = {
+  points: [number, number, number, number];
+  stops: number[];
+  colors: string[];
+}
+
 const FULL_CIRCLE = Math.PI * 2;
 const { WIDTH, HEIGHT } = Config.CANVAS;
 
@@ -54,8 +60,14 @@ export default class Frame {
     this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
   }
 
+  renderGradientData(data: GradientData) {
+    const gradient = this.ctx.createLinearGradient(...data.points);
+    data.stops.forEach((x, i) => gradient.addColorStop(x, data.colors[i]));
+    this.fillStyle(gradient);
+    this.fillFrame();
+  }
   createLinGrad(x1: number, y1: number, x2: number, y2: number) {
-    return this.ctx.createLinearGradient(x1, y1, x2, y2);
+    return
   }
 
   drawImage(image: DrawableImage, x: number, y: number, w: number, h: number) {

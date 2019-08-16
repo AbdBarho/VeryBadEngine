@@ -1,5 +1,4 @@
-import Vector from "./Vector";
-import Vec2 from "./vector/Vec2";
+import { V2 } from "./VectorTypes";
 
 export default class MathHelper {
   static speedPerSecond(value: number) {
@@ -17,16 +16,16 @@ export default class MathHelper {
     return Math.atan2(-y, x);
   }
 
-  static direction2d(vecStart: Vec2, vecEnd: Vec2) {
+  static direction2d(vecStart: V2, vecEnd: V2) {
     let angle = this.atan2(vecEnd.x - vecStart.x, vecEnd.y - vecStart.y);
     // we use -y because the y is positive when we go down the canvas, not up just like in normal math
-    return Vector.create(Math.cos(angle), -Math.sin(angle));
+    return { x: Math.cos(angle), y: -Math.sin(angle) };
   }
 
-  static rotation2d(vec: Vec2) {
+  static rotation2d(vec: V2) {
     let angle = this.atan2(vec.x, vec.y);
     // we use -y because the y is positive when we go down the canvas, not up just like in normal math
-    return Vector.create(Math.cos(angle), -Math.sin(angle));
+    return { x: Math.cos(angle), y: -Math.sin(angle) };
   }
 
   static getRandomInt(max: number, min = 0) {
@@ -60,10 +59,10 @@ export default class MathHelper {
     return Math.max(Math.min(num, max), min);
   }
 
-  static getRandomVector(maxValues: number[]) {
-    let values = []
-    for (let i = 0; i < maxValues.length; i++)
-      values.push(this.getRandomInt(maxValues[i]));
-    return Vector.create(...values);
+  static randomV2Int(v: V2) {
+    return {
+      x: this.getRandomInt(v.x),
+      y: this.getRandomInt(v.y)
+    };
   }
 }

@@ -1,6 +1,6 @@
 import { InputProvider } from "../../engine/core/Inputmanager";
 import EventManager from "../../engine/services/Eventmanager";
-import { V2 } from "../../engine/math/vector/VectorTypes";
+import { V2 } from "../../engine/math/VectorTypes";
 
 export default class InputReplicator extends EventManager implements InputProvider {
   mousePos: V2 = { x: 0, y: 0 };

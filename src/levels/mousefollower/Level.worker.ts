@@ -1,6 +1,6 @@
-import MouseFollowerLevel from "./Level";
-import LevelWorker, { LevelWorkerScope } from "../worker/LevelWorker";
-const ctx: LevelWorkerScope = self as any;
-const worker = new LevelWorker(ctx, MouseFollowerLevel)
-// weird hack for typescript
-export default null as any as (new () => any);
+import LevelWorker from "./LevelWorker";
+import { LevelWorkerScope, WorkerConstructor } from "../worker/WorkerTypes";
+
+// weird hacks for typescript
+new LevelWorker(self as unknown as LevelWorkerScope);
+export default null as unknown as WorkerConstructor;

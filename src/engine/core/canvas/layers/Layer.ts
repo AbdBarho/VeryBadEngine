@@ -1,5 +1,5 @@
 import Canvas from "../Canvas";
-import { V2 } from "../../../math/vector/VectorTypes";
+import { V2 } from "../../../math/VectorTypes";
 
 export default class Layer {
   canvas: Canvas;
@@ -24,14 +24,14 @@ export default class Layer {
     return this.frame.transferControlToOffscreen();
   }
 
-  setDimensions(w: number, h: number, left: number, top: number) {
-    this.size.x = w;
-    this.size.y = h;
+  setDimensions(size: V2, shift: V2) {
+    this.size.x = size.x;
+    this.size.y = size.y;
     if (!this.isTransferred) {
-      this.frame.width = w;
-      this.frame.height = h;
+      this.frame.width = size.x;
+      this.frame.height = size.y;
     }
-    this.frame.style.top = top + "px";
-    this.frame.style.left = left + "px";
+    this.frame.style.top = shift.y + "px";
+    this.frame.style.left = shift.x + "px";
   }
 }

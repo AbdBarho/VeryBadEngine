@@ -1,10 +1,8 @@
 import CONFIG from "../../config/Config";
-import Vector from "../../math/Vector";
-import Vec2 from "../../math/vector/Vec2";
 import EventManager from "../../services/Eventmanager";
 import Logger from "../../services/Logger";
 import Layer from "./layers/Layer";
-import { V2 } from "../../math/vector/VectorTypes";
+import { V2, getV2 } from "../../math/VectorTypes";
 
 
 const { WIDTH, HEIGHT } = CONFIG.CANVAS;
@@ -13,15 +11,15 @@ const { WIDTH, HEIGHT } = CONFIG.CANVAS;
 export default class Canvas extends EventManager {
   layers: Layer[] = [];
 
-  scale = Vector.create();
-  shift = Vector.create();
-  size = Vector.create();
-  baseSize: Vec2;
+  scale = getV2();
+  shift = getV2();
+  size = getV2();
+  baseSize: V2;
   aspectRatio: number;
 
   constructor() {
     super();
-    this.baseSize = Vector.create(WIDTH, HEIGHT);
+    this.baseSize = { x: WIDTH, y: HEIGHT };
     this.aspectRatio = WIDTH / HEIGHT;
     //FIXME: not here
     window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent()));
@@ -37,8 +35,7 @@ export default class Canvas extends EventManager {
 
   private create(index: number) {
     let layer = new Layer(this);
-    let len = this.layers.length;
-    while (index > len) {
+    while (index > this.layers.length) {
       this.layers.push(new Layer(this));
     }
     this.layers.splice(index, 0, layer);
@@ -59,23 +56,30 @@ export default class Canvas extends EventManager {
       height = Math.trunc(width / this.aspectRatio);
     }
     Logger.debugState({ width, height });
-    this.size.set(width, height);
-    this.scale = Vector.copy(this.size).divVec(this.baseSize);
 
-    let leftShift = (parentWidth - width) / 2;
-    let topShift = (parentHeight - height) / 2;
-    this.shift.set(leftShift, topShift);
+    this.size.x = width;
+    this.size.y = height;
+
+    this.scale = {
+      x: this.size.x / this.baseSize.x,
+      y: this.size.y / this.baseSize.y
+    };
+
+    this.shift.x = (parentWidth - width) / 2;
+    this.shift.y = (parentHeight - height) / 2;
 
     for (let layer of this.layers) {
-      layer.setDimensions(width, height, leftShift, topShift);
+      layer.setDimensions(this.size, this.shift);
       document.body.appendChild(layer.getFrame());
     }
     this.trigger("resize", this.size);
   }
 
   pixelToUnit(x: number, y: number): V2 {
-    const vec = new Vec2(x, y).subVec(this.shift).divVec(this.scale).trunc();
-    return { x: vec.x, y: vec.y };
+    return {
+      x: (x - this.shift.x) / this.scale.x,
+      y: (y - this.shift.y) / this.scale.y
+    };
   }
 
   onResize(callback: (...args: any[]) => any, context: any) {

@@ -1,13 +1,12 @@
-import { StarAnimation } from "../../engine/ecs/components/Component";
-import Entity from "../../engine/ecs/Entity";
-import System from "../../engine/ecs/system/System";
-import Vec2 from "../../engine/math/vector/Vec2";
-import Frame from "../../engine/core/canvas/layers/Frame";
-
+import { StarAnimation } from "../../../engine/ecs/components/Component";
+import Entity from "../../../engine/ecs/Entity";
+import System from "../../../engine/ecs/system/System";
+import Frame from "../../../engine/core/canvas/layers/Frame";
+import { V2 } from "../../../engine/math/VectorTypes";
 
 
 interface StarAnimationEntity extends Entity {
-  position: Vec2;
+  position: V2;
   starAnimation: StarAnimation;
 }
 

@@ -5,11 +5,11 @@ import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import MathHelper from "../../math/Math";
 import StepFunctions from "../../math/Step";
-import Vec2 from "../../math/vector/Vec2";
 import Frame from "../../core/canvas/layers/Frame";
+import { V2 } from "../../math/VectorTypes";
 
 interface Explosion extends Entity {
-  position: Vec2;
+  position: V2;
   explosion: boolean;
   explosionModel: ExplosionModel;
 }
