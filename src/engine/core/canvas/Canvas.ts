@@ -4,9 +4,7 @@ import Logger from "../../services/Logger";
 import Layer from "./layers/Layer";
 import { V2, getV2 } from "../../math/VectorTypes";
 
-
 const { WIDTH, HEIGHT } = CONFIG.CANVAS;
-
 
 export default class Canvas extends EventManager {
   layers: Layer[] = [];
@@ -14,37 +12,37 @@ export default class Canvas extends EventManager {
   scale = getV2();
   shift = getV2();
   size = getV2();
-  baseSize: V2;
-  aspectRatio: number;
+  baseSize: V2 = { x: WIDTH, y: HEIGHT };
+  aspectRatio: number = WIDTH / HEIGHT;
 
   constructor() {
     super();
-    this.baseSize = { x: WIDTH, y: HEIGHT };
-    this.aspectRatio = WIDTH / HEIGHT;
     //FIXME: not here
-    window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent()));
+    window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent(false)));
   }
 
   getLayer(index: number) {
     return this.layers[index] || this.create(index);
   }
 
-  getShift() {
-    return this.shift;
+  getSize() {
+    return this.size;
   }
 
   private create(index: number) {
     let layer = new Layer(this);
     while (index > this.layers.length) {
-      this.layers.push(new Layer(this));
+      const layer = new Layer(this);
+      layer.setDimensions(this.size, this.shift);
+      this.layers.push(layer);
     }
     this.layers.splice(index, 0, layer);
-    this.fitToParent();
+    this.fitToParent(true);
     return layer;
 
   }
 
-  private fitToParent() {
+  private fitToParent(newLayer: boolean) {
     let parentWidth = window.innerWidth;
     let parentHeight = window.innerHeight;
     let width, height;
@@ -55,24 +53,42 @@ export default class Canvas extends EventManager {
       width = Math.trunc(Math.min(parentWidth, parentHeight * this.aspectRatio));
       height = Math.trunc(width / this.aspectRatio);
     }
-    Logger.debugState({ width, height });
 
-    this.size.x = width;
-    this.size.y = height;
+    const shiftX = Math.trunc((parentWidth - width) / 2)
+    const shiftY = Math.trunc((parentHeight - height) / 2);
+    const same =
+      width === this.size.x && height === this.size.y &&
+      shiftX === this.shift.x && shiftY === this.shift.y;
 
-    this.scale = {
-      x: this.size.x / this.baseSize.x,
-      y: this.size.y / this.baseSize.y
-    };
+    if (same && !newLayer)
+      return;
 
-    this.shift.x = (parentWidth - width) / 2;
-    this.shift.y = (parentHeight - height) / 2;
-
-    for (let layer of this.layers) {
-      layer.setDimensions(this.size, this.shift);
-      document.body.appendChild(layer.getFrame());
+    if (newLayer) {
+      let i = 1;
+      for (const layer of this.layers.reverse()) {
+        const frame = layer.getFrame();
+        frame.id = "frame_" + (this.layers.length - i++);
+        document.body.appendChild(frame);
+      }
     }
-    this.trigger("resize", this.size);
+    if (!same) {
+      Logger.debugState({ width, height });
+
+      this.size.x = width;
+      this.size.y = height;
+
+      this.scale = {
+        x: this.size.x / this.baseSize.x,
+        y: this.size.y / this.baseSize.y
+      };
+
+      this.shift.x = shiftX;
+      this.shift.y = shiftY;
+
+      for (const layer of this.layers)
+        layer.setDimensions(this.size, this.shift);
+      this.trigger("resize", this.size);
+    }
   }
 
   pixelToUnit(x: number, y: number): V2 {

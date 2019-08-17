@@ -24,15 +24,14 @@ export default class MouseFollowerLevel extends ECS {
   frames: Frame[] = [new Frame()];
 
   constructor(worker: MouseFollowerWorker) {
-  // constructor(input: InputManager) {
     super();
     this.worker = worker;
     this.input = worker.input;
     this.canvas = worker.canvas!;
 
     //create systems
-    let MFSys = new MouseFollowerSystem(this.input, this);
-    let MFMovement = new MouseFollowerMovementSystem();
+    const MFSys = new MouseFollowerSystem(this.input, this);
+    const MFMovement = new MouseFollowerMovementSystem();
     const frame = this.frames[0];
     this.systems = [
       new InputSystem(this.input, this, MFSys, MFMovement),
@@ -49,8 +48,7 @@ export default class MouseFollowerLevel extends ECS {
       MFSys,
       MFMovement,
       new WrapAroundWorld(),
-
-      // new KeepInWorld(),
+      
 
       new StarAnimationRenderer(frame),
       new RectangleRenderer(frame),

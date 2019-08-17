@@ -11,7 +11,7 @@ export default class MouseFollowerWorkerController extends LevelWorkerController
     const layer = this.canvas.getLayer(1);
     const offscreen = layer.transferToOffscreen();
     this.send({ type: "canvas_buffer_transmit", canvas: offscreen }, [offscreen]);
-    this.send({ type: "canvas_resize", size: layer.getSize() });
+    this.send({ type: "canvas_resize", size: this.canvas.getSize() });
 
     this.canvas.onResize(this.resize, this);
     this.input.onAll(this.transmitInput, this);

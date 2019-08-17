@@ -12,9 +12,9 @@ A preview of the current engine capabilities [can be found here](https://abdbarh
 - ~~move main loop to a worker~~
 - move rendering to main thread, each system sends render commands as soon as possible
 - better implement the input redirection from main thread to worker
-- ~~proper implementation of speed and acceleration limiting~~ (find more effecient solution)
-- change the concept of layers in the main thread
+- ~~proper implementation of speed and acceleration limiting~~ (find more efficient solution)
+- ~~change the concept of layers in the main thread~~ (maybe they are still valid??)
 - improve logger, in worker and main thread
-- remove functions from Vec2 class, make solely a data object
+- ~~remove functions from Vec2 class, make solely a data object~~
 - work on level switching and think about the life cycles of each level and its systems
 - ...

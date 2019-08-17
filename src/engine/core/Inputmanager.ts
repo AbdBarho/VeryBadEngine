@@ -17,16 +17,44 @@ export default class InputManager extends QueuedEventManager implements InputPro
   constructor(canvas: Canvas) {
     super();
     this.canvas = canvas;
-    window.addEventListener("keydown", e => this.updateButtonsState("keydown", e.code, true));
-    window.addEventListener("keyup", e => this.updateButtonsState("keyup", e.code, false));
 
-    window.addEventListener("mousedown", e => this.updateButtonsState("mousedown", "Mouse" + (e.button + 1), true));
-    window.addEventListener("mouseup", e => this.updateButtonsState("mouseup", "Mouse" + (e.button + 1), false));
-
+    this.key = this.key.bind(this);
+    window.addEventListener("keydown", this.key);
+    window.addEventListener("keyup", this.key);
+    window.addEventListener("mousedown", this.key);
+    window.addEventListener("mouseup", this.key);
     window.addEventListener("mousemove", e => this.mousePositionUpdate("mousemove", e));
 
     window.addEventListener("blur", () => this.clearAll());
-    window.addEventListener("contextmenu", e => e.preventDefault());
+    window.addEventListener("contextmenu", this.killEvent);
+  }
+  private killEvent(e: Event) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+  }
+  private key(e: MouseEvent | KeyboardEvent) {
+    // this.killEvent(e);
+    switch (e.type) {
+      case "keydown":
+        e = e as KeyboardEvent;
+        this.updateButtonsState(e.type, e.code, true);
+        return
+      case "keyup":
+        e = e as KeyboardEvent;
+        this.updateButtonsState(e.type, e.code, false);
+        return
+
+      case "mousedown":
+        e = e as MouseEvent;
+        this.updateButtonsState(e.type, "Mouse" + (e.button + 1), true);
+        return
+
+      case "mouseup":
+        e = e as MouseEvent;
+        this.updateButtonsState(e.type, "Mouse" + (e.button + 1), false);
+        return
+    }
   }
 
   private updateButtonsState(event: string, name: string, isPressed: boolean) {
