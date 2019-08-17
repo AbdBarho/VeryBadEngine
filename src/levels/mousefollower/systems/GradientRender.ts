@@ -1,7 +1,7 @@
 import Frame, { GradientData } from "../../../engine/core/canvas/layers/Frame";
 import System from "../../../engine/ecs/system/System";
 import { RotatingGradient } from "../../../engine/ecs/components/Component";
-import { GradientEntity } from "../Entities";
+import { GradientEntity } from "../types/Entities";
 
 export default class GradientRenderer extends System {
   frame: Frame;

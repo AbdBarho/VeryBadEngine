@@ -1,7 +1,7 @@
 import System from "../../../engine/ecs/system/System";
 import { sandwich } from "../../../engine/math/Math";
 import Config from "../Config";
-import { KeepInWorldRectangle } from "../Entities";
+import { KeepInWorldRectangle } from "../types/Entities";
 
 const WORLD_EDGES = Config.WORLD.SIZE;
 

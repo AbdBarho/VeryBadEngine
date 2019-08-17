@@ -3,7 +3,7 @@ import ECS from "../../../engine/ecs/ECS";
 import System from "../../../engine/ecs/system/System";
 import { V2 } from "../../../engine/math/VectorTypes";
 import Config from "../Config";
-import { MouseFollowerEntity } from "../Entities";
+import { MouseFollowerEntity } from "../types/Entities";
 import Factory from "../services/Factory";
 import { getRandomColor, clearV2, direction2d, getSignedRandom } from "../../../engine/math/Math";
 

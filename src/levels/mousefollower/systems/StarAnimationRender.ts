@@ -1,20 +1,13 @@
 import Frame from "../../../engine/core/canvas/layers/Frame";
 import Entity from "../../../engine/ecs/Entity";
 import System from "../../../engine/ecs/system/System";
-import { StarAnimationEntity } from "../Entities";
+import { StarAnimationEntity } from "../types/Entities";
 
 export default class StarAnimationRenderer extends System {
   frame: Frame;
   constructor(frame: Frame) {
     super("StarAnimationRender", ["starAnimation", "position"]);
     this.frame = frame;
-  }
-
-  addIfCompatible(entity: Entity) {
-    if (super.addIfCompatible(entity)) {
-      return true;
-    }
-    return false;
   }
 
   updateEntity(entity: StarAnimationEntity, dt: number) {
@@ -29,7 +22,7 @@ export default class StarAnimationRenderer extends System {
     const { x: width, y: height } = borderBox;
     this.frame.ctx.drawImage(cache,
       width * currentFrame, 0, width, height, //from where to read the image
-      position.x - width / 2, position.y - height / 2, width, height   // where to write the image
+      position.x - width / 2, position.y - height / 2, width, height  // where to write the image
     );
   }
 

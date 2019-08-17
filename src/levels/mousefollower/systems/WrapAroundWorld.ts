@@ -1,6 +1,6 @@
 import System from "../../../engine/ecs/system/System";
 import Config from "../Config";
-import { WrappedEntity } from "../Entities";
+import { WrappedEntity } from "../types/Entities";
 
 const WORLD_SIZE = Config.WORLD.SIZE;
 

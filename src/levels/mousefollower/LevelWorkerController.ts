@@ -1,10 +1,10 @@
 import { V2 } from '../../engine/math/VectorTypes';
 import LevelWorkerController from '../worker/LevelWorkerController';
 import MouseFollowerLevel from "./Level.worker";
-import { MFEngineMessage, MFWorkerMessage } from './MessageTypes';
+import { MFEngineMessage, MFWorkerMessage } from './types/MessageTypes';
 
 export default class MouseFollowerWorkerController extends LevelWorkerController {
-  // executor: 
+  // executor:
   init() {
     const worker = this.worker = new MouseFollowerLevel() ;
     worker.onmessage = (e) => this.receive(e.data);

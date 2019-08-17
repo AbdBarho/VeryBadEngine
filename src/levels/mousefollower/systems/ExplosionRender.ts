@@ -1,17 +1,10 @@
-import Frame from "../../core/canvas/layers/Frame";
-import { ExplosionModel } from "../../ecs/components/Component";
-import ECS from "../../ecs/ECS";
-import Entity from "../../ecs/Entity";
-import System from "../../ecs/system/System";
-import { toHexColor } from "../../math/Math";
-import StepFunctions from "../../math/Step";
-import { V2 } from "../../math/VectorTypes";
+import Frame from "../../../engine/core/canvas/layers/Frame";
+import ECS from "../../../engine/ecs/ECS";
+import System from "../../../engine/ecs/system/System";
+import { toHexColor } from "../../../engine/math/Math";
+import StepFunctions from "../../../engine/math/Step";
+import { Explosion } from "../types/Entities";
 
-interface Explosion extends Entity {
-  position: V2;
-  explosion: boolean;
-  explosionModel: ExplosionModel;
-}
 
 export default class ExplosionRender extends System {
   frame: Frame;

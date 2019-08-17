@@ -2,7 +2,7 @@ import Frame from '../../engine/core/canvas/layers/Frame';
 import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
 import Velocity from "../../engine/systems/movement/Velocity";
-import ExplosionRender from "../../engine/systems/render/ExplosionRender";
+import ExplosionRender from "./systems/ExplosionRender";
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
 import Config from './Config';
@@ -31,19 +31,16 @@ export default class MouseFollowerLevel extends ECS {
     this.canvas = worker.canvas!;
 
     //create systems
-    const MFSys = new MouseFollowerSystem(this.input, this);
+    const mouseFollowerSystem = new MouseFollowerSystem(this.input, this);
     const frame = new Frame();
     this.systems = [
-      new InputSystem(this.input, this, MFSys),
-
-      //background elements can be updated and rendered directly
-      // new BackgroundColor(frame, '#111'),
       new GradientRenderer(frame),
+      new InputSystem(this.input, this, mouseFollowerSystem),
 
+
+      mouseFollowerSystem,
       new ExplosionDetection(),
 
-      MFSys,
-      // MFMovement,
 
       //movement
       new AccelerationLimiter(),
@@ -52,12 +49,12 @@ export default class MouseFollowerLevel extends ECS {
       new Velocity(),
       new WrapAroundWorld(),
 
-
+      //render
       new StarAnimationRenderer(frame),
       new RectangleRenderer(frame),
       new ExplosionRender(frame, this),
 
-      //Flush buffer
+      //flush
       new FlushBuffer(this.canvas, [frame])
 
     ];

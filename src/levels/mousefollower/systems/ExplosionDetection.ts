@@ -2,7 +2,7 @@ import MultiSystem from "../../../engine/ecs/system/Multisystem";
 import { rotation2d } from "../../../engine/math/Math";
 import StepFunctions from "../../../engine/math/Step";
 import ObjectUtils from "../../../engine/util/ObjectUtils";
-import { ExplodableEntity, ExplosionEntity } from "../Entities";
+import { ExplodableEntity, ExplosionEntity } from "../types/Entities";
 
 export default class ExplosionDetection extends MultiSystem {
   constructor() {

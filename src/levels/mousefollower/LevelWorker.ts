@@ -1,7 +1,7 @@
 import InputReplicator from "../worker/InputReplicator";
 import LevelWorker from "../worker/LevelWorker";
 import MouseFollowerLevel from "./Level";
-import { MFEngineMessage, MFWorkerMessage } from "./MessageTypes";
+import { MFEngineMessage, MFWorkerMessage } from "./types/MessageTypes";
 
 export default class MouseFollowerWorker extends LevelWorker {
   input = new InputReplicator();

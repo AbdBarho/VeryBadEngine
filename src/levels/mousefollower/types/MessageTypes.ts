@@ -1,4 +1,4 @@
-import { V2 } from "../../engine/math/VectorTypes";
+import { V2 } from "../../../engine/math/VectorTypes";
 
 interface CanvasBufferTransmitMessage {
   type: "canvas_buffer_transmit"
