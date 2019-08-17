@@ -1,4 +1,4 @@
-import Entity from "./Entity";
+import Entity, { Component } from "./Entity";
 import ISystem from "./system/ISystem";
 
 
@@ -52,12 +52,25 @@ export default class ECS {
   }
 
   processAndReset(dt: number) {
+    this.update = this.updateSystems;
     this.processQueue();
     this.updateSystems(dt);
-    this.update = this.updateSystems;
   }
 
   update(dt: number) {
     this.updateSystems(dt);
+  }
+
+  modifyEntities(required: Component[], notAllowed: Component[], callback: (e: Entity) => void) {
+
+    let modified = Object.values(this.entities);
+    if (required.length)
+      modified = modified.filter(e => required.every(component => e.hasOwnProperty(component)));
+    if (notAllowed.length)
+      modified = modified.filter(e => !notAllowed.some(component => e.hasOwnProperty(component)));
+    for (const e of modified)
+      callback(e);
+    modified.forEach(e => this.reCheckEntity(e));
+
   }
 }

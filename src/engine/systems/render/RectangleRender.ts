@@ -1,15 +1,7 @@
-import Entity from "../../ecs/Entity";
-import System from "../../ecs/system/System";
 import Frame from "../../core/canvas/layers/Frame";
-import { Flag, Color } from "../../ecs/components/Component";
-import { V2 } from "../../math/VectorTypes";
+import { RectangleModelObject } from "../../ecs/Entity";
+import System from "../../ecs/system/System";
 
-interface RectangleModelObject extends Entity {
-  position: V2
-  rectModel: Flag
-  rectColor: Color
-  borderBox: V2
-}
 
 export default class RectangleRenderer extends System {
   frame: Frame;

@@ -1,5 +1,4 @@
-import MathHelper from '../../engine/math/Math';
-
+import { accelerationPerSecond } from "../../engine/math/Math";
 export default {
   WORLD: {
     SIZE: { x: 1920, y: 1080 }
@@ -12,7 +11,7 @@ export default {
       RESPAWN_ON_DESTROY: true,
       LOOK_AHEAD_STEPS: 0,
       RANDOM_FACTOR_SCALE: 0,
-      ACCELERATION_SCALE: MathHelper.accelerationPerSecond(1500)
+      ACCELERATION_SCALE: accelerationPerSecond(1500)
     }
   }
 };

@@ -3,22 +3,18 @@ import ECS from "../../../engine/ecs/ECS";
 import EmptySystem from "../../../engine/ecs/system/Emptysystem";
 import Factory from "../services/Factory";
 import MFSys from "./MouseFollowerSystem";
-import MFMoveSys from "./MovementSystem";
-
 
 export default class InputSystem extends EmptySystem {
   input: InputProvider;
   ecs: ECS;
   system: MFSys;
-  movement: MFMoveSys;
   slowMoScale = .12;
 
-  constructor(input: InputProvider, ecs: ECS, system: MFSys, movement: MFMoveSys) {
+  constructor(input: InputProvider, ecs: ECS, system: MFSys) {
     super("InputSystem");
     this.input = input;
     this.ecs = ecs;
     this.system = system;
-    this.movement = movement;
   }
 
   init() {
@@ -69,8 +65,12 @@ export default class InputSystem extends EmptySystem {
         break;
       case "Digit5":
         // freeze/unfreeze
-        this.system.changeFreezeState();
-        this.movement.changeFreezeState();
+        this.ecs.modifyEntities(["mouseFollower"], [], e => {
+          if (e.isFrozen)
+            delete e.isFrozen;
+          else
+            e.isFrozen = true;
+        })
         break;
       default:
         break;

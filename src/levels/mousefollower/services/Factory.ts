@@ -1,8 +1,8 @@
-import config from "../Config";
-import EntityFactory from "../../../engine/ecs/Factory";
-import MathHelper from "../../../engine/math/Math";
-import { V2, getV2 } from "../../../engine/math/VectorTypes";
 import { Color, Flag, GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradient, StarAnimation } from "../../../engine/ecs/components/Component";
+import EntityFactory from "../../../engine/ecs/Factory";
+import { accelerationPerSecond, getRandomBool, getRandomColor, getRandomInt, getSignedRandom, randomV2Int, speedPerSecond } from "../../../engine/math/Math";
+import { getV2, V2 } from "../../../engine/math/VectorTypes";
+import config from "../Config";
 import CacheDrawer from "./CacheDrawer";
 
 export default class MouseFollowerFactory {
@@ -15,14 +15,14 @@ export default class MouseFollowerFactory {
   }
 
   static getVectorInWorld() {
-    return MathHelper.randomV2Int(config.WORLD.SIZE);
+    return randomV2Int(config.WORLD.SIZE);
   }
 
   static createSideScroller() {
     const pos = this.getVectorInWorld();
-    let size = MathHelper.getRandomInt(20, 4);
+    let size = getRandomInt(20, 4);
     size += size % 2;
-    const xVelocity = MathHelper.speedPerSecond(size);
+    const xVelocity = speedPerSecond(size);
     return {
       ...EntityFactory.createMovingEntity(pos, { x: xVelocity, y: 0 }),
       ...this.createRectModel(size, "#ffffff20"),
@@ -30,18 +30,22 @@ export default class MouseFollowerFactory {
     }
   }
 
+  static getRandomColor() {
+    return getRandomColor();
+  }
+
   static createMouseFollower() {
     const pos = this.getVectorInWorld();
-    const size = MathHelper.getRandomInt(14, 8);
+    const size = getRandomInt(14, 8);
     return {
       ...EntityFactory.createAcceleratingEntity(pos),
-      ...this.createRectModel(size, MathHelper.getRandomColor()),
+      ...this.createRectModel(size, getRandomColor()),
       wrapAroundWorld: <Flag>true,
       // keepInWorld: true,
       mouseFollower: <Flag>true,
       explodes: <Flag>true,
-      maxAcceleration: MathHelper.accelerationPerSecond(1000),
-      maxVelocity: MathHelper.speedPerSecond(500)
+      maxAcceleration: accelerationPerSecond(1000),
+      maxVelocity: speedPerSecond(500)
     }
   }
 
@@ -50,10 +54,10 @@ export default class MouseFollowerFactory {
       ...EntityFactory.createBasicEntity(),
       position: getV2(),
       explosion: <Flag>true,
-      explosionVelocity: MathHelper.speedPerSecond(500) * 2, // * 2 to counter v0
+      explosionVelocity: speedPerSecond(500) * 2, // * 2 to counter v0
       explosionRadius: 500,
       explosionModel: {
-        color: <Color>MathHelper.getRandomColor(),
+        color: <Color> getRandomColor(),
         radius: 250,
         lifeTime: 1000,
         progress: 0
@@ -62,15 +66,15 @@ export default class MouseFollowerFactory {
   }
 
   static createAnimatedStar() {
-    const numSpikes = MathHelper.getRandomInt(8, 4);
-    const lifeTimeInSeconds = MathHelper.getRandomInt(10, 5);
-    const minRadius = MathHelper.getRandomInt(10, 2);
-    const maxRadius = MathHelper.getRandomInt(50, 30);
+    const numSpikes = getRandomInt(8, 4);
+    const lifeTimeInSeconds = getRandomInt(10, 5);
+    const minRadius = getRandomInt(10, 2);
+    const maxRadius = getRandomInt(50, 30);
     const lifeTime = lifeTimeInSeconds * 1000;
     const fillStyle = '#fff';
     const opacityFactor = 0.4;
     const numFrames = 60;
-    const rotationDirection = MathHelper.getRandomBool() ? 1 : -1;
+    const rotationDirection = getRandomBool() ? 1 : -1;
     const cache = CacheDrawer.drawStar({
       fillStyle,
       lifeTime,
@@ -82,14 +86,14 @@ export default class MouseFollowerFactory {
       rotationDirection
     })
     const pos = this.getVectorInWorld();
-    const xVelocity = MathHelper.speedPerSecond(MathHelper.getSignedRandom(10, 15));
+    const xVelocity = speedPerSecond(getSignedRandom(10, 15));
 
     return {
       ...EntityFactory.createMovingEntity(pos, { x: Math.abs(xVelocity), y: 0 }),
       wrapAroundWorld: true,
       starAnimation: {
         borderBox: <V2>{ x: maxRadius * 2, y: maxRadius * 2 },
-        progress: MathHelper.getRandomInt(lifeTime),
+        progress: getRandomInt(lifeTime),
         lifeTime,
         numFrames,
         cache

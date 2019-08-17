@@ -1,11 +1,11 @@
 import { InputProvider } from "../../../engine/core/Inputmanager";
 import ECS from "../../../engine/ecs/ECS";
 import System from "../../../engine/ecs/system/System";
-import MathHelper from "../../../engine/math/Math";
 import { V2 } from "../../../engine/math/VectorTypes";
 import Config from "../Config";
 import { MouseFollowerEntity } from "../Entities";
 import Factory from "../services/Factory";
+import { getRandomColor, clearV2, direction2d, getSignedRandom } from "../../../engine/math/Math";
 
 const WORLD_SIZE = Config.WORLD.SIZE;
 
@@ -13,7 +13,6 @@ const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {
   input: InputProvider;
   ecs: ECS;
-  isFrozen = CONFIG.IS_FROZEN;
   stopOnReach = CONFIG.STOP_ON_REACH;
   destroyOnReach = CONFIG.DESTROY_ON_REACH;
   respawnOnDestroy = CONFIG.RESPAWN_ON_DESTROY;
@@ -23,7 +22,10 @@ export default class MouseFollowerSystem extends System {
   target = { x: WORLD_SIZE.x / 2, y: WORLD_SIZE.y / 2 };
 
   constructor(inputManager: InputProvider, ecs: ECS) {
-    super("MouseFollowerSystem", ["acceleration", "position", "velocity", "mouseFollower", "borderBox"]);
+    super("MouseFollowerSystem",
+      ["acceleration", "position", "velocity", "mouseFollower", "borderBox"],
+      ["isFrozen"]
+    );
     this.input = inputManager;
     this.ecs = ecs;
     this.updateSubRoutines();
@@ -38,46 +40,35 @@ export default class MouseFollowerSystem extends System {
     this.target.y = mousePos.y;
   }
 
-  changeFreezeState() {
-    this.isFrozen = !this.isFrozen;
-  }
-
   updateSubRoutines() {
     this.getDirection = this.lookAheadSteps ? this.getDirectionWithLookAhead : this.getDirectionNoLookAhead;
     this.scaleIfNeeded = this.randomFactorScale ? this.scaleByRandom : () => { };
   }
 
-  update(dt: number) {
-    if (this.isFrozen)
-      return;
-    return super.update(dt);
-  }
-
   updateEntity(entity: MouseFollowerEntity, dt: number) {
     if (this.destroyOnReach || this.stopOnReach) {
       if (this.targetReached(entity)) {
-        if (this.stopOnReach) {
-          entity.velocity.x = 0;
-          entity.velocity.y = 0;
-          entity.acceleration.x = 0;
-          entity.acceleration.y = 0;
-        }
+        if (this.destroyOnReach) {
+          if (!this.respawnOnDestroy)
+            return this.ecs.removeEntity(entity.ID);
 
-        if (this.destroyOnReach && this.respawnOnDestroy) {
-          //simulate respawn
-          Object.assign(entity, Factory.createMouseFollower(), { ID: entity.ID });
-        } else if (this.destroyOnReach) {
-          this.ecs.removeEntity(entity.ID);
+          entity.rectColor = getRandomColor();
+          entity.position = Factory.getVectorInWorld();
+          clearV2(entity.velocity);
+          clearV2(entity.acceleration);
+        }
+        if (this.stopOnReach) {
+          clearV2(entity.velocity);
+          clearV2(entity.acceleration);
         }
         return;
       }
     }
 
-    let dir = this.getDirection(entity);
+    const dir = this.getDirection(entity);
     this.scaleIfNeeded(dir);
     entity.acceleration.x = dir.x;
     entity.acceleration.y = dir.y;
-    entity.hasChanged = true;
 
   }
 
@@ -103,14 +94,14 @@ export default class MouseFollowerSystem extends System {
       x: pos.x + vel.x * this.lookAheadSteps,
       y: pos.y + vel.y * this.lookAheadSteps
     }
-    let dir = MathHelper.direction2d(newPos, this.target);
+    let dir = direction2d(newPos, this.target);
     dir.x *= this.accelerationScale;
     dir.y *= this.accelerationScale;
     return dir;
   }
 
   getDirectionNoLookAhead(entity: MouseFollowerEntity) {
-    const dir = MathHelper.direction2d(entity.position, this.target)
+    const dir = direction2d(entity.position, this.target);
     dir.x *= this.accelerationScale;
     dir.y *= this.accelerationScale;
     return dir;
@@ -122,8 +113,8 @@ export default class MouseFollowerSystem extends System {
   }
 
   scaleByRandom(dir: V2) {
-    dir.x += MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
-    dir.y += MathHelper.getSignedRandom() * this.randomFactorScale * this.accelerationScale;
+    dir.x += getSignedRandom() * this.randomFactorScale * this.accelerationScale;
+    dir.y += getSignedRandom() * this.randomFactorScale * this.accelerationScale;
   }
 
   destroy() {

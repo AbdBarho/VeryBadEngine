@@ -1,11 +1,10 @@
-import Layer from "../../core/canvas/layers/Layer";
+import Frame from "../../core/canvas/layers/Frame";
 import { ExplosionModel } from "../../ecs/components/Component";
 import ECS from "../../ecs/ECS";
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import MathHelper from "../../math/Math";
+import { toHexColor } from "../../math/Math";
 import StepFunctions from "../../math/Step";
-import Frame from "../../core/canvas/layers/Frame";
 import { V2 } from "../../math/VectorTypes";
 
 interface Explosion extends Entity {
@@ -36,7 +35,7 @@ export default class ExplosionRender extends System {
 
     radius *= StepFunctions.smoothStop(percent, 5);
     let opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 10)) * 256);
-    color = color + MathHelper.toHexColor(opacity);
+    color = color + toHexColor(opacity);
 
     this.frame.fillCircle(position.x, position.y, radius, color);
   }

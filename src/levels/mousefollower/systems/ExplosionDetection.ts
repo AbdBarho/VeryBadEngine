@@ -1,8 +1,8 @@
 import MultiSystem from "../../../engine/ecs/system/Multisystem";
-import MathHelper from "../../../engine/math/Math";
+import { rotation2d } from "../../../engine/math/Math";
 import StepFunctions from "../../../engine/math/Step";
 import ObjectUtils from "../../../engine/util/ObjectUtils";
-import { ExplosionEntity, ExplodableEntity } from "../Entities";
+import { ExplodableEntity, ExplosionEntity } from "../Entities";
 
 export default class ExplosionDetection extends MultiSystem {
   constructor() {
@@ -36,7 +36,7 @@ export default class ExplosionDetection extends MultiSystem {
     const distanceScale = vectorLengthSq / (source.explosionRadius * source.explosionRadius);
     if (distanceScale < 1) {
       const power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
-      let dir = MathHelper.rotation2d(dist);
+      let dir = rotation2d(dist);
       target.velocity.x += dir.x * power;
       target.velocity.y += dir.y * power;
     }

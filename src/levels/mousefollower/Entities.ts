@@ -1,6 +1,6 @@
 import { V2 } from "../../engine/math/VectorTypes";
 import { RotatingGradient, Flag, StarAnimation } from "../../engine/ecs/components/Component";
-import Entity from "../../engine/ecs/Entity";
+import Entity, { RectangleModelObject } from "../../engine/ecs/Entity";
 
 export interface ExplosionEntity extends Entity {
   position: V2;
@@ -36,7 +36,7 @@ export interface StarAnimationEntity extends Entity {
   starAnimation: StarAnimation;
 }
 
-export interface MouseFollowerEntity extends Entity {
+export interface MouseFollowerEntity extends RectangleModelObject {
   mouseFollower: Flag
   acceleration: V2
   position: V2

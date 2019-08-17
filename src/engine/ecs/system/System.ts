@@ -1,14 +1,14 @@
-import Entity, { ComponentName as CN } from "../Entity";
+import Entity, { Component } from "../Entity";
 import EmptySystem from "./Emptysystem";
 
 export default class System extends EmptySystem {
-  required: CN[];
-  notAllowed: CN[];
+  required: Component[];
+  notAllowed: Component[];
   entities: { [ID: string]: Entity } = {};
   /**
    * @param required required components, if nothing given, the system will accept all entities
    */
-  constructor(name: string, required: CN[] = [], notAllowed: CN[] = []) {
+  constructor(name: string, required: Component[] = [], notAllowed: Component[] = []) {
     super(name);
     this.required = required;
     this.notAllowed = notAllowed;

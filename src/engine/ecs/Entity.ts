@@ -1,15 +1,15 @@
 import { ExplosionModel, StarAnimation, Flag, Color, RotatingGradient } from "./components/Component";
 import { V2 } from "../math/VectorTypes";
 
-export type ComponentName = keyof Entity;
+export type Component = keyof Entity;
 
 export default interface Entity {
   ID: string;
-  hasChanged: boolean;
   //movement
   moves?: boolean;
   position?: V2;
   velocity?: V2;
+  isFrozen?: Flag;
   maxVelocity?: number;
   acceleration?: V2;
   maxAcceleration?: number;
@@ -33,4 +33,29 @@ export default interface Entity {
   // gradient
   rotatingGradient?: RotatingGradient;
 
+}
+
+export interface VelocityEntity extends Entity {
+  position: V2;
+  velocity: V2;
+}
+
+export interface AccelerationEntity extends Entity {
+  acceleration: V2;
+  velocity: V2;
+}
+export interface LimitedVel extends Entity {
+  velocity: V2;
+  maxVelocity: number;
+}
+
+export interface LimitedAcc extends Entity {
+  acceleration: V2;
+  maxAcceleration: number;
+}
+export interface RectangleModelObject extends Entity {
+  position: V2
+  rectModel: Flag
+  rectColor: Color
+  borderBox: V2
 }

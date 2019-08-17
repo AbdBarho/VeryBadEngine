@@ -3,7 +3,7 @@ import LevelWorker from "../worker/LevelWorker";
 import MouseFollowerLevel from "./Level";
 import { MFEngineMessage, MFWorkerMessage } from "./MessageTypes";
 
-export default class MouseFollwerWorker extends LevelWorker {
+export default class MouseFollowerWorker extends LevelWorker {
   input = new InputReplicator();
   canvas: OffscreenCanvas | null = null;
   level: MouseFollowerLevel | null = null;

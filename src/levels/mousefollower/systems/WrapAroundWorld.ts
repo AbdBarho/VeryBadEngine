@@ -10,8 +10,6 @@ export default class WrapAroundWorld extends System {
   }
 
   updateEntity(entity: WrappedEntity) {
-    if (!entity.hasChanged)
-      return;
     const { x, y } = entity.position;
     entity.position.x = x > WORLD_SIZE.x ? x % WORLD_SIZE.x : x < 0 ? WORLD_SIZE.x: x;
     entity.position.y = y > WORLD_SIZE.y ? y % WORLD_SIZE.y : y < 0 ? WORLD_SIZE.y : y;

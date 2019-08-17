@@ -1,9 +1,9 @@
-import Entity, { ComponentName } from "../Entity";
+import Entity, { Component } from "../Entity";
 import EmptySystem from "./Emptysystem";
 
 interface Group {
   name: string;
-  components: ComponentName[];
+  components: Component[];
 }
 
 export default class MultiSystem extends EmptySystem {

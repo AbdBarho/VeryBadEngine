@@ -1,8 +1,7 @@
 import Frame from '../../engine/core/canvas/layers/Frame';
 import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
-import MathHelper from "../../engine/math/Math";
-import VelocitySystem from "../../engine/systems/movement/Velocity";
+import Velocity from "../../engine/systems/movement/Velocity";
 import ExplosionRender from "../../engine/systems/render/ExplosionRender";
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
@@ -13,9 +12,12 @@ import ExplosionDetection from "./systems/ExplosionDetection";
 import GradientRenderer from "./systems/GradientRender";
 import InputSystem from "./systems/InputSystem";
 import MouseFollowerSystem from "./systems/MouseFollowerSystem";
-import MouseFollowerMovementSystem from "./systems/MovementSystem";
 import StarAnimationRenderer from "./systems/StarAnimationRender";
 import WrapAroundWorld from "./systems/WrapAroundWorld";
+import { getRandomInt } from '../../engine/math/Math';
+import AccelerationLimiter from '../../engine/systems/movement/AccelerationLimiter';
+import Acceleration from '../../engine/systems/movement/Acceleration';
+import VelocityLimiter from '../../engine/systems/movement/VelocityLimiter';
 
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;
@@ -30,10 +32,9 @@ export default class MouseFollowerLevel extends ECS {
 
     //create systems
     const MFSys = new MouseFollowerSystem(this.input, this);
-    const MFMovement = new MouseFollowerMovementSystem();
     const frame = new Frame();
     this.systems = [
-      new InputSystem(this.input, this, MFSys, MFMovement),
+      new InputSystem(this.input, this, MFSys),
 
       //background elements can be updated and rendered directly
       // new BackgroundColor(frame, '#111'),
@@ -41,11 +42,14 @@ export default class MouseFollowerLevel extends ECS {
 
       new ExplosionDetection(),
 
-      new VelocitySystem(),
-
-
       MFSys,
-      MFMovement,
+      // MFMovement,
+
+      //movement
+      new AccelerationLimiter(),
+      new Acceleration(),
+      new VelocityLimiter(),
+      new Velocity(),
       new WrapAroundWorld(),
 
 
@@ -60,7 +64,7 @@ export default class MouseFollowerLevel extends ECS {
 
     //background
     this.queueEntity(Factory.createRotatingGradient(
-      Config.WORLD.SIZE, MathHelper.getRandomInt(360), 0.05, "min", "center", "center",  {
+      Config.WORLD.SIZE, getRandomInt(360), 0.05, "min", "center", "center",  {
         0: "#400a",
         100: "#004a"
       }
