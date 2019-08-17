@@ -15,18 +15,18 @@ export default class MouseFollwerWorker extends LevelWorker {
       case "frame_start": {
         this.level!.update(message.dt);
         this.send({ type: "frame_end" });
-        break;
+        return;
       }
 
       case "input": {
         this.input.trigger(message.name, ...message.data);
-        break;
+        return;
       }
 
       case "canvas_buffer_transmit": {
         this.canvas = message.canvas;
         this.level = new MouseFollowerLevel(this);
-        break;
+        return;
       }
 
       case "canvas_resize": {
@@ -34,7 +34,7 @@ export default class MouseFollwerWorker extends LevelWorker {
         this.canvas!.width = size.x;
         this.canvas!.height = size.y;
         this.level!.drawLastFrame();
-        break;
+        return;
       }
 
       default:

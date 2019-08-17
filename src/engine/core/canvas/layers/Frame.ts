@@ -62,12 +62,10 @@ export default class Frame {
 
   renderGradientData(data: GradientData) {
     const gradient = this.ctx.createLinearGradient(...data.points);
-    data.stops.forEach((x, i) => gradient.addColorStop(x, data.colors[i]));
+    for (let i = 0; i < data.stops.length; i++)
+      gradient.addColorStop(data.stops[i], data.colors[i]);
     this.fillStyle(gradient);
     this.fillFrame();
-  }
-  createLinGrad(x1: number, y1: number, x2: number, y2: number) {
-    return
   }
 
   drawImage(image: DrawableImage, x: number, y: number, w: number, h: number) {

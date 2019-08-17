@@ -3,17 +3,20 @@ import EmptySystem from "../../ecs/system/Emptysystem";
 
 export default class FlushBuffer extends EmptySystem {
   output: OffscreenCanvas;
-  buffers: Frame[];
-  constructor(layer: OffscreenCanvas, buffers: Frame[]) {
+  frames: Frame[];
+  ctx: OffscreenCanvasRenderingContext2D;
+  constructor(output: OffscreenCanvas, frames: Frame[]) {
     super('FlushBuffer');
-    this.output = layer;
-    this.buffers = buffers;
+    this.output = output;
+    this.frames = frames;
+    this.ctx = output.getContext("2d") as OffscreenCanvasRenderingContext2D;
   }
 
   update() {
-    const context = this.output.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    context.globalAlpha = 0.5;
-    this.buffers.forEach(frame => context.drawImage(frame.getBuffer(), 0, 0, this.output.width, this.output.height));
-    context.globalAlpha = 1;
+    // this.ctx.clearRect(0, 0, this.output.width, this.output.height);
+    this.ctx.globalAlpha = 0.5;
+    for (const frame of this.frames)
+      this.ctx.drawImage(frame.getBuffer(), 0, 0, this.output.width, this.output.height);
+    this.ctx.globalAlpha = 1;
   }
 }

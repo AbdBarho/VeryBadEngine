@@ -15,18 +15,16 @@ export default class Canvas extends EventManager {
   baseSize: V2 = { x: WIDTH, y: HEIGHT };
   aspectRatio: number = WIDTH / HEIGHT;
 
-  constructor() {
-    super();
-    //FIXME: not here
-    window.addEventListener("resize", () => requestAnimationFrame(() => this.fitToParent(false)));
-  }
-
-  getLayer(index: number) {
-    return this.layers[index] || this.create(index);
+  resize() {
+    this.fitToParent(false);
   }
 
   getSize() {
     return this.size;
+  }
+
+  getLayer(index: number) {
+    return this.layers[index] || this.create(index);
   }
 
   private create(index: number) {
@@ -64,10 +62,10 @@ export default class Canvas extends EventManager {
       return;
 
     if (newLayer) {
-      let i = 1;
-      for (const layer of this.layers.reverse()) {
+      let i = 0;
+      for (const layer of this.layers) {
         const frame = layer.getFrame();
-        frame.id = "frame_" + (this.layers.length - i++);
+        frame.id = "frame_" + (i++);
         document.body.appendChild(frame);
       }
     }

@@ -4,6 +4,10 @@ export type Color = string;
 
 export type Flag = boolean;
 
+export type GradientShiftX = "center" | "left" | "right";
+export type GradientShiftY = "center" | "top" | "bottom";
+export type GradientRadius = "min" | "max";
+export type GradientStops = { [stop: number]: Color };
 
 export type ExplosionModel = {
   color: Color
@@ -18,4 +22,15 @@ export type StarAnimation = {
   numFrames: number
   borderBox: V2
   cache: OffscreenCanvas;
+}
+
+export type RotatingGradient = {
+  size: V2;
+  angle: number;
+  speed: number;
+  stops: number[];
+  colors: Color[];
+  shiftX: GradientShiftX;
+  shiftY: GradientShiftY;
+  radius: GradientRadius;
 }

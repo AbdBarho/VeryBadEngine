@@ -2,20 +2,7 @@ import MultiSystem from "../../../engine/ecs/system/Multisystem";
 import MathHelper from "../../../engine/math/Math";
 import StepFunctions from "../../../engine/math/Step";
 import ObjectUtils from "../../../engine/util/ObjectUtils";
-import { V2 } from "../../../engine/math/VectorTypes";
-
-interface ExplosionEntity {
-  position: V2;
-  explosion: boolean;
-  explosionVelocity: number;
-  explosionRadius: number;
-}
-
-interface ExplodableEntity {
-  explodes: boolean;
-  velocity: V2;
-  position: V2;
-}
+import { ExplosionEntity, ExplodableEntity } from "../Entities";
 
 export default class ExplosionDetection extends MultiSystem {
   constructor() {

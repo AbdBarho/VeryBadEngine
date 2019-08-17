@@ -1,9 +1,8 @@
 import config from "../Config";
-import RotatingGradient, { GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradientConfig } from "../../../engine/ecs/components/gradient/RotatingGradient";
 import EntityFactory from "../../../engine/ecs/Factory";
 import MathHelper from "../../../engine/math/Math";
 import { V2, getV2 } from "../../../engine/math/VectorTypes";
-import { Color, Flag } from "../../../engine/ecs/components/Component";
+import { Color, Flag, GradientRadius, GradientShiftX, GradientShiftY, GradientStops, RotatingGradient, StarAnimation } from "../../../engine/ecs/components/Component";
 import CacheDrawer from "./CacheDrawer";
 
 export default class MouseFollowerFactory {
@@ -94,15 +93,16 @@ export default class MouseFollowerFactory {
         lifeTime,
         numFrames,
         cache
-      }
+      } as StarAnimation
     }
   }
 
-  static createRotatingGradient(size: V2, start: number, speed: number, radius: GradientRadius, shiftX: GradientShiftX, shiftY: GradientShiftY, stops: GradientStops) {
-    const config: RotatingGradientConfig = { size, start, speed, shiftX, shiftY, radius, stops };
+  static createRotatingGradient(size: V2, angle: number, speed: number, radius: GradientRadius, shiftX: GradientShiftX, shiftY: GradientShiftY, levels: GradientStops) {
+    const colors = Object.values(levels);
+    const stops = Object.keys(levels).map(key => parseInt(key) / 100);
     return {
       ...EntityFactory.createBasicEntity(),
-      gradient: new RotatingGradient(config)
+      rotatingGradient: { size, angle, speed, radius, shiftX, shiftY, stops, colors} as RotatingGradient
     }
   }
 }

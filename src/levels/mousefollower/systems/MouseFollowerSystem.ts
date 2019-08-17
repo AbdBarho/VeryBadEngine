@@ -1,21 +1,13 @@
 import { InputProvider } from "../../../engine/core/Inputmanager";
-import { Flag } from "../../../engine/ecs/components/Component";
 import ECS from "../../../engine/ecs/ECS";
-import Entity from "../../../engine/ecs/Entity";
 import System from "../../../engine/ecs/system/System";
 import MathHelper from "../../../engine/math/Math";
 import { V2 } from "../../../engine/math/VectorTypes";
 import Config from "../Config";
+import { MouseFollowerEntity } from "../Entities";
 import Factory from "../services/Factory";
-const WORLD_SIZE = Config.WORLD.SIZE;
 
-interface MouseFollowerEntity extends Entity {
-  mouseFollower: Flag
-  acceleration: V2
-  position: V2
-  velocity: V2
-  borderBox: V2
-}
+const WORLD_SIZE = Config.WORLD.SIZE;
 
 const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {

@@ -6,6 +6,7 @@ import VelocitySystem from "../../engine/systems/movement/Velocity";
 import ExplosionRender from "../../engine/systems/render/ExplosionRender";
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
+import Config from './Config';
 import MouseFollowerWorker from "./LevelWorker";
 import Factory from "./services/Factory";
 import ExplosionDetection from "./systems/ExplosionDetection";
@@ -15,13 +16,11 @@ import MouseFollowerSystem from "./systems/MouseFollowerSystem";
 import MouseFollowerMovementSystem from "./systems/MovementSystem";
 import StarAnimationRenderer from "./systems/StarAnimationRender";
 import WrapAroundWorld from "./systems/WrapAroundWorld";
-import Config from './Config';
 
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;
   canvas: OffscreenCanvas;
   worker: MouseFollowerWorker;
-  frames: Frame[] = [new Frame()];
 
   constructor(worker: MouseFollowerWorker) {
     super();
@@ -32,7 +31,7 @@ export default class MouseFollowerLevel extends ECS {
     //create systems
     const MFSys = new MouseFollowerSystem(this.input, this);
     const MFMovement = new MouseFollowerMovementSystem();
-    const frame = this.frames[0];
+    const frame = new Frame();
     this.systems = [
       new InputSystem(this.input, this, MFSys, MFMovement),
 
@@ -48,7 +47,7 @@ export default class MouseFollowerLevel extends ECS {
       MFSys,
       MFMovement,
       new WrapAroundWorld(),
-      
+
 
       new StarAnimationRenderer(frame),
       new RectangleRenderer(frame),
@@ -60,19 +59,19 @@ export default class MouseFollowerLevel extends ECS {
     ];
 
     //background
-    this.queueEntity(Factory.createRotatingGradient(Config.WORLD.SIZE,
-      MathHelper.getRandomInt(360), 0.05, "min", "center", "center", {
+    this.queueEntity(Factory.createRotatingGradient(
+      Config.WORLD.SIZE, MathHelper.getRandomInt(360), 0.05, "min", "center", "center",  {
         0: "#400a",
         100: "#004a"
-      })
-    );
+      }
+    ));
 
-    this.queueEntity(Factory.createRotatingGradient(Config.WORLD.SIZE,
-      -90, -0.012, "min", "right", "top", {
+    this.queueEntity(Factory.createRotatingGradient(
+      Config.WORLD.SIZE, -90, -0.012, "min", "right", "top", {
         50: "#0000",
         100: "#0006"
-      })
-    );
+      }
+    ));
 
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());
@@ -89,7 +88,6 @@ export default class MouseFollowerLevel extends ECS {
   }
 
   drawLastFrame() {
-    const context = this.canvas.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    this.frames.forEach(frame => context.drawImage(frame.getBuffer(), 0, 0, this.canvas.width, this.canvas.height));
+    this.systems[this.systems.length - 1].update(0);
   }
 }

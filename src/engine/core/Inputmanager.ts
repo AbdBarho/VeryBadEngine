@@ -24,9 +24,10 @@ export default class InputManager extends QueuedEventManager implements InputPro
     window.addEventListener("mousedown", this.key);
     window.addEventListener("mouseup", this.key);
     window.addEventListener("mousemove", e => this.mousePositionUpdate("mousemove", e));
+    window.addEventListener("contextmenu", this.killEvent);
 
     window.addEventListener("blur", () => this.clearAll());
-    window.addEventListener("contextmenu", this.killEvent);
+    window.addEventListener("resize", () => this.canvas.resize());
   }
   private killEvent(e: Event) {
     e.preventDefault();

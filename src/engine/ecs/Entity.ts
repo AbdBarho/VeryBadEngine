@@ -1,5 +1,4 @@
-import { ExplosionModel, StarAnimation, Flag, Color } from "./components/Component";
-import IGradient from "./components/gradient/IGradient";
+import { ExplosionModel, StarAnimation, Flag, Color, RotatingGradient } from "./components/Component";
 import { V2 } from "../math/VectorTypes";
 
 export type ComponentName = keyof Entity;
@@ -32,6 +31,6 @@ export default interface Entity {
   // stars
   starAnimation?: StarAnimation;
   // gradient
-  gradient?: IGradient;
+  rotatingGradient?: RotatingGradient;
 
 }

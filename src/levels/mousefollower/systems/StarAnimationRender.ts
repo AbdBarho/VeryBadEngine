@@ -1,14 +1,7 @@
-import { StarAnimation } from "../../../engine/ecs/components/Component";
+import Frame from "../../../engine/core/canvas/layers/Frame";
 import Entity from "../../../engine/ecs/Entity";
 import System from "../../../engine/ecs/system/System";
-import Frame from "../../../engine/core/canvas/layers/Frame";
-import { V2 } from "../../../engine/math/VectorTypes";
-
-
-interface StarAnimationEntity extends Entity {
-  position: V2;
-  starAnimation: StarAnimation;
-}
+import { StarAnimationEntity } from "../Entities";
 
 export default class StarAnimationRenderer extends System {
   frame: Frame;

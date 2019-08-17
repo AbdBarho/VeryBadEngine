@@ -1,16 +1,9 @@
-import Entity from "../../../engine/ecs/Entity";
 import System from "../../../engine/ecs/system/System";
 import Config from "../Config";
-import { Flag } from "../../../engine/ecs/components/Component";
-import { V2 } from "../../../engine/math/VectorTypes";
+import { KeepInWorldRectangle } from "../Entities";
 
 const WORLD_EDGES = Config.WORLD.SIZE;
 
-interface KeepInWorldRectangle extends Entity {
-  position: V2;
-  borderBox: V2;
-  keepInWorld: Flag;
-}
 
 export default class KeepInWorld extends System {
   constructor() {

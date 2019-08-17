@@ -4,6 +4,7 @@ import MouseFollowerLevel from "./Level.worker";
 import { MFEngineMessage, MFWorkerMessage } from './MessageTypes';
 
 export default class MouseFollowerWorkerController extends LevelWorkerController {
+  // executor: 
   init() {
     const worker = this.worker = new MouseFollowerLevel() ;
     worker.onmessage = (e) => this.receive(e.data);
