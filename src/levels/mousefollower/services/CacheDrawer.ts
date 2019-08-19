@@ -45,7 +45,7 @@ export default class CacheDrawer {
       //only for alpha
       const distanceToMiddle = Math.abs(percent - 0.5)
       const alpha = distanceToMiddle * opacityFactor;
-      if (alpha < 0.03)
+      if (alpha < 0.02)
         continue;
       ctx.globalAlpha = alpha;
 

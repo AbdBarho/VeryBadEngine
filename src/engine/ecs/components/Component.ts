@@ -34,3 +34,10 @@ export type RotatingGradient = {
   shiftY: GradientShiftY;
   radius: GradientRadius;
 }
+
+export type OpacityAnimation = {
+  start: number
+  end: number
+  lifeTime: number
+  progress: number
+}

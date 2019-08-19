@@ -1,13 +1,12 @@
 import InputReplicator from "../worker/InputReplicator";
 import LevelWorker from "../worker/LevelWorker";
-import MouseFollowerLevel from "./Level";
 import { BasicEngineMessage, BasicWorkerMessage } from '../worker/types/MessageTypes';
-import Config from './Config';
+import LoadingLevel from "./Level";
 
-export default class MouseFollowerWorker extends LevelWorker {
+export default class LoadingWorker extends LevelWorker {
   input = new InputReplicator();
   canvas: OffscreenCanvas | null = null;
-  level: MouseFollowerLevel | null = null;
+  level: LoadingLevel | null = null;
 
   receive(message: BasicEngineMessage) {
     // console.log(message);
@@ -39,14 +38,14 @@ export default class MouseFollowerWorker extends LevelWorker {
       }
 
       case "init_level": {
-        this.level = new MouseFollowerLevel(this);
+        this.level = new LoadingLevel(this);
         this.send({ type: "init_done" });
         return;
       }
-
-      case "all_levels_init":
-        this.input.trigger("mousemove", { x: Config.WORLD.SIZE.x, y: Config.WORLD.SIZE.y });
-        return;
+      case "all_levels_init": {
+        this.level!.fade();
+        return
+      }
 
       default:
         throw "Unknown or unimplemented message type: " + message.type;

@@ -1,4 +1,5 @@
-import { LevelWorkerScope } from './WorkerTypes';
+import { LevelWorkerScope } from './types/WorkerTypes';
+import { BasicEngineMessage, BasicWorkerMessage } from './types/MessageTypes';
 
 export default abstract class LevelWorker {
   ctx: LevelWorkerScope;
@@ -6,6 +7,6 @@ export default abstract class LevelWorker {
     this.ctx = workerContext;
     workerContext.onmessage = (e => this.receive(e.data));
   }
-  abstract receive(message: any): any;
-  abstract send(message: any): any;
+  abstract receive(message: BasicEngineMessage): any;
+  abstract send(message: BasicWorkerMessage): any;
 }

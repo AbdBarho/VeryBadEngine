@@ -1,23 +1,23 @@
 import Frame from '../../engine/core/canvas/layers/Frame';
 import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
+import { getRandomInt } from '../../engine/math/Math';
+import Acceleration from '../../engine/systems/movement/Acceleration';
+import AccelerationLimiter from '../../engine/systems/movement/AccelerationLimiter';
 import Velocity from "../../engine/systems/movement/Velocity";
-import ExplosionRender from "./systems/ExplosionRender";
+import VelocityLimiter from '../../engine/systems/movement/VelocityLimiter';
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
 import Config from './Config';
 import MouseFollowerWorker from "./LevelWorker";
 import Factory from "./services/Factory";
 import ExplosionDetection from "./systems/ExplosionDetection";
+import ExplosionRender from "./systems/ExplosionRender";
 import GradientRenderer from "./systems/GradientRender";
 import InputSystem from "./systems/InputSystem";
 import MouseFollowerSystem from "./systems/MouseFollowerSystem";
 import StarAnimationRenderer from "./systems/StarAnimationRender";
 import WrapAroundWorld from "./systems/WrapAroundWorld";
-import { getRandomInt } from '../../engine/math/Math';
-import AccelerationLimiter from '../../engine/systems/movement/AccelerationLimiter';
-import Acceleration from '../../engine/systems/movement/Acceleration';
-import VelocityLimiter from '../../engine/systems/movement/VelocityLimiter';
 
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;

@@ -13,5 +13,9 @@ window.addEventListener("load", () => {
   }
   const game = new Engine();
   (window as any).game = game;
-  setTimeout(() => game.start(), 50);
+  // game.worldManager.init().then(() => {
+  //   setTimeout(() => game.start(), 50);
+  // });
+  game.worldManager.init();
+  game.start();
 });

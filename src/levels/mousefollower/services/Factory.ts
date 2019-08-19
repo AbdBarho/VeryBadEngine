@@ -67,13 +67,14 @@ export default class MouseFollowerFactory {
 
   static createAnimatedStar() {
     const numSpikes = getRandomInt(8, 4);
-    const lifeTimeInSeconds = getRandomInt(10, 5);
+    const lifeTimeInSeconds = getRandomInt(5, 3);
     const minRadius = getRandomInt(10, 2);
     const maxRadius = getRandomInt(50, 30);
     const lifeTime = lifeTimeInSeconds * 1000;
     const fillStyle = '#fff';
     const opacityFactor = 0.4;
-    const numFrames = 60;
+    const FPS = 15;
+    const numFrames = lifeTimeInSeconds * FPS;
     const rotationDirection = getRandomBool() ? 1 : -1;
     const cache = CacheDrawer.drawStar({
       fillStyle,

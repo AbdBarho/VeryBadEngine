@@ -1,4 +1,4 @@
-import { ExplosionModel, StarAnimation, Flag, Color, RotatingGradient } from "./components/Component";
+import { ExplosionModel, StarAnimation, Flag, Color, RotatingGradient, OpacityAnimation } from "./components/Component";
 import { V2 } from "../math/VectorTypes";
 
 export type Component = keyof Entity;
@@ -32,7 +32,7 @@ export default interface Entity {
   starAnimation?: StarAnimation;
   // gradient
   rotatingGradient?: RotatingGradient;
-
+  opacityAnimation?: OpacityAnimation;
 }
 
 export interface VelocityEntity extends Entity {
