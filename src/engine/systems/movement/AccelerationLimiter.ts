@@ -1,6 +1,6 @@
 import { LimitedAcc } from "../../ecs/Entity";
 import System from "../../ecs/system/System";
-import { scaleIfNeeded } from "../../math/Math";
+import { limitMag } from "../../math/Math";
 
 export default class AccelerationLimiter extends System {
   constructor() {
@@ -8,6 +8,6 @@ export default class AccelerationLimiter extends System {
   }
 
   updateEntity(entity: LimitedAcc, dt: number) {
-    scaleIfNeeded(entity.acceleration, entity.maxAcceleration);
+    limitMag(entity.acceleration, entity.maxAcceleration);
   }
 }

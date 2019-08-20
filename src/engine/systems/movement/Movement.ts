@@ -1,7 +1,7 @@
 import Entity from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 import { V2 } from "../../math/VectorTypes";
-import { scaleIfNeeded } from "../../math/Math";
+import { limitMag } from "../../math/Math";
 
 interface MovementSystemObject extends Entity {
   moves: boolean;
@@ -25,14 +25,14 @@ export default class MovementSystem extends System {
     let vel = entity.velocity;
     let pos = entity.position;
     //limit acceleration
-    scaleIfNeeded(acc, entity.maxAcceleration);
+    limitMag(acc, entity.maxAcceleration);
 
     //update speed
     vel.x += acc.x * dt;
     vel.y += acc.y * dt;
 
     //limit speed
-    scaleIfNeeded(vel, entity.maxVelocity);
+    limitMag(vel, entity.maxVelocity);
 
     //update position
     pos.x += vel.x * dt;

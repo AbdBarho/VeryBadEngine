@@ -1,13 +1,16 @@
 import Logger from "./Logger";
 
+type Callback = (dt: number) => Promise<any>
+
 export default class PeriodicExecuter {
-  callback: (dt: number) => any;
+  callback: Callback;
   timer = 0;
   lastTime = 0;
   maxDelta = 0;
   isRunning = false;
 
-  constructor(callback: (dt: number) => any, maxDelta = 100) {
+  constructor(callback: Callback, maxDelta = 100) {
+
     this.callback = callback;
     this.maxDelta = maxDelta;
     this.run = this.run.bind(this);
@@ -33,7 +36,8 @@ export default class PeriodicExecuter {
       if (!this.isRunning)
         return;
       this.lastTime = now;
-      this.timer = requestAnimationFrame(this.run);
+      // this.timer = requestAnimationFrame(this.run);
+      this.timer = requestAnimationFrame(() => setTimeout(this.run, 0));
     });
   }
 

@@ -71,7 +71,7 @@ export function clearV2(v: V2) {
   v.y = 0;
 }
 
-export function scaleIfNeeded(v: V2, scale: number) {
+export function limitMag(v: V2, scale: number) {
   // smart way
   let magSq = v.x * v.x + v.y * v.y;
   if (magSq > scale * scale) {
@@ -80,8 +80,8 @@ export function scaleIfNeeded(v: V2, scale: number) {
     v.y = scale * v.y / mag;
   }
   //fast way
-  // vec.x = vec.x > scale ? scale : vec.x < -scale ? -scale : vec.x;
-  // vec.y = vec.y > scale ? scale : vec.y < -scale ? -scale : vec.y;
+  // v.x = v.x > scale ? scale : v.x < -scale ? -scale : v.x;
+  // v.y = v.y > scale ? scale : v.y < -scale ? -scale : v.y;
 }
 
 export function sandwich(val: number, min: number, max: number) {

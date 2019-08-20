@@ -53,7 +53,4 @@ export default class LoadingWorker extends LevelWorker {
 
   }
 
-  send(message: BasicWorkerMessage) {
-    this.ctx.postMessage(message);
-  }
 }

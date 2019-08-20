@@ -15,8 +15,7 @@ export default class MouseFollowerWorker extends LevelWorker {
 
       case "frame_start": {
         this.level!.update(message.dt);
-        //push to the end of the browsers execution queue
-        setTimeout(() => this.send({ type: "frame_end" }), 0);
+        this.send({ type: "frame_end" });
         return;
       }
 
@@ -53,9 +52,5 @@ export default class MouseFollowerWorker extends LevelWorker {
         throw "Unknown or unimplemented message type: " + message.type;
     }
 
-  }
-
-  send(message: BasicWorkerMessage) {
-    this.ctx.postMessage(message);
   }
 }

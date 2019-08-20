@@ -1,6 +1,6 @@
 import System from "../../ecs/system/System";
 import { LimitedVel } from "../../ecs/Entity";
-import { scaleIfNeeded } from "../../math/Math";
+import { limitMag } from "../../math/Math";
 
 export default class VelocityLimiter extends System {
   constructor() {
@@ -8,6 +8,6 @@ export default class VelocityLimiter extends System {
   }
 
   updateEntity(entity: LimitedVel, dt: number) {
-    scaleIfNeeded(entity.velocity, entity.maxVelocity);
+    limitMag(entity.velocity, entity.maxVelocity);
   }
 }

@@ -1,7 +1,7 @@
 import MultiSystem from "../../../engine/ecs/system/Multisystem";
 import { rotation2d } from "../../../engine/math/Math";
 import StepFunctions from "../../../engine/math/Step";
-import ObjectUtils from "../../../engine/util/ObjectUtils";
+import { isEmpty } from "../../../engine/util/utils";
 import { ExplodableEntity, ExplosionEntity } from "../types/Entities";
 
 export default class ExplosionDetection extends MultiSystem {
@@ -13,7 +13,7 @@ export default class ExplosionDetection extends MultiSystem {
   }
 
   update(dt: number) {
-    if (ObjectUtils.isEmpty(this.entities.sources))
+    if (isEmpty(this.entities.sources))
       return;
 
     let sources = this.entities.sources;

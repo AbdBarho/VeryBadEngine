@@ -14,9 +14,9 @@ export default class FlushBuffer extends EmptySystem {
 
   update() {
     // this.ctx.clearRect(0, 0, this.output.width, this.output.height);
-    this.ctx.globalAlpha = 0.5;
+    this.ctx.globalAlpha = 0.1;
     for (const frame of this.frames)
       this.ctx.drawImage(frame.getBuffer(), 0, 0, this.output.width, this.output.height);
-    this.ctx.globalAlpha = 1;
+    // this.ctx.globalAlpha = 1;
   }
 }

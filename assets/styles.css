@@ -20,7 +20,7 @@ h1 {
 
 #state {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  position: fixed;
+  position: absolute;
   padding: 5px;
   top: 0px;
   left: 0px;
