@@ -13,8 +13,8 @@ export default class LoadingWorkerController extends LevelWorkerController {
     const offscreen = layer.transferToOffscreen();
     this.send({ type: "canvas_buffer_transmit", canvas: offscreen }, [offscreen]);
     this.send({ type: "canvas_resize", size: this.canvas.getSize() });
-    await this.sendAndWait({ type: "init_level" }, "init_done");
     this.canvas.onResize(this.resize, this);
+    await this.sendAndWait({ type: "init_level" }, "init_done");
   }
 
   resize(size: V2) {

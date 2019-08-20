@@ -15,7 +15,8 @@ export default class MouseFollowerWorker extends LevelWorker {
 
       case "frame_start": {
         this.level!.update(message.dt);
-        this.send({ type: "frame_end" });
+        //push to the end of the browsers execution queue
+        setTimeout(() => this.send({ type: "frame_end" }), 0);
         return;
       }
 
