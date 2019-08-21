@@ -5,6 +5,8 @@ export default class FlushBuffer extends EmptySystem {
   output: OffscreenCanvas;
   frames: Frame[];
   ctx: OffscreenCanvasRenderingContext2D;
+
+  alpha = 0.1;
   constructor(output: OffscreenCanvas, frames: Frame[]) {
     super('FlushBuffer');
     this.output = output;
@@ -13,10 +15,9 @@ export default class FlushBuffer extends EmptySystem {
   }
 
   update() {
-    // this.ctx.clearRect(0, 0, this.output.width, this.output.height);
-    this.ctx.globalAlpha = 0.1;
+    this.ctx.globalAlpha = this.alpha;
     for (const frame of this.frames)
       this.ctx.drawImage(frame.getBuffer(), 0, 0, this.output.width, this.output.height);
-    // this.ctx.globalAlpha = 1;
+    this.ctx.globalAlpha = 1;
   }
 }

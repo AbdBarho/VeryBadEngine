@@ -5,12 +5,13 @@ export default {
   },
   SYSTEMS: {
     MOUSE_FOLLOWER_SYSTEM: {
+      USE_MOUSE: false,
       IS_FROZEN: false,
       STOP_ON_REACH: false,
       DESTROY_ON_REACH: false,
       RESPAWN_ON_DESTROY: true,
       LOOK_AHEAD_STEPS: 0,
-      RANDOM_FACTOR_SCALE: 0,
+      RANDOM_FACTOR_SCALE: 10,
       ACCELERATION_SCALE: accelerationPerSecond(1500)
     }
   }

@@ -3,18 +3,25 @@ import ECS from "../../../engine/ecs/ECS";
 import EmptySystem from "../../../engine/ecs/system/Emptysystem";
 import Factory from "../services/Factory";
 import MFSys from "./MouseFollowerSystem";
+import Navigator from "./Navigator";
+import FlushBuffer from "../../../engine/systems/render/FlushBuffer";
+import Config from "../Config";
 
 export default class InputSystem extends EmptySystem {
   input: InputProvider;
   ecs: ECS;
   system: MFSys;
+  navigator: Navigator;
+  buffer: FlushBuffer;
   slowMoScale = .12;
 
-  constructor(input: InputProvider, ecs: ECS, system: MFSys) {
+  constructor(input: InputProvider, ecs: ECS, system: MFSys, navigator: Navigator, buffer: FlushBuffer) {
     super("InputSystem");
     this.input = input;
     this.ecs = ecs;
     this.system = system;
+    this.navigator = navigator;
+    this.buffer = buffer;
   }
 
   init() {
@@ -57,13 +64,17 @@ export default class InputSystem extends EmptySystem {
         break;
       case "Digit3":
         // black hole
-        this.setMFSysParams(false, true, true, 200, 0);
+        this.setMFSysParams(false, true, true, 50, 0);
         break;
       case "Digit4":
         //random
         this.setMFSysParams(false, false, false, 0, 1);
         break;
       case "Digit5":
+        //totally random
+        this.setMFSysParams(false, false, false, 0, Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM.RANDOM_FACTOR_SCALE);
+        break;
+      case "Digit6":
         // freeze/unfreeze
         this.ecs.modifyEntities(["mouseFollower"], [], e => {
           if (e.isFrozen)
@@ -71,6 +82,22 @@ export default class InputSystem extends EmptySystem {
           else
             e.isFrozen = true;
         })
+        break;
+      case "Digit7":
+        if (this.system.useMouse) {
+          this.system.useMouse = false;
+          this.system.setTarget(this.navigator.getCurrent())
+        } else {
+          this.system.useMouse = true;
+          this.setMFSysParams(false, false, true, 0, 0);
+          this.system.setTarget(this.input.mousePos);
+        }
+        break;
+      case "ArrowUp":
+        this.buffer.alpha = Math.min(this.buffer.alpha + 0.05, 1);
+        break;
+      case "ArrowDown":
+        this.buffer.alpha = Math.max(this.buffer.alpha - 0.05, 0.15);
         break;
       default:
         break;
@@ -96,7 +123,7 @@ export default class InputSystem extends EmptySystem {
     let i = 100;
     for (let id in this.system.entities) {
       this.ecs.removeEntity(id);
-      if (--i == 0)
+      if (--i === 0)
         break;
     }
     // Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length);

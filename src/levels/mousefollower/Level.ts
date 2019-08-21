@@ -18,6 +18,7 @@ import InputSystem from "./systems/InputSystem";
 import MouseFollowerSystem from "./systems/MouseFollowerSystem";
 import StarAnimationRenderer from "./systems/StarAnimationRender";
 import WrapAroundWorld from "./systems/WrapAroundWorld";
+import Navigator from './systems/Navigator';
 
 export default class MouseFollowerLevel extends ECS {
   input: InputProvider;
@@ -31,13 +32,16 @@ export default class MouseFollowerLevel extends ECS {
     this.canvas = worker.canvas!;
 
     //create systems
-    const mouseFollowerSystem = new MouseFollowerSystem(this.input, this);
     const frame = new Frame();
+
+    const mouseFollowerSystem = new MouseFollowerSystem(this.input, this);
+    const navigator = new Navigator(mouseFollowerSystem, frame);
+    const bufferSystem = new FlushBuffer(this.canvas, [frame]);
     this.systems = [
       new GradientRenderer(frame),
-      new InputSystem(this.input, this, mouseFollowerSystem),
+      new InputSystem(this.input, this, mouseFollowerSystem, navigator, bufferSystem),
 
-
+      navigator,
       mouseFollowerSystem,
       new ExplosionDetection(),
 
@@ -55,24 +59,17 @@ export default class MouseFollowerLevel extends ECS {
       new ExplosionRender(frame, this),
 
       //flush
-      new FlushBuffer(this.canvas, [frame])
-
+      bufferSystem
     ];
 
     //background
     this.queueEntity(Factory.createRotatingGradient(
-      Config.WORLD.SIZE, getRandomInt(360), 0.05, "min", "center", "center",  {
+      Config.WORLD.SIZE, 0, 0.05, "min", "center", "center",  {
         0: "#400a",
         100: "#004a"
       }
     ));
 
-    this.queueEntity(Factory.createRotatingGradient(
-      Config.WORLD.SIZE, -90, -0.012, "min", "right", "top", {
-        50: "#0000",
-        100: "#0006"
-      }
-    ));
 
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createSideScroller());

@@ -25,18 +25,11 @@ export default class LoadingLevel extends ECS {
 
     //background
     this.queueEntity(Factory.createRotatingGradient(
-      Config.WORLD.SIZE, getRandomInt(360), 0.05, "min", "center", "center", {
+      Config.WORLD.SIZE, 0, 0.05, "min", "center", "center", {
         0: "#a00",
         100: "#00a"
       }
     ));
-
-    // this.queueEntity(Factory.createRotatingGradient(
-    //   Config.WORLD.SIZE, -90, -0.012, "min", "right", "top", {
-    //     50: "#0000",
-    //     100: "#0006"
-    //   }
-    // ));
   }
 
   drawLastFrame() {

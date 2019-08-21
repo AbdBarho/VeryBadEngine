@@ -1,7 +1,7 @@
 import { InputProvider } from "../../../engine/core/Inputmanager";
 import ECS from "../../../engine/ecs/ECS";
 import System from "../../../engine/ecs/system/System";
-import { V2 } from "../../../engine/math/VectorTypes";
+import { V2, setV2 } from "../../../engine/math/VectorTypes";
 import Config from "../Config";
 import { MouseFollowerEntity } from "../types/Entities";
 import Factory from "../services/Factory";
@@ -13,6 +13,7 @@ const CONFIG = Config.SYSTEMS.MOUSE_FOLLOWER_SYSTEM;
 export default class MouseFollowerSystem extends System {
   input: InputProvider;
   ecs: ECS;
+  useMouse = CONFIG.USE_MOUSE;
   stopOnReach = CONFIG.STOP_ON_REACH;
   destroyOnReach = CONFIG.DESTROY_ON_REACH;
   respawnOnDestroy = CONFIG.RESPAWN_ON_DESTROY;
@@ -36,8 +37,13 @@ export default class MouseFollowerSystem extends System {
   }
 
   mouseMove(mousePos: V2) {
-    this.target.x = mousePos.x;
-    this.target.y = mousePos.y;
+    if (!this.useMouse)
+      return
+    this.setTarget(mousePos);
+  }
+
+  setTarget(v: V2) {
+    setV2(this.target, v);
   }
 
   updateSubRoutines() {

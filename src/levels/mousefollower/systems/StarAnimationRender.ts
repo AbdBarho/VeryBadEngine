@@ -1,5 +1,4 @@
 import Frame from "../../../engine/core/canvas/layers/Frame";
-import Entity from "../../../engine/ecs/Entity";
 import System from "../../../engine/ecs/system/System";
 import { StarAnimationEntity } from "../types/Entities";
 
@@ -20,7 +19,7 @@ export default class StarAnimationRenderer extends System {
 
     // all frames are on the x axis
     const { x: width, y: height } = borderBox;
-    this.frame.ctx.drawImage(cache,
+    this.frame.drawSprite(cache,
       width * currentFrame, 0, width, height, //from where to read the image
       position.x - width / 2, position.y - height / 2, width, height // where to write the image
     );

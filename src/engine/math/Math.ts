@@ -87,3 +87,10 @@ export function limitMag(v: V2, scale: number) {
 export function sandwich(val: number, min: number, max: number) {
   return val < min ? min : val > max ? max : val;
 }
+
+export function interpolate(start: number, end: number, percent: number) {
+  const diff = end - start;
+  return diff > 0 ?
+    start + percent * diff :
+    end - ((1 - percent) * diff);
+}

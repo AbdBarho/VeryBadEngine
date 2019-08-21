@@ -3,6 +3,7 @@ import System from "../../../engine/ecs/system/System";
 import { OpacityAnimation } from "../../../engine/ecs/components/Component";
 import ECS from "../../../engine/ecs/ECS";
 import LevelWorker from "../../worker/LevelWorker";
+import { interpolate } from "../../../engine/math/Math";
 
 export default class OpacityBuffer extends System {
   output: OffscreenCanvas;
@@ -38,20 +39,12 @@ export default class OpacityBuffer extends System {
     const o = entities[0].opacityAnimation as OpacityAnimation;
 
     o.progress = o.progress + dt;
-    const diff = o.end - o.start;
-    const direction = diff > 0; // true is up, false is down
-
     const percent = o.progress / o.lifeTime;
-
     //FIXME: hack!!!
     if (percent > 1) {
       this.worker.send({ type: "set_self_to_idle" });
       return o.end;
     }
-    if (direction) { // is up
-      return o.start + percent * diff;
-    }
-    //is down
-    return o.end - ((1 - percent) * diff);
+    return interpolate(o.start, o.end, percent);
   }
 }

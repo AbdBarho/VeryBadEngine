@@ -43,6 +43,8 @@ export default class Frame {
   }
 
   fillStyle(fill: FillStyle) {
+    // if (this.ctx.fillStyle === fill)
+    //   return;
     this.ctx.fillStyle = fill;
   }
 
@@ -72,21 +74,23 @@ export default class Frame {
     this.ctx.drawImage(image, x, y, w, h);
   }
 
+  drawSprite(sprite: DrawableImage,
+    sourceX: number, sourceY: number, sourceW: number, sourceH: number,
+    x: number, y: number, w: number, h: number) {
+    this.ctx.drawImage(sprite, sourceX, sourceY, sourceW, sourceH, x, y, w, h);
+  }
+
   fillFrame() {
     this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
   }
 
-  fillRectCompact(dims: [number, number, number, number], color: string) {
-    this.ctx.fillStyle = color;
-    this.ctx.fillRect(dims[0], dims[1], dims[2], dims[3]);
-  }
   fillRect(x: number, y: number, w: number, h: number, color: string) {
-    this.ctx.fillStyle = color;
-    this.ctx.fillRect(x, y, w, h);
+    this.fillStyle(color);
+    this.ctx.fillRect(x | 0, y | 0, w | 0, h | 0);
   }
 
   fillCircle(cx: number, cy: number, radius: number, color: string) {
-    this.ctx.fillStyle = color;
+    this.fillStyle(color);
     this.ctx.beginPath();
     this.ctx.ellipse(cx, cy, radius, radius, 0, 0, FULL_CIRCLE);
     this.ctx.fill();
@@ -94,7 +98,7 @@ export default class Frame {
   }
 
   fillStar(cx: number, cy: number, numSpikes: number, minRadius: number, maxRadius: number, fillStyle: string) {
-    this.ctx.fillStyle = fillStyle;
+    this.fillStyle(fillStyle);
     this.ctx.beginPath();
     this.ctx.translate(cx, cy);
     this.ctx.moveTo(0, 0 - minRadius);
