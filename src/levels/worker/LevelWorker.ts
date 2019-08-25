@@ -11,7 +11,8 @@ export default abstract class LevelWorker {
   abstract receive(message: BasicEngineMessage): any;
   send(message: BasicWorkerMessage) {
     if (message.type === "frame_end")
-      return delay(() => this.ctx.postMessage(message));
+      // return delay(() => this.ctx.postMessage(message));
+      return this.ctx.postMessage(message);
 
     this.ctx.postMessage(message);
   }
