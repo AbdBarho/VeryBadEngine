@@ -36,8 +36,8 @@ export default class PeriodicExecuter {
       if (!this.isRunning)
         return;
       this.lastTime = now;
-      // this.timer = requestAnimationFrame(this.run);
-      this.timer = requestAnimationFrame(() => setTimeout(this.run, 0));
+      this.timer = requestAnimationFrame(this.run);
+      // this.timer = requestAnimationFrame(() => setTimeout(this.run, 0));
     });
   }
 

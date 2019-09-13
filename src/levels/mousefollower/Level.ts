@@ -77,7 +77,7 @@ export default class MouseFollowerLevel extends ECS {
     for (let i = 0; i < 100; i++)
       this.queueEntity(Factory.createAnimatedStar());
 
-    for (let i = 0; i < 1000; i++)
+    for (let i = 0; i < 500; i++)
       this.queueEntity(Factory.createMouseFollower());
 
 
