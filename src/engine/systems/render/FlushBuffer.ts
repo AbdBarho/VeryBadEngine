@@ -2,16 +2,16 @@ import Frame from "../../core/canvas/layers/Frame";
 import EmptySystem from "../../ecs/system/Emptysystem";
 
 export default class FlushBuffer extends EmptySystem {
-  output: OffscreenCanvas;
+  output: HTMLCanvasElement;
   frames: Frame[];
-  ctx: OffscreenCanvasRenderingContext2D;
+  ctx: CanvasRenderingContext2D;
 
   alpha = 0.1;
-  constructor(output: OffscreenCanvas, frames: Frame[]) {
+  constructor(output: HTMLCanvasElement, frames: Frame[]) {
     super('FlushBuffer');
     this.output = output;
     this.frames = frames;
-    this.ctx = output.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    this.ctx = output.getContext("2d") as CanvasRenderingContext2D;
   }
 
   update() {

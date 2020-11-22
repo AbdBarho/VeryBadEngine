@@ -1,15 +1,17 @@
 import Canvas from "../engine/core/canvas/Canvas";
 import InputManager from "../engine/core/Inputmanager";
-import LevelWorkerController from "./worker/LevelWorkerController";
+import ECS from "../engine/ecs/ECS";
+import LoadingLevel from "./loading/Level";
 
 export type LevelConstructor = {
-  new(world: WorldManager): LevelWorkerController;
+  new(world: WorldManager): ECS;
 }
+
 export default class WorldManager {
   canvas: Canvas;
   input: InputManager;
-  idleLevels: LevelWorkerController[];
-  activeLevels: LevelWorkerController[] = [];
+  idleLevels: ECS[];
+  activeLevels: ECS[] = [];
 
   isPaused = false; //TODO: we have 'isRunning' variable in the engine level, maybe get rid of that?
   constructor(canvas: Canvas, inputManager: InputManager, levels: LevelConstructor[]) {
@@ -18,21 +20,16 @@ export default class WorldManager {
     this.idleLevels = levels.map(Level => new Level(this));
   }
 
-  async init(sequentially = true) {
-    if (sequentially) {
-      while (this.idleLevels.length) {
-        const level = this.idleLevels.shift() as LevelWorkerController;
-        level.setActive(true);
-        await level.init();
-        this.activeLevels.push(level);
-      }
-    } else {
-      this.idleLevels.forEach(level => level.setActive(true));
-      this.activeLevels = this.idleLevels;
-      this.idleLevels = [];
-      await Promise.all(this.activeLevels.map(level => level.init()));
+  init() {
+    while (this.idleLevels.length) {
+      const level = this.idleLevels.shift() as ECS;
+      level.init();
+      this.activeLevels.push(level);
     }
-    this.activeLevels.forEach(level => level.send({ type: "all_levels_init" }));
+    for (const level of this.activeLevels)
+      if (level instanceof LoadingLevel)
+        level.fade();
+
   }
 
   start() {
@@ -49,18 +46,17 @@ export default class WorldManager {
       level.destroy();
   }
 
-  async update(dt: number, sequentially = false) {
-    if (this.isPaused)
+  update(dt: number) {
+    if (this.isPaused) {
+      this.input.emptyQueue();
       return;
-
-    if (sequentially)
-      for (const level of this.activeLevels)
-        await level.update(dt);
-    else
-      return Promise.all(this.activeLevels.map(level => level.update(dt)));
+    }
+    this.input.executeQueue();
+    for (const level of this.activeLevels)
+      level.update(dt);
   }
 
-  setIdle(level: LevelWorkerController) {
+  setIdle(level: ECS) {
     const index = this.activeLevels.indexOf(level);
     if (index === -1)
       return;

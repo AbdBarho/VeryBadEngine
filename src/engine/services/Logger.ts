@@ -26,8 +26,12 @@ export default class Logger {
     numUpdates = 0;
   }
 
+  static getAvgFPS() {
+    return (fps.reduce((acc, curr) => acc + curr, 0) / fps.length);
+  }
+
   static showFPSDebug() {
-    const avg = (fps.reduce((acc, curr) => acc + curr, 0) / fps.length);
+    const avg = Logger.getAvgFPS();
     const avgStr = (1000 / avg).toFixed(2);
     fps = [];
     Logger.debugInfo("AVG FPS", avgStr);

@@ -1,26 +1,27 @@
 import Frame from '../../engine/core/canvas/layers/Frame';
 import ECS from "../../engine/ecs/ECS";
 import { getRandomInt } from '../../engine/math/Math';
-import LoadingWorker from './LevelWorker';
 import GradientRenderer from '../mousefollower/systems/GradientRender';
 import Config from '../mousefollower/Config';
 import Factory from '../mousefollower/services/Factory';
 import OpacityBuffer from './systems/OpacityBuffer';
+import WorldManager from '../WorldManager';
+import Layer from '../../engine/core/canvas/layers/Layer';
 
 export default class LoadingLevel extends ECS {
-  canvas: OffscreenCanvas;
-  worker: LoadingWorker;
+  world: WorldManager;
+  outputLayer: Layer;
 
-  constructor(worker: LoadingWorker) {
+  constructor(world: WorldManager) {
     super();
-    this.worker = worker;
-    this.canvas = worker.canvas!;
+    this.world = world;
+    this.outputLayer = world.canvas.getLayer(1);
 
     //create systems
     const frame = new Frame();
     this.systems = [
       new GradientRenderer(frame),
-      new OpacityBuffer(this.canvas, [frame], this, this.worker)
+      new OpacityBuffer(this.outputLayer.getFrame(), [frame], this)
     ];
 
     //background
@@ -33,7 +34,8 @@ export default class LoadingLevel extends ECS {
   }
 
   drawLastFrame() {
-    this.systems[this.systems.length - 1].update(0);
+    // no need to, it is just a loading screen
+    // this.systems[this.systems.length - 1].update(0);
   }
 
   fade() {

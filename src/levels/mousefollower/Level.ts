@@ -9,7 +9,6 @@ import VelocityLimiter from '../../engine/systems/movement/VelocityLimiter';
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
 import Config from './Config';
-import MouseFollowerWorker from "./LevelWorker";
 import Factory from "./services/Factory";
 import ExplosionDetection from "./systems/ExplosionDetection";
 import ExplosionRender from "./systems/ExplosionRender";
@@ -19,27 +18,28 @@ import MouseFollowerSystem from "./systems/MouseFollowerSystem";
 import StarAnimationRenderer from "./systems/StarAnimationRender";
 import WrapAroundWorld from "./systems/WrapAroundWorld";
 import Navigator from './systems/Navigator';
+import WorldManager from '../WorldManager';
+import Layer from '../../engine/core/canvas/layers/Layer';
 
 export default class MouseFollowerLevel extends ECS {
-  input: InputProvider;
-  canvas: OffscreenCanvas;
-  worker: MouseFollowerWorker;
+  world: WorldManager;
+  outputLayer: Layer;
 
-  constructor(worker: MouseFollowerWorker) {
+  constructor(world: WorldManager) {
     super();
-    this.worker = worker;
-    this.input = worker.input;
-    this.canvas = worker.canvas!;
+    this.world = world;
+    this.outputLayer = world.canvas.getLayer(0);
 
     //create systems
+    const InputManager = this.world.input;
     const frame = new Frame();
 
-    const mouseFollowerSystem = new MouseFollowerSystem(this.input, this);
+    const mouseFollowerSystem = new MouseFollowerSystem(InputManager, this);
     const navigator = new Navigator(mouseFollowerSystem, frame);
-    const bufferSystem = new FlushBuffer(this.canvas, [frame]);
+    const bufferSystem = new FlushBuffer(this.outputLayer.getFrame(), [frame]);
     this.systems = [
       new GradientRenderer(frame),
-      new InputSystem(this.input, this, mouseFollowerSystem, navigator, bufferSystem),
+      new InputSystem(InputManager, this, mouseFollowerSystem, navigator, bufferSystem),
 
       navigator,
       mouseFollowerSystem,

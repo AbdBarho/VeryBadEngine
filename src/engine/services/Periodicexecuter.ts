@@ -32,12 +32,15 @@ export default class PeriodicExecuter {
     const now = performance.now();
     const dt = now - this.lastTime;
     Logger.fps(dt);
+    // const delta = getDelta(Logger.getAvgFPS());
+    // this.callback(delta).then(() => {
     this.callback(dt < this.maxDelta ? dt : this.maxDelta).then(() => {
       if (!this.isRunning)
         return;
       this.lastTime = now;
       this.timer = requestAnimationFrame(this.run);
       // this.timer = requestAnimationFrame(() => setTimeout(this.run, 0));
+      // this.timer = setTimeout(this.run, 16);
     });
   }
 
@@ -48,4 +51,14 @@ export default class PeriodicExecuter {
       this.timer = 0;
     }
   }
+}
+
+function getDelta(avgFPS: number): number {
+  if (avgFPS < 75)
+    return 16.666666666666 // 60 fps: 1000 / 60
+
+  if (avgFPS < 105)
+    return 11.11111111111111 // 90 fps: 1000 / 90
+
+  return 8.333333333333334 // 120 fps: 1000 / 120
 }

@@ -4,7 +4,7 @@
   "description": "A very bad game engine",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --config webpack.dev.js",
+    "dev": "webpack --config webpack.dev.js --progress",
     "build": "webpack --config webpack.prod.js"
   },
   "repository": {
@@ -15,20 +15,20 @@
     "game",
     "browser"
   ],
-  "author": "Abdullah Barhoum",
   "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/AbdBarho/VeryBadEngine/issues"
   },
   "homepage": "https://github.com/AbdBarho/VeryBadEngine#readme",
   "devDependencies": {
-    "circular-dependency-plugin": "^5.2.0",
-    "fork-ts-checker-webpack-plugin": "^1.5.0",
-    "inline-source": "^7.1.0",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.5.3",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7",
-    "worker-loader": "^2.0.0"
+    "circular-dependency-plugin": "^5.2.2",
+    "fork-ts-checker-webpack-plugin": "^6.0.3",
+    "inline-source": "^7.2.0",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
+    "mkdirp": "^1.0.4",
+    "webpack": "^5.6.0",
+    "webpack-cli": "^4.2.0",
+    "worker-loader": "^3.0.5"
   }
 }
