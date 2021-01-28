@@ -1,4 +1,4 @@
-import Frame from "../../core/canvas/layers/Frame";
+import Frame from "../../Frame";
 import { RectangleModelObject } from "../../ecs/Entity";
 import System from "../../ecs/system/System";
 

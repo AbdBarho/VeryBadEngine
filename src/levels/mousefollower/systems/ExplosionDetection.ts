@@ -16,10 +16,10 @@ export default class ExplosionDetection extends MultiSystem {
     if (isEmpty(this.entities.sources))
       return;
 
-    let sources = this.entities.sources;
-    let targets = this.entities.targets;
-    for (let id in sources)
-      for (let targetId in targets)
+    const sources = this.entities.sources;
+    const targets = this.entities.targets;
+    for (const id in sources)
+      for (const targetId in targets)
         this.applyExplosion(sources[id] as ExplosionEntity, targets[targetId] as ExplodableEntity);
     //all explosions handled, new ones will be queued in the next frame, if any
     this.entities.sources = {};
@@ -36,7 +36,7 @@ export default class ExplosionDetection extends MultiSystem {
     const distanceScale = vectorLengthSq / (source.explosionRadius * source.explosionRadius);
     if (distanceScale < 1) {
       const power = StepFunctions.smoothStart(1 - distanceScale, 3) * source.explosionVelocity;
-      let dir = rotation2d(dist);
+      const dir = rotation2d(dist);
       target.velocity.x += dir.x * power;
       target.velocity.y += dir.y * power;
     }

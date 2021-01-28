@@ -4,7 +4,7 @@ import Config from "../Config";
 import MouseFollowerSystem from "./MouseFollowerSystem";
 import { getRandomInt, interpolate } from "../../../engine/math/Math";
 import MouseFollowerFactory from "../services/Factory";
-import Frame from "../../../engine/core/canvas/layers/Frame";
+import Frame from "../../../engine/Frame";
 
 const SIZE = Config.WORLD.SIZE;
 

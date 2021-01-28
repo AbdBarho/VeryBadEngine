@@ -1,4 +1,4 @@
-import Frame, { GradientData } from "../../../engine/core/canvas/layers/Frame";
+import Frame, { GradientData } from "../../../engine/Frame";
 import System from "../../../engine/ecs/system/System";
 import { RotatingGradient } from "../../../engine/ecs/components/Component";
 import { GradientEntity } from "../types/Entities";

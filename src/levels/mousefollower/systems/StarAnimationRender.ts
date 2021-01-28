@@ -1,4 +1,4 @@
-import Frame from "../../../engine/core/canvas/layers/Frame";
+import Frame from "../../../engine/Frame";
 import System from "../../../engine/ecs/system/System";
 import { StarAnimationEntity } from "../types/Entities";
 

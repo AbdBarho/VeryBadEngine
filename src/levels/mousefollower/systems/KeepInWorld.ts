@@ -6,7 +6,7 @@ import { KeepInWorldRectangle } from "../types/Entities";
 const WORLD_EDGES = Config.WORLD.SIZE;
 
 
-export default class KeepInWorld extends System {
+export default class KeepInScreen extends System {
   constructor() {
     super("KeepInWorld", ["position", "keepInWorld", "borderBox"]);
   }

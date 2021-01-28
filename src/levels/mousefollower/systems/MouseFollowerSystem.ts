@@ -1,4 +1,4 @@
-import { InputProvider } from "../../../engine/core/Inputmanager";
+import { InputProvider } from "../../../engine/Inputmanager";
 import ECS from "../../../engine/ecs/ECS";
 import System from "../../../engine/ecs/system/System";
 import { V2, setV2 } from "../../../engine/math/VectorTypes";

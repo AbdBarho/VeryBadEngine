@@ -1,13 +1,12 @@
-import Frame from '../../engine/core/canvas/layers/Frame';
-import { InputProvider } from "../../engine/core/Inputmanager";
 import ECS from "../../engine/ecs/ECS";
-import { getRandomInt } from '../../engine/math/Math';
+import Frame from '../../engine/Frame';
 import Acceleration from '../../engine/systems/movement/Acceleration';
 import AccelerationLimiter from '../../engine/systems/movement/AccelerationLimiter';
 import Velocity from "../../engine/systems/movement/Velocity";
 import VelocityLimiter from '../../engine/systems/movement/VelocityLimiter';
 import FlushBuffer from "../../engine/systems/render/FlushBuffer";
 import RectangleRenderer from "../../engine/systems/render/RectangleRender";
+import World from '../WorldManager';
 import Config from './Config';
 import Factory from "./services/Factory";
 import ExplosionDetection from "./systems/ExplosionDetection";
@@ -15,31 +14,28 @@ import ExplosionRender from "./systems/ExplosionRender";
 import GradientRenderer from "./systems/GradientRender";
 import InputSystem from "./systems/InputSystem";
 import MouseFollowerSystem from "./systems/MouseFollowerSystem";
+import Navigator from './systems/Navigator';
 import StarAnimationRenderer from "./systems/StarAnimationRender";
 import WrapAroundWorld from "./systems/WrapAroundWorld";
-import Navigator from './systems/Navigator';
-import WorldManager from '../WorldManager';
-import Layer from '../../engine/core/canvas/layers/Layer';
 
 export default class MouseFollowerLevel extends ECS {
-  world: WorldManager;
-  outputLayer: Layer;
+  world: World;
 
-  constructor(world: WorldManager) {
+  constructor(world: World) {
     super();
     this.world = world;
-    this.outputLayer = world.canvas.getLayer(0);
-
+    const canvas = world.canvas;
+    const outputFrame = canvas.frame;
     //create systems
     const InputManager = this.world.input;
-    const frame = new Frame();
+    const tempFrame = new Frame(canvas);
 
     const mouseFollowerSystem = new MouseFollowerSystem(InputManager, this);
-    const navigator = new Navigator(mouseFollowerSystem, frame);
-    const bufferSystem = new FlushBuffer(this.outputLayer.getFrame(), [frame]);
+    const navigator = new Navigator(mouseFollowerSystem, tempFrame);
+    const bufferSystem = new FlushBuffer(outputFrame, [tempFrame]);
     this.systems = [
-      new GradientRenderer(frame),
-      new InputSystem(InputManager, this, mouseFollowerSystem, navigator, bufferSystem),
+      new GradientRenderer(tempFrame),
+      new InputSystem(InputManager, this, mouseFollowerSystem, world, navigator, bufferSystem),
 
       navigator,
       mouseFollowerSystem,
@@ -54,9 +50,9 @@ export default class MouseFollowerLevel extends ECS {
       new WrapAroundWorld(),
 
       //render
-      new StarAnimationRenderer(frame),
-      new RectangleRenderer(frame),
-      new ExplosionRender(frame, this),
+      new StarAnimationRenderer(tempFrame),
+      new RectangleRenderer(tempFrame),
+      new ExplosionRender(tempFrame, this),
 
       //flush
       bufferSystem
@@ -64,10 +60,10 @@ export default class MouseFollowerLevel extends ECS {
 
     //background
     this.queueEntity(Factory.createRotatingGradient(
-      Config.WORLD.SIZE, 0, 0.05, "min", "center", "center",  {
-        0: "#400a",
-        100: "#004a"
-      }
+      Config.WORLD.SIZE, 0, 0.05, "min", "center", "center", {
+      0: "#400a",
+      100: "#004a"
+    }
     ));
 
 
@@ -83,9 +79,5 @@ export default class MouseFollowerLevel extends ECS {
 
     this.init();
 
-  }
-
-  drawLastFrame() {
-    this.systems[this.systems.length - 1].update(0);
   }
 }

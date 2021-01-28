@@ -12,5 +12,5 @@ function fitToScreen() {
   config.CANVAS.WIDTH = window.innerWidth;
   config.CANVAS.HEIGHT = window.innerHeight;
 }
-// fitToScreen();
+fitToScreen();
 export default config;

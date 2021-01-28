@@ -1,4 +1,6 @@
-import Config from "../../../config/Config";
+import { FULL_CIRCLE } from "./math/Math";
+import { V2 } from "./math/VectorTypes";
+import Canvas from "./Canvas";
 
 export type DrawableImage = HTMLCanvasElement | HTMLImageElement | SVGImageElement | ImageBitmap | OffscreenCanvas;
 export type FillStyle = string | CanvasGradient | CanvasPattern;
@@ -9,21 +11,21 @@ export type GradientData = {
   colors: string[];
 }
 
-const FULL_CIRCLE = Math.PI * 2;
-const { WIDTH, HEIGHT } = Config.CANVAS;
-
 export default class Frame {
+  canvas: Canvas;
+  buffer: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
 
-  buffer = new OffscreenCanvas(WIDTH, HEIGHT);
-  ctx: OffscreenCanvasRenderingContext2D;
-  width = WIDTH;
-  height = HEIGHT;
+  constructor(canvas: Canvas) {
+    this.canvas = canvas;
+    this.buffer = document.createElement('canvas');
+    this.buffer.width = canvas.size.x;
+    this.buffer.height = canvas.size.y;
 
-  constructor() {
-    let ctx = this.buffer.getContext("2d");
+    const ctx = this.buffer.getContext("2d");
     if (ctx === null)
       throw "No context could be created for the off screen canvas";
-    this.ctx = ctx as OffscreenCanvasRenderingContext2D;
+    this.ctx = ctx;
   }
 
   getBuffer() {
@@ -34,19 +36,22 @@ export default class Frame {
     return this.ctx;
   }
 
+  setDimensions(size: V2, shift: V2) {
+    this.buffer.width = size.x;
+    this.buffer.height = size.y;
+    this.buffer.style.top = shift.y + "px";
+    this.buffer.style.left = shift.x + "px";
+  }
+
   clear() {
-    this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    const size = this.canvas.size;
+    this.ctx.clearRect(0, 0, size.x, size.y);
   }
 
   alpha(val: number) {
     this.ctx.globalAlpha = val;
   }
 
-  fillStyle(fill: FillStyle) {
-    // if (this.ctx.fillStyle === fill)
-    //   return;
-    this.ctx.fillStyle = fill;
-  }
 
   debugPoint(cx: number, cy: number, radius: number, fill: string) {
     this.ctx.fillStyle = fill;
@@ -57,21 +62,31 @@ export default class Frame {
   }
 
 
-  backgroundSolidColor(color: string) {
-    this.ctx.fillStyle = color;
-    this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  fillWith(fill: FillStyle) {
+    this.fillStyle(fill);
+    const size = this.canvas.size;
+    this.ctx.fillRect(0, 0, size.x, size.y);
   }
+
+  fillStyle(fill: FillStyle) {
+    this.ctx.fillStyle = fill;
+  }
+
 
   renderGradientData(data: GradientData) {
     const gradient = this.ctx.createLinearGradient(...data.points);
     for (let i = 0; i < data.stops.length; i++)
       gradient.addColorStop(data.stops[i], data.colors[i]);
-    this.fillStyle(gradient);
-    this.fillFrame();
+    this.fillWith(gradient);
   }
 
   drawImage(image: DrawableImage, x: number, y: number, w: number, h: number) {
     this.ctx.drawImage(image, x, y, w, h);
+  }
+
+  fillWithImage(image: DrawableImage) {
+    const size = this.canvas.size;
+    this.ctx.drawImage(image, 0, 0, size.x, size.y);
   }
 
   drawSprite(sprite: DrawableImage,
@@ -80,9 +95,6 @@ export default class Frame {
     this.ctx.drawImage(sprite, sourceX, sourceY, sourceW, sourceH, x, y, w, h);
   }
 
-  fillFrame() {
-    this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
-  }
 
   fillRect(x: number, y: number, w: number, h: number, color: string) {
     this.fillStyle(color);

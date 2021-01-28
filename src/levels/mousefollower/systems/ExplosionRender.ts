@@ -1,4 +1,4 @@
-import Frame from "../../../engine/core/canvas/layers/Frame";
+import Frame from "../../../engine/Frame";
 import ECS from "../../../engine/ecs/ECS";
 import System from "../../../engine/ecs/system/System";
 import { toHexColor } from "../../../engine/math/Math";
@@ -16,7 +16,7 @@ export default class ExplosionRender extends System {
   }
 
   updateEntity(entity: Explosion, dt: number) {
-    let { explosionModel, position } = entity;
+    const { explosionModel, position } = entity;
     let { progress, lifeTime, color, radius } = explosionModel;
 
     //update animation progress
@@ -24,10 +24,10 @@ export default class ExplosionRender extends System {
     if (progress >= lifeTime)
       return this.ecs.removeEntity(entity.ID);
 
-    let percent = progress / lifeTime;
+    const percent = progress / lifeTime;
 
     radius *= StepFunctions.smoothStop(percent, 5);
-    let opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 10)) * 256);
+    const opacity = Math.trunc((1 - StepFunctions.smoothStop(percent, 10)) * 256);
     color = color + toHexColor(opacity);
 
     this.frame.fillCircle(position.x, position.y, radius, color);

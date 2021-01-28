@@ -1,25 +1,29 @@
-import { InputProvider } from "../../../engine/core/Inputmanager";
 import ECS from "../../../engine/ecs/ECS";
 import EmptySystem from "../../../engine/ecs/system/Emptysystem";
+import { InputProvider } from "../../../engine/Inputmanager";
+import FlushBuffer from "../../../engine/systems/render/FlushBuffer";
+import World from "../../WorldManager";
+import Config from "../Config";
 import Factory from "../services/Factory";
 import MFSys from "./MouseFollowerSystem";
 import Navigator from "./Navigator";
-import FlushBuffer from "../../../engine/systems/render/FlushBuffer";
-import Config from "../Config";
 
 export default class InputSystem extends EmptySystem {
   input: InputProvider;
-  ecs: ECS;
+  level: ECS;
   system: MFSys;
+  world: World;
   navigator: Navigator;
   buffer: FlushBuffer;
   slowMoScale = .12;
 
-  constructor(input: InputProvider, ecs: ECS, system: MFSys, navigator: Navigator, buffer: FlushBuffer) {
+  constructor(input: InputProvider, level: ECS, system: MFSys, world: World,
+    navigator: Navigator, buffer: FlushBuffer) {
     super("InputSystem");
     this.input = input;
-    this.ecs = ecs;
+    this.level = level;
     this.system = system;
+    this.world = world;
     this.navigator = navigator;
     this.buffer = buffer;
   }
@@ -33,17 +37,19 @@ export default class InputSystem extends EmptySystem {
   mouseDown(key: string) {
     if (key === "Mouse1") {
       const explosion = Factory.createExplosion();
-      explosion.position.x = this.input.mousePos.x;
-      explosion.position.y = this.input.mousePos.y;
-      this.ecs.queueEntity(explosion);
+      const scale = this.world.canvas.scale;
+      explosion.position.x = this.input.mousePos.x * scale.x;
+      explosion.position.y = this.input.mousePos.y * scale.y;
+
+      this.level.queueEntity(explosion);
     }
     else if (key === "Mouse3")
-      this.ecs.timeScale = this.slowMoScale;
+      this.level.timeScale = this.slowMoScale;
   }
 
   mouseUp(key: string) {
     if (key === "Mouse3")
-      this.ecs.timeScale = 1;
+      this.level.timeScale = 1;
   }
 
   handleKey(keyName: string) {
@@ -76,7 +82,7 @@ export default class InputSystem extends EmptySystem {
         break;
       case "Digit6":
         // freeze/unfreeze
-        this.ecs.modifyEntities(["mouseFollower"], [], e => {
+        this.level.modifyEntities(["mouseFollower"], [], e => {
           if (e.isFrozen)
             delete e.isFrozen;
           else
@@ -115,14 +121,14 @@ export default class InputSystem extends EmptySystem {
 
   spawnMouseFollowers() {
     for (let i = 0; i < 100; i++)
-      this.ecs.queueEntity(Factory.createMouseFollower());
+      this.level.queueEntity(Factory.createMouseFollower());
     // Logger.debugInfo("Num mouseFollowers", Object.keys(this.system.entities).length + 100);
   }
 
   removeMouseFollowers() {
     let i = 100;
     for (let id in this.system.entities) {
-      this.ecs.removeEntity(id);
+      this.level.removeEntity(id);
       if (--i === 0)
         break;
     }

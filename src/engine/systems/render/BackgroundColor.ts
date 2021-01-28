@@ -1,4 +1,4 @@
-import Frame from "../../core/canvas/layers/Frame";
+import Frame from "../../Frame";
 import EmptySystem from "../../ecs/system/Emptysystem";
 
 export default class BackgroundColor extends EmptySystem {
@@ -11,6 +11,6 @@ export default class BackgroundColor extends EmptySystem {
   }
 
   update() {
-    this.output.backgroundSolidColor(this.color);
+    this.output.fillWith(this.color);
   }
 }

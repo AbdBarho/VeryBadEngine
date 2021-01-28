@@ -1,6 +1,6 @@
-import { QueuedEventManager } from "../services/Eventmanager";
-import Canvas from "./canvas/Canvas";
-import { V2 } from "../math/VectorTypes";
+import { V2 } from "./math/VectorTypes";
+import { QueuedEventManager } from "./services/Eventmanager";
+import Canvas from "./Canvas";
 
 export interface InputProvider {
   mousePos: V2;
@@ -27,7 +27,7 @@ export default class InputManager extends QueuedEventManager implements InputPro
     window.addEventListener("contextmenu", this.killEvent);
 
     window.addEventListener("blur", () => this.clearAll());
-    window.addEventListener("resize", () => this.canvas.resize());
+    window.addEventListener("resize", () => this.canvas.fit());
   }
   private killEvent(e: Event) {
     e.preventDefault();

@@ -1,13 +1,13 @@
-import Canvas from "../engine/core/canvas/Canvas";
-import InputManager from "../engine/core/Inputmanager";
+import Canvas from "../engine/Canvas";
+import InputManager from "../engine/Inputmanager";
 import ECS from "../engine/ecs/ECS";
-import LoadingLevel from "./loading/Level";
+import LoadingLevel from "./loading/LoadingLevel";
 
 export type LevelConstructor = {
-  new(world: WorldManager): ECS;
+  new(world: World): ECS;
 }
 
-export default class WorldManager {
+export default class World {
   canvas: Canvas;
   input: InputManager;
   idleLevels: ECS[];

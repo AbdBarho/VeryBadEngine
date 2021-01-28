@@ -1,4 +1,4 @@
-import { InputProvider } from "../../core/Inputmanager";
+import { InputProvider } from "../../Inputmanager";
 import ECS from "../../ecs/ECS";
 import EmptySystem from "../../ecs/system/Emptysystem";
 

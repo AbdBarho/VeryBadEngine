@@ -1,31 +1,28 @@
-import Frame from "../../../engine/core/canvas/layers/Frame";
+import Frame from "../../../engine/Frame";
 import { OpacityAnimation } from "../../../engine/ecs/components/Component";
 import ECS from "../../../engine/ecs/ECS";
 import System from "../../../engine/ecs/system/System";
 import { interpolate } from "../../../engine/math/Math";
 
 export default class OpacityBuffer extends System {
-  output: HTMLCanvasElement;
+  output: Frame;
   frames: Frame[];
-  ctx: CanvasRenderingContext2D;
   ecs: ECS;
-  constructor(output: HTMLCanvasElement, frames: Frame[], ecs: ECS) {
+  constructor(output: Frame, frames: Frame[], ecs: ECS) {
     super('OpacityBuffer', ['opacityAnimation']);
     this.output = output;
     this.frames = frames;
-    this.ctx = output.getContext("2d") as CanvasRenderingContext2D;
     this.ecs = ecs;
   }
 
   update(dt: number) {
     //clear at first, so the transparency shows
-    this.ctx.clearRect(0, 0, this.output.width, this.output.height);
+    this.output.clear()
 
     const alpha = this.getAlpha(dt);
-    this.ctx.globalAlpha = alpha;
-    for (const frame of this.frames)
-      this.ctx.drawImage(frame.getBuffer(), 0, 0, this.output.width, this.output.height);
-    this.ctx.globalAlpha = 1;
+    this.output.alpha(alpha);
+    this.frames.forEach(f => this.output.fillWithImage(f.getBuffer()));
+    this.output.alpha(1);
   }
 
   getAlpha(dt: number): number {

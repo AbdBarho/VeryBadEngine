@@ -1,5 +1,7 @@
 import { V2 } from "./VectorTypes";
 
+export const FULL_CIRCLE = Math.PI * 2;
+
 export function speedPerSecond(value: number) {
   return value / 1000;
 }
@@ -89,8 +91,5 @@ export function sandwich(val: number, min: number, max: number) {
 }
 
 export function interpolate(start: number, end: number, percent: number) {
-  const diff = end - start;
-  return diff > 0 ?
-    start + percent * diff :
-    end - ((1 - percent) * diff);
+  return (1 - percent) * start + percent * end;
 }
